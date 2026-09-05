@@ -18,7 +18,7 @@ const currentPath = Astro.url.pathname;
   <Container>
     <div class="nav-row">
       <a href="/" class="brand" aria-label="New Earth Network — home">
-        <Logo variant="full" priority />
+        <Logo variant="full" priority width={500} />
       </a>
 
       <nav class="desktop-nav" aria-label="Primary">
@@ -60,7 +60,7 @@ const currentPath = Astro.url.pathname;
 <!--
   Rendered outside <header> deliberately: the header's backdrop-filter creates a new
   containing block for position:fixed descendants, which would trap this panel inside
-  the 64px header box instead of covering the viewport.
+  the header's own (short) box instead of covering the viewport.
 -->
 <MobileNavigation links={links} primaryLabel="Find a Gathering" primaryHref="/events" />
 
@@ -118,26 +118,82 @@ const currentPath = Astro.url.pathname;
     position: sticky;
     top: 0;
     z-index: var(--z-nav);
-    background: rgba(46, 42, 63, 0.85);
+    background: var(--color-nav-glass);
     backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--color-border);
+    box-shadow: var(--shadow-nav);
   }
 
   .nav-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 64px;
+    height: var(--nav-height);
   }
 
   .brand {
+    position: relative;
     display: flex;
     align-items: center;
+    /* Single source of truth for the logo's rendered size, so the pulse rings below
+       stay centered on the circular icon even if this height changes later. 0.4975
+       is the icon's true alpha-weighted centroid as a fraction of the rendered
+       height — measured directly on the rendered image with a sweep of sample
+       windows to find the plateau before the wordmark starts contaminating it, not
+       assumed from the crop boundary (the sparkle accents make the icon visually
+       off-center within its own crop). */
+    --nav-logo-height: 92px;
+    --nav-icon-center-x: calc(var(--nav-logo-height) * 0.4975);
   }
 
   .brand :global(img) {
-    height: 28px;
+    height: var(--nav-logo-height);
     width: auto;
+  }
+
+  /* A signal pulse behind the icon mark — two rings expanding and thinning outward,
+     offset half a cycle apart, like the logo is broadcasting. z-index: -1 sinks them
+     below .brand's own content but keeps them above .nav's background fill, so they
+     read as coming from behind the icon rather than sitting on top of it. */
+  .brand::before,
+  .brand::after {
+    content: '';
+    position: absolute;
+    top: calc(var(--nav-logo-height) / 2);
+    left: var(--nav-icon-center-x);
+    width: 100px;
+    height: 100px;
+    translate: -50% -50%;
+    border: 12px solid var(--color-electric-rose);
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+    z-index: -1;
+    animation: nav-signal-pulse 3s ease-out infinite;
+  }
+
+  .brand::after {
+    animation-delay: 1.5s;
+  }
+
+  @keyframes nav-signal-pulse {
+    0% {
+      border-width: 12px;
+      transform: scale(0);
+      opacity: 0.55;
+    }
+    100% {
+      border-width: 0;
+      transform: scale(1);
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .brand::before,
+    .brand::after {
+      animation: none;
+      opacity: 0;
+    }
   }
 
   .desktop-nav {

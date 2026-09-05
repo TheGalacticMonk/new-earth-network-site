@@ -5,28 +5,54 @@
 
 :root {
   /* ---- Color: surfaces ---- */
-  --color-bg-primary: #2e2a3f; /* signature surface — dominates the site */
-  --color-bg-deep: #211e2d; /* recessed sections, footer, deepest layer */
-  --color-bg-elevated: #39344b; /* cards, raised panels */
+  --color-bg-primary: #140a1d; /* black-plum — the site’s night sky */
+  --color-bg-deep: #09050f; /* recessed panels, the space between stars */
+  --color-bg-elevated: #24142d; /* cards, raised panels */
+
+  /* ---- Color: atmosphere ---- */
+  --color-nebula-violet: rgba(151, 91, 255, 0.3);
+  --color-nebula-orchid: rgba(221, 78, 185, 0.24);
+  --color-nebula-rose: rgba(255, 104, 145, 0.15);
+  --color-nebula-gold: rgba(255, 183, 102, 0.1);
+  --color-nebula-violet-soft: rgba(184, 116, 255, 0.2);
+  --color-nebula-orchid-soft: rgba(232, 88, 192, 0.14);
+  --color-nebula-cyan-soft: rgba(122, 243, 255, 0.055);
+  --color-nav-glass: rgba(9, 5, 15, 0.54);
+  --color-overlay-surface: rgba(9, 5, 15, 0.84);
 
   /* ---- Color: accent (use sparingly — CTAs, active states, small celestial detail) ---- */
-  --color-electric-blue: #009fff;
-  --color-electric-cyan: #00e5ee;
-  --color-accent-glow: rgba(0, 229, 238, 0.35);
+  --color-electric-blue: #5b8cff;
+  --color-electric-cyan: #7af3ff;
+  --color-accent-glow: rgba(122, 243, 255, 0.32);
+  /* Solid version of --color-nebula-rose — a crisp UI color (the nav logo's pulse
+     ring) needs full opacity, not the atmospheric wash the nebula token is tuned for. */
+  --color-electric-rose: #ff6891;
+
+  /* Starlight — a white point radiating the logo's electric blue/cyan, so the stars
+     read as pieces of the same signal rather than a second, unrelated light source. */
+  --color-star-light: var(--color-text-primary);
+  --color-star-glow: rgba(122, 243, 255, 0.95);
+  --color-star-glow-soft: rgba(91, 140, 255, 0.6);
+  --color-star-glow-wide: rgba(91, 140, 255, 0.3);
 
   /* ---- Color: text ---- */
-  --color-text-primary: #ffffff;
-  --color-text-body: #e8e6ed;
-  --color-text-muted: #aaa6b7;
+  --color-text-primary: #f7f4ff;
+  --color-text-body: #ded9ef;
+  --color-text-muted: #b6afcc;
 
-  /* ---- Color: structure ---- */
-  --color-border: rgba(232, 230, 237, 0.12);
-  --color-border-strong: rgba(232, 230, 237, 0.22);
-  --color-border-accent: rgba(0, 229, 238, 0.4);
+  /* ---- Color: structure ----
+     No general-purpose hairline border token: surfaces are separated by shadow and
+     background tone, not outline. --color-border-accent exists only for the one
+     legitimate exception — the keyboard-only skip-link. */
+  --color-border-accent: rgba(122, 243, 255, 0.44);
 
-  /* ---- Type families ---- */
+  /* ---- Type families ----
+     Display: headlines and card/heading text. Body: everything read at length.
+     Accent: uppercase-only, generously tracked technical/label moments (kickers,
+     buttons, badges, footer labels) — never set in mixed case. */
   --font-display: 'Space Grotesk Variable', 'Space Grotesk', system-ui, sans-serif;
-  --font-body: 'Inter Variable', 'Inter', system-ui, sans-serif;
+  --font-body: 'Manrope Variable', 'Manrope', system-ui, sans-serif;
+  --font-accent: 'Michroma', 'Space Grotesk Variable', system-ui, sans-serif;
 
   /* ---- Type scale (fluid, clamped) ---- */
   --text-xs: 0.8125rem; /* 13px */
@@ -42,9 +68,11 @@
   --leading-snug: 1.25;
   --leading-normal: 1.6;
 
+  --tracking-tighter: -0.04em; /* giant display headlines only */
   --tracking-tight: -0.02em;
   --tracking-normal: 0;
   --tracking-wide: 0.08em;
+  --tracking-widest: 0.14em; /* accent font — Michroma reads best generously spaced */
 
   /* ---- Space (4px base grid) ---- */
   --space-1: 0.25rem; /* 4 */
@@ -66,9 +94,15 @@
   --radius-md: 10px;
   --radius-full: 999px;
 
-  /* ---- Elevation (one light source, used to lift, not to decorate) ---- */
+  /* ---- Elevation (one light source, used to lift, not to decorate) ----
+     Surfaces float on shadow, not outline — no hairline borders on cards,
+     panels, or the nav. Two floating steps (rest / hover-raised) plus the
+     existing glow tokens for the brand's illuminated accents. */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.24);
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.32);
+  --shadow-float: 0 24px 48px -16px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.28);
+  --shadow-float-hover: 0 32px 64px -16px rgba(0, 0, 0, 0.6), 0 0 32px var(--color-accent-glow);
+  --shadow-nav: 0 16px 32px -16px rgba(0, 0, 0, 0.55);
   --shadow-glow-sm: 0 0 24px var(--color-accent-glow);
   --shadow-glow-md: 0 0 48px var(--color-accent-glow);
 
@@ -81,6 +115,7 @@
   /* ---- Layout ---- */
   --container-max: 1200px;
   --container-padding: clamp(1.25rem, 4vw, 3rem);
+  --nav-height: 108px;
 
   /* ---- Z-index scale ---- */
   --z-nav: 100;

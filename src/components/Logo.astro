@@ -7,17 +7,18 @@ interface Props {
   variant?: 'full' | 'icon';
   priority?: boolean;
   class?: string;
+  width?: number;
 }
 
-const { variant = 'full', priority = false, class: className } = Astro.props;
+const { variant = 'full', priority = false, class: className, width } = Astro.props;
 const src = variant === 'full' ? logoFull : logoIcon;
-const width = variant === 'full' ? 240 : 40;
+const renderWidth = width ?? (variant === 'full' ? 240 : 40);
 ---
 
 <Image
   src={src}
   alt="New Earth Network"
-  width={width}
+  width={renderWidth}
   class:list={['logo', className]}
   loading={priority ? 'eager' : 'lazy'}
   fetchpriority={priority ? 'high' : 'auto'}

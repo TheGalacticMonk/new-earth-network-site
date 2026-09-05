@@ -17,11 +17,33 @@ Verified: `npx astro check` — 0 errors. `npm run build` — 15 static pages, n
 
 ## Fonts
 
-Self-hosted via `@fontsource-variable/space-grotesk` (display) and
-`@fontsource-variable/inter` (body). Both are single variable-font files per script
-subset (no separate files per weight), `font-display: swap`, zero runtime JS. Space
-Grotesk's geometric, slightly technical letterforms pair with the circular logo mark
-and read as "signal," not "wellness." Inter carries body copy without competing.
+Three families, each with one job — never mixed outside that job:
+
+- **Display** — `@fontsource-variable/space-grotesk`. Headings and hero/manifesto
+  display text. Weights 500/600/700 (h3/h4 500, h2 600, h1 and the hero headline 700
+  with tighter tracking — `--tracking-tighter`, `-0.04em` — so the giant headline reads
+  dense and confident rather than loose).
+- **Body** — `@fontsource-variable/manrope`. Everything read at length. Weights
+  400/500/600.
+- **Accent** — `@fontsource/michroma` (static, weight 400 only — Michroma has no other
+  weight). Uppercase-only, generously tracked (`--tracking-widest`, `0.14em`): kickers,
+  button labels, footer column headings, date badges, status/RSVP micro-copy. Never set
+  in mixed case — it's designed as a display-caps face and looks wrong otherwise.
+  Reserved for short strings (a word or two); longer incidental uppercase text
+  (breadcrumbs, location strings, form labels) stays on the body font so nothing wraps
+  awkwardly against Michroma's wide letterforms.
+
+All self-hosted, `font-display: swap`, zero runtime JS.
+
+History: shipped first with Space Grotesk + Inter, which read as geometric and
+technically precise — closer to a briefing-room dossier than a community events brand.
+Tried Bricolage Grotesque + Manrope for warmth, which fixed the tone but lost some of
+the brand's "signal/beacon" precision. Landed here: Space Grotesk stays for headlines
+(bumped to bolder weights and tighter tracking so it reads as confident/broadcast, not
+thin/technical), Manrope stays for body warmth, and Michroma is layered in specifically
+for the small uppercase moments — giving those a genuine "technical readout" character
+(a TV lower-third, a signal timestamp) without letting that quality dominate the whole
+page the way an all-Space-Grotesk, all-caps treatment did before.
 
 ## Design tokens
 

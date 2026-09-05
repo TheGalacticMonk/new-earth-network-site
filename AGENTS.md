@@ -26,7 +26,9 @@ scroll-reveal). See `docs/architecture.md` for the full rationale and file map.
 
 Visual identity: dark muted violet (`#2E2A3F`) environment, electric blue/cyan accents used
 sparingly, the New Earth Network logo (`src/assets/`) as the one deliberately luminous
-element. Fonts: Space Grotesk (display) + Inter (body), self-hosted via `@fontsource-variable`.
+element. Fonts: Space Grotesk (display, weights 500/600/700) + Manrope (body, weights
+400/500/600) + Michroma (technical/accent — kickers, buttons, badges — uppercase only,
+weight 400), all self-hosted via `@fontsource-variable`/`@fontsource`.
 
 ## Development
 

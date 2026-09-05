@@ -30,7 +30,11 @@ const cityEvents = allEvents
       <h1>{name}</h1>
       <p class="location">{region ? `${region}, ${country}` : country}</p>
 
-      {image && <Image src={image} alt="" width={800} height={533} class="cover" />}
+      {image && (
+        <div class="cover">
+          <Image src={image} alt="" width={800} height={533} />
+        </div>
+      )}
 
       <p class="summary">{summary}</p>
 
@@ -80,8 +84,13 @@ const cityEvents = allEvents
   .cover {
     margin-top: var(--space-8);
     border-radius: var(--radius-md);
+    overflow: clip;
+  }
+
+  .cover :global(img) {
     width: 100%;
     height: auto;
+    display: block;
   }
 
   .summary {

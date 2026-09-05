@@ -24,7 +24,7 @@ const pageTitle = title === siteName ? title : `${title} — ${siteName}`;
     <meta name="generator" content={Astro.generator} />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#2E2A3F" />
+    <meta name="theme-color" content="#140A1D" />
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content={pageTitle} />
@@ -33,7 +33,6 @@ const pageTitle = title === siteName ? title : `${title} — ${siteName}`;
     <meta name="twitter:card" content="summary" />
   </head>
   <body>
-    <a class="skip-link" href="#main">Skip to content</a>
     <Navigation />
     <main id="main">
       <slot />
