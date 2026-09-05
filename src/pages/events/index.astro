@@ -1,0 +1,50 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Container from '../../components/Container.astro';
+import Section from '../../components/Section.astro';
+import SectionHeader from '../../components/SectionHeader.astro';
+import EventCard from '../../components/EventCard.astro';
+
+const allEvents = await getCollection('events');
+const upcoming = allEvents
+  .filter((event) => event.data.status !== 'past')
+  .sort((a, b) => a.data.date.getTime() - b.data.date.getTime());
+---
+
+<BaseLayout title="Gatherings" description="Find an upcoming New Earth Network gathering near you.">
+  <Section>
+    <Container>
+      <SectionHeader kicker="All gatherings" heading="Find a gathering" />
+      {upcoming.length > 0 ? (
+        <div class="grid">
+          {upcoming.map((event) => (
+            <EventCard event={event} />
+          ))}
+        </div>
+      ) : (
+        <p>No gatherings scheduled yet — check back soon, or start one yourself.</p>
+      )}
+    </Container>
+  </Section>
+</BaseLayout>
+
+<style>
+  .grid {
+    display: grid;
+    gap: var(--space-6);
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 640px) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

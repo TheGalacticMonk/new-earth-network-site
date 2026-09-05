@@ -1,0 +1,25 @@
+---
+// Vertical rhythm primitive. Every homepage section renders through this so section
+// spacing stays one governed value instead of a per-page guess.
+interface Props {
+  as?: keyof HTMLElementTagNameMap;
+  tone?: 'primary' | 'deep';
+  id?: string;
+}
+
+const { as: Tag = 'section', tone = 'primary', id } = Astro.props;
+---
+
+<Tag class="section" data-tone={tone} id={id}>
+  <slot />
+</Tag>
+
+<style>
+  .section {
+    padding-block: var(--space-section);
+  }
+
+  .section[data-tone='deep'] {
+    background: var(--color-bg-deep);
+  }
+</style>

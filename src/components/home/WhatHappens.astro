@@ -1,0 +1,116 @@
+---
+import Container from '../Container.astro';
+import SectionHeader from '../SectionHeader.astro';
+
+const steps = [
+  {
+    n: '01',
+    title: 'You show up',
+    body: 'No agenda, no performance. Just a real place, at a real time, with people who get it.',
+  },
+  {
+    n: '02',
+    title: 'You connect',
+    body: 'Conversation that goes past small talk, because everyone in the room came for the same reason.',
+  },
+  {
+    n: '03',
+    title: 'You belong',
+    body: 'A circle that keeps meeting — not a one-time event you attend and forget.',
+  },
+];
+---
+
+<section class="happens">
+  <Container>
+    <div class="layout">
+      <div class="copy">
+        <SectionHeader kicker="At a gathering" heading="What actually happens" />
+        <ol class="steps" role="list">
+          {steps.map((step) => (
+            <li>
+              <span class="n">{step.n}</span>
+              <div>
+                <h3>{step.title}</h3>
+                <p>{step.body}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      <div class="media" role="img" aria-label="Photography from New Earth Network gatherings — coming soon">
+        <p class="media-note">Gathering photography<br />coming soon</p>
+      </div>
+    </div>
+  </Container>
+</section>
+
+<style>
+  .happens {
+    padding-block: var(--space-section);
+  }
+
+  .layout {
+    display: grid;
+    gap: var(--space-12);
+  }
+
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .steps li {
+    display: flex;
+    gap: var(--space-6);
+  }
+
+  .n {
+    font-family: var(--font-display);
+    font-size: var(--text-md);
+    color: var(--color-electric-cyan);
+    flex-shrink: 0;
+  }
+
+  .steps h3 {
+    font-size: var(--text-md);
+    margin-bottom: var(--space-2);
+  }
+
+  .steps p {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .media {
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    background: linear-gradient(160deg, var(--color-bg-elevated), var(--color-bg-deep));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .media-note {
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--color-text-muted);
+  }
+
+  @media (min-width: 900px) {
+    .layout {
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+    }
+
+    .media {
+      order: 2;
+    }
+  }
+</style>

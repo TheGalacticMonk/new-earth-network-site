@@ -1,0 +1,82 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Container from '../components/Container.astro';
+import Section from '../components/Section.astro';
+import Button from '../components/Button.astro';
+
+const steps = [
+  { title: 'Apply', body: 'Tell us about your city and why you want to bring New Earth Network there.' },
+  { title: 'Get equipped', body: 'We share the format, principles, and everything you need to host your first gathering.' },
+  { title: 'Go first', body: 'Host your first circle. The network grows one organizer at a time.' },
+];
+---
+
+<BaseLayout title="Start a Gathering" description="Bring New Earth Network to your city.">
+  <Section>
+    <Container narrow>
+      <h1>Bring New Earth Network to your city</h1>
+      <p class="lead">
+        Every city in the network started with one person who decided to go first.
+        If that's you, here's how it works.
+      </p>
+
+      <ol class="steps" role="list" id="how-it-works">
+        {steps.map((step, i) => (
+          <li>
+            <span class="n">0{i + 1}</span>
+            <div>
+              <h2>{step.title}</h2>
+              <p>{step.body}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+
+      <div class="cta">
+        <Button href="/contact" variant="primary" size="lg">Apply to organize</Button>
+      </div>
+    </Container>
+  </Section>
+</BaseLayout>
+
+<style>
+  h1 {
+    font-size: var(--text-2xl);
+  }
+
+  .lead {
+    margin-top: var(--space-8);
+    font-size: var(--text-md);
+    color: var(--color-text-body);
+  }
+
+  .steps {
+    margin-top: var(--space-16);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .steps li {
+    display: flex;
+    gap: var(--space-6);
+  }
+
+  .n {
+    font-family: var(--font-display);
+    color: var(--color-electric-cyan);
+  }
+
+  h2 {
+    font-size: var(--text-md);
+    margin-bottom: var(--space-2);
+  }
+
+  .steps p {
+    color: var(--color-text-muted);
+  }
+
+  .cta {
+    margin-top: var(--space-16);
+  }
+</style>

@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Container from '../components/Container.astro';
+import Section from '../components/Section.astro';
+
+const faqs = [
+  {
+    q: 'Do I need to be "spiritual" to come?',
+    a: "No. You need to be curious about people and willing to show up in person. That's the only requirement.",
+  },
+  {
+    q: 'Is there a cost to attend?',
+    a: 'Most gatherings are free or low-cost to cover the venue. Each event page lists specifics.',
+  },
+  {
+    q: "What if my city doesn't have a chapter yet?",
+    a: 'Start one. See the Start a Gathering page for how that works.',
+  },
+];
+---
+
+<BaseLayout title="FAQ" description="Common questions about New Earth Network gatherings.">
+  <Section>
+    <Container narrow>
+      <h1>Frequently asked questions</h1>
+      <dl class="faqs">
+        {faqs.map((item) => (
+          <div class="item">
+            <dt>{item.q}</dt>
+            <dd>{item.a}</dd>
+          </div>
+        ))}
+      </dl>
+    </Container>
+  </Section>
+</BaseLayout>
+
+<style>
+  h1 {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-16);
+  }
+
+  .faqs {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .item {
+    padding-bottom: var(--space-8);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  dt {
+    font-family: var(--font-display);
+    font-size: var(--text-md);
+    color: var(--color-text-primary);
+  }
+
+  dd {
+    margin-top: var(--space-3);
+    color: var(--color-text-muted);
+  }
+</style>

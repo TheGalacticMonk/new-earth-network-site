@@ -1,0 +1,114 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Container from '../../components/Container.astro';
+import Section from '../../components/Section.astro';
+import EventCard from '../../components/EventCard.astro';
+
+export async function getStaticPaths() {
+  const cities = await getCollection('cities');
+  return cities.map((city) => ({
+    params: { slug: city.id },
+    props: { city },
+  }));
+}
+
+const { city } = Astro.props;
+const { name, region, country, summary, image, organizerName, status } = city.data;
+
+const allEvents = await getCollection('events');
+const cityEvents = allEvents
+  .filter((event) => event.data.citySlug === city.id && event.data.status !== 'past')
+  .sort((a, b) => a.data.date.getTime() - b.data.date.getTime());
+---
+
+<BaseLayout title={name} description={summary}>
+  <Section>
+    <Container narrow>
+      <p class="breadcrumb"><a href="/cities">Cities</a></p>
+      <h1>{name}</h1>
+      <p class="location">{region ? `${region}, ${country}` : country}</p>
+
+      {image && <Image src={image} alt="" width={800} height={533} class="cover" />}
+
+      <p class="summary">{summary}</p>
+
+      {status === 'launching' ? (
+        <p class="note">This chapter is just getting started — no gatherings scheduled yet.</p>
+      ) : organizerName ? (
+        <p class="organizer">Organized by {organizerName}</p>
+      ) : null}
+    </Container>
+  </Section>
+
+  {cityEvents.length > 0 && (
+    <Section tone="deep">
+      <Container>
+        <h2>Upcoming in {name}</h2>
+        <div class="grid">
+          {cityEvents.map((event) => (
+            <EventCard event={event} />
+          ))}
+        </div>
+      </Container>
+    </Section>
+  )}
+</BaseLayout>
+
+<style>
+  .breadcrumb {
+    font-size: var(--text-xs);
+    color: var(--color-electric-cyan);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    margin-bottom: var(--space-4);
+  }
+
+  h1 {
+    font-size: var(--text-2xl);
+  }
+
+  .location {
+    margin-top: var(--space-2);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    font-size: var(--text-xs);
+  }
+
+  .cover {
+    margin-top: var(--space-8);
+    border-radius: var(--radius-md);
+    width: 100%;
+    height: auto;
+  }
+
+  .summary {
+    margin-top: var(--space-8);
+    font-size: var(--text-md);
+  }
+
+  .note,
+  .organizer {
+    margin-top: var(--space-4);
+    color: var(--color-text-muted);
+  }
+
+  h2 {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-8);
+  }
+
+  .grid {
+    display: grid;
+    gap: var(--space-6);
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 640px) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

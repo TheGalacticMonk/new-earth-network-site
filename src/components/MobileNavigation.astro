@@ -1,0 +1,82 @@
+---
+interface NavLink {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  links: NavLink[];
+  primaryLabel: string;
+  primaryHref: string;
+}
+
+const { links, primaryLabel, primaryHref } = Astro.props;
+---
+
+<div class="mobile-nav" id="mobile-nav" role="dialog" aria-modal="true" aria-label="Mobile navigation" hidden>
+  <nav aria-label="Mobile">
+    <ul role="list">
+      {links.map((link) => (
+        <li><a href={link.href}>{link.label}</a></li>
+      ))}
+    </ul>
+    <a class="mobile-cta" href={primaryHref}>{primaryLabel}</a>
+  </nav>
+</div>
+
+<style>
+  .mobile-nav {
+    position: fixed;
+    inset: 0;
+    top: 64px;
+    z-index: var(--z-overlay);
+    background: var(--color-bg-deep);
+    animation: fade-in var(--duration-base) var(--ease-out);
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  nav {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: var(--space-8) var(--container-padding);
+  }
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  li a {
+    display: block;
+    padding: var(--space-4) 0;
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    color: var(--color-text-primary);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .mobile-cta {
+    margin-top: auto;
+    text-align: center;
+    padding: var(--space-4);
+    font-family: var(--font-display);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    font-size: var(--text-sm);
+    color: var(--color-bg-deep);
+    background: var(--color-electric-cyan);
+    border-radius: var(--radius-full);
+  }
+</style>

@@ -1,0 +1,72 @@
+---
+import Container from './Container.astro';
+import Button from './Button.astro';
+
+interface Props {
+  kicker?: string;
+  heading: string;
+  primaryLabel: string;
+  primaryHref: string;
+  secondaryLabel?: string;
+  secondaryHref?: string;
+  tone?: 'primary' | 'deep';
+}
+
+const { kicker, heading, primaryLabel, primaryHref, secondaryLabel, secondaryHref, tone = 'deep' } = Astro.props;
+---
+
+<div class="cta" data-tone={tone}>
+  <Container narrow>
+    <div class="cta-inner">
+      {kicker && <p class="kicker">{kicker}</p>}
+      <h2 class="heading">{heading}</h2>
+      <div class="actions">
+        <Button href={primaryHref} variant="primary" size="lg">{primaryLabel}</Button>
+        {secondaryLabel && secondaryHref && (
+          <Button href={secondaryHref} variant="secondary" size="lg">{secondaryLabel}</Button>
+        )}
+      </div>
+      <slot />
+    </div>
+  </Container>
+</div>
+
+<style>
+  .cta {
+    padding-block: var(--space-24);
+    position: relative;
+  }
+
+  .cta[data-tone='deep'] {
+    background: var(--color-bg-deep);
+  }
+
+  .cta-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-6);
+    text-align: center;
+  }
+
+  .kicker {
+    font-family: var(--font-display);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-electric-cyan);
+  }
+
+  .heading {
+    font-size: var(--text-xl);
+    max-width: 20ch;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-4);
+    margin-top: var(--space-2);
+  }
+</style>

@@ -1,0 +1,66 @@
+---
+import { getCollection } from 'astro:content';
+import Container from '../Container.astro';
+import SectionHeader from '../SectionHeader.astro';
+import EventCard from '../EventCard.astro';
+import Button from '../Button.astro';
+
+const allEvents = await getCollection('events');
+const upcoming = allEvents
+  .filter((event) => event.data.status !== 'past')
+  .sort((a, b) => a.data.date.getTime() - b.data.date.getTime())
+  .slice(0, 3);
+---
+
+<section class="gatherings">
+  <Container>
+    <SectionHeader kicker="This month" heading="Upcoming gatherings" />
+
+    {upcoming.length > 0 ? (
+      <div class="grid">
+        {upcoming.map((event) => (
+          <EventCard event={event} />
+        ))}
+      </div>
+    ) : (
+      <p class="empty">No gatherings scheduled yet — check back soon, or start one yourself.</p>
+    )}
+
+    <div class="footer-action">
+      <Button href="/events" variant="ghost">View all gatherings →</Button>
+    </div>
+  </Container>
+</section>
+
+<style>
+  .gatherings {
+    padding-block: var(--space-section);
+  }
+
+  .grid {
+    display: grid;
+    gap: var(--space-6);
+    grid-template-columns: 1fr;
+  }
+
+  .empty {
+    color: var(--color-text-muted);
+  }
+
+  .footer-action {
+    margin-top: var(--space-8);
+    text-align: center;
+  }
+
+  @media (min-width: 640px) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

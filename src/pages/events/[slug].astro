@@ -1,0 +1,118 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Container from '../../components/Container.astro';
+import Section from '../../components/Section.astro';
+import Button from '../../components/Button.astro';
+import { formatEventDate, eventStatusLabel } from '../../lib/format';
+
+export async function getStaticPaths() {
+  const events = await getCollection('events');
+  return events.map((event) => ({
+    params: { slug: event.id },
+    props: { event },
+  }));
+}
+
+const { event } = Astro.props;
+const { title, cityName, venue, address, date, time, description, image, rsvpUrl, status, capacity } = event.data;
+const { day, month, weekday } = formatEventDate(date);
+---
+
+<BaseLayout title={title} description={description}>
+  <Section>
+    <Container narrow>
+      <p class="breadcrumb"><a href="/events">Gatherings</a> / {cityName}</p>
+      <h1>{title}</h1>
+      <p class="meta">{weekday}, {month} {day} · {time} · {venue}{address ? ` — ${address}` : ''}</p>
+
+      {image && <Image src={image} alt="" width={800} height={533} class="cover" />}
+
+      <p class="description">{description}</p>
+
+      <dl class="details">
+        <div>
+          <dt>Status</dt>
+          <dd>{eventStatusLabel[status]}</dd>
+        </div>
+        {capacity && (
+          <div>
+            <dt>Capacity</dt>
+            <dd>{capacity} people</dd>
+          </div>
+        )}
+      </dl>
+
+      {rsvpUrl ? (
+        <Button href={rsvpUrl} variant="primary" size="lg">RSVP</Button>
+      ) : (
+        <p class="note">RSVP details for this gathering are coming soon.</p>
+      )}
+    </Container>
+  </Section>
+</BaseLayout>
+
+<style>
+  .breadcrumb {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-4);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+  }
+
+  .breadcrumb a {
+    color: var(--color-electric-cyan);
+  }
+
+  h1 {
+    font-size: var(--text-2xl);
+  }
+
+  .meta {
+    margin-top: var(--space-4);
+    color: var(--color-text-muted);
+  }
+
+  .cover {
+    margin-top: var(--space-8);
+    border-radius: var(--radius-md);
+    width: 100%;
+    height: auto;
+  }
+
+  .description {
+    margin-top: var(--space-8);
+    font-size: var(--text-md);
+  }
+
+  .details {
+    display: flex;
+    gap: var(--space-8);
+    margin-top: var(--space-8);
+    padding-block: var(--space-6);
+    border-block: 1px solid var(--color-border);
+  }
+
+  dt {
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-text-muted);
+  }
+
+  dd {
+    margin-top: var(--space-1);
+    font-family: var(--font-display);
+  }
+
+  .note {
+    color: var(--color-text-muted);
+  }
+
+  .details + .note,
+  .details + a {
+    margin-top: var(--space-8);
+  }
+</style>

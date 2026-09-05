@@ -1,0 +1,153 @@
+---
+import Container from './Container.astro';
+import Logo from './Logo.astro';
+
+const explore = [
+  { label: 'About', href: '/about' },
+  { label: 'Events', href: '/events' },
+  { label: 'Cities', href: '/cities' },
+  { label: 'Start a Gathering', href: '/start-a-gathering' },
+];
+
+const more = [
+  { label: 'Principles', href: '/principles' },
+  { label: 'FAQ', href: '/faq' },
+  { label: 'Contact', href: '/contact' },
+];
+
+const social = [
+  { label: 'Instagram', href: 'https://instagram.com' },
+  { label: 'TikTok', href: 'https://tiktok.com' },
+];
+
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <Container>
+    <div class="grid">
+      <div class="brand-col">
+        <a href="/" aria-label="New Earth Network — home">
+          <Logo variant="full" />
+        </a>
+        <p class="tagline">Real gatherings, in real cities, for real people.</p>
+      </div>
+
+      <nav aria-label="Explore">
+        <p class="col-heading">Explore</p>
+        <ul role="list">
+          {explore.map((link) => (
+            <li><a href={link.href}>{link.label}</a></li>
+          ))}
+        </ul>
+      </nav>
+
+      <nav aria-label="More">
+        <p class="col-heading">More</p>
+        <ul role="list">
+          {more.map((link) => (
+            <li><a href={link.href}>{link.label}</a></li>
+          ))}
+        </ul>
+      </nav>
+
+      <nav aria-label="Social">
+        <p class="col-heading">Follow</p>
+        <ul role="list">
+          {social.map((link) => (
+            <li><a href={link.href} rel="me noreferrer" target="_blank">{link.label}</a></li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+
+    <div class="bottom">
+      <p>© {year} New Earth Network</p>
+      <p class="signature">The internet found us. Now we meet.</p>
+    </div>
+  </Container>
+</footer>
+
+<style>
+  .footer {
+    background: var(--color-bg-deep);
+    border-top: 1px solid var(--color-border);
+    padding-block: var(--space-16) var(--space-8);
+  }
+
+  .grid {
+    display: grid;
+    gap: var(--space-8);
+    grid-template-columns: 1fr;
+  }
+
+  .brand-col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .brand-col :global(img) {
+    height: 24px;
+    width: auto;
+  }
+
+  .tagline {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    max-width: 32ch;
+  }
+
+  .col-heading {
+    font-family: var(--font-display);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-4);
+  }
+
+  nav ul {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  nav a {
+    font-size: var(--text-sm);
+    color: var(--color-text-body);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  nav a:hover {
+    color: var(--color-electric-cyan);
+  }
+
+  .bottom {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-top: var(--space-16);
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--color-border);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  .signature {
+    font-family: var(--font-display);
+    color: var(--color-text-muted);
+  }
+
+  @media (min-width: 640px) {
+    .grid {
+      grid-template-columns: 1.5fr repeat(3, 1fr);
+    }
+
+    .bottom {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+</style>

@@ -1,0 +1,32 @@
+---
+import { Image } from 'astro:assets';
+import logoFull from '../assets/logo-full.png';
+import logoIcon from '../assets/logo-icon.png';
+
+interface Props {
+  variant?: 'full' | 'icon';
+  priority?: boolean;
+  class?: string;
+}
+
+const { variant = 'full', priority = false, class: className } = Astro.props;
+const src = variant === 'full' ? logoFull : logoIcon;
+const width = variant === 'full' ? 240 : 40;
+---
+
+<Image
+  src={src}
+  alt="New Earth Network"
+  width={width}
+  class:list={['logo', className]}
+  loading={priority ? 'eager' : 'lazy'}
+  fetchpriority={priority ? 'high' : 'auto'}
+/>
+
+<style>
+  .logo {
+    height: auto;
+    width: auto;
+    max-width: 100%;
+  }
+</style>

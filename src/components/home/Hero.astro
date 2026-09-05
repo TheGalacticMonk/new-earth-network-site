@@ -1,0 +1,74 @@
+---
+import Container from '../Container.astro';
+import Button from '../Button.astro';
+import Logo from '../Logo.astro';
+import AmbientField from '../AmbientField.astro';
+---
+
+<section class="hero">
+  <AmbientField variant="hero" />
+  <Container>
+    <div class="hero-content">
+      <Logo variant="full" priority class="hero-logo" />
+      <h1 class="headline">The internet found us.<br />Now it's time to meet.</h1>
+      <p class="subhead">
+        New Earth Network is a real-world community of conscious, awakened people —
+        gathering in person, in your city, to build the connections a screen can't.
+      </p>
+      <div class="actions">
+        <Button href="/events" variant="primary" size="lg">Find a Gathering</Button>
+        <Button href="/start-a-gathering" variant="secondary" size="lg">Start a Gathering</Button>
+      </div>
+    </div>
+  </Container>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding-block: var(--space-24) var(--space-24);
+    display: flex;
+    align-items: center;
+    min-height: 88vh;
+  }
+
+  .hero-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-8);
+    text-align: center;
+    max-width: 760px;
+    margin-inline: auto;
+  }
+
+  .hero-logo {
+    width: clamp(160px, 24vw, 220px);
+  }
+
+  .headline {
+    font-size: var(--text-3xl);
+  }
+
+  .subhead {
+    font-size: var(--text-md);
+    color: var(--color-text-muted);
+    max-width: 52ch;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-4);
+    margin-top: var(--space-2);
+  }
+
+  @media (min-width: 640px) {
+    .hero {
+      min-height: 92vh;
+    }
+  }
+</style>

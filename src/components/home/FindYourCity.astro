@@ -1,0 +1,67 @@
+---
+import { getCollection } from 'astro:content';
+import Container from '../Container.astro';
+import SectionHeader from '../SectionHeader.astro';
+import CityCard from '../CityCard.astro';
+import Button from '../Button.astro';
+
+const cities = await getCollection('cities');
+---
+
+<section class="cities" data-tone="deep">
+  <Container>
+    <SectionHeader kicker="Find your city" heading="Gatherings are forming everywhere">
+      New Earth Network started in one city. It won't stay there.
+    </SectionHeader>
+
+    <div class="grid">
+      {cities.map((city) => (
+        <CityCard city={city} />
+      ))}
+    </div>
+
+    <div class="footer-action">
+      <p class="prompt">Don't see your city yet?</p>
+      <Button href="/start-a-gathering" variant="secondary">Start one</Button>
+    </div>
+  </Container>
+</section>
+
+<style>
+  .cities {
+    padding-block: var(--space-section);
+    background: var(--color-bg-deep);
+  }
+
+  .grid {
+    display: grid;
+    gap: var(--space-6);
+    grid-template-columns: 1fr;
+  }
+
+  .footer-action {
+    margin-top: var(--space-12);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    text-align: center;
+  }
+
+  .prompt {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+  }
+
+  @media (min-width: 640px) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>

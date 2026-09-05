@@ -1,0 +1,110 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Container from '../components/Container.astro';
+import Section from '../components/Section.astro';
+---
+
+<BaseLayout title="Contact" description="Get in touch with New Earth Network.">
+  <Section>
+    <Container narrow>
+      <h1>Get in touch</h1>
+      <p class="lead">Questions, organizer applications, press — this reaches the team.</p>
+
+      <!-- No backend wired up yet (phase 2). Swap the script's fetch target for the
+           chosen provider (email API, form service) without touching markup. -->
+      <form id="contact-form" class="form" novalidate>
+        <div class="field">
+          <label for="name">Name</label>
+          <input id="name" name="name" type="text" required autocomplete="name" />
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" required autocomplete="email" />
+        </div>
+        <div class="field">
+          <label for="city">City</label>
+          <input id="city" name="city" type="text" autocomplete="address-level2" />
+        </div>
+        <div class="field">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="5" required></textarea>
+        </div>
+        <button type="submit">Send</button>
+      </form>
+      <p id="contact-status" class="status" role="status" aria-live="polite"></p>
+    </Container>
+  </Section>
+</BaseLayout>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  const status = document.getElementById('contact-status');
+
+  form?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    if (status) status.textContent = "Message received. We'll get back to you soon.";
+    form.reset();
+  });
+</script>
+
+<style>
+  h1 {
+    font-size: var(--text-2xl);
+  }
+
+  .lead {
+    margin-top: var(--space-8);
+    color: var(--color-text-body);
+  }
+
+  .form {
+    margin-top: var(--space-12);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  label {
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  input,
+  textarea {
+    padding: var(--space-4);
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    resize: vertical;
+  }
+
+  button {
+    align-self: flex-start;
+    padding: var(--space-4) var(--space-8);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-bg-deep);
+    background: var(--color-electric-cyan);
+    border-radius: var(--radius-full);
+    transition: box-shadow var(--duration-base) var(--ease-out);
+  }
+
+  button:hover {
+    box-shadow: var(--shadow-glow-md);
+  }
+
+  .status {
+    margin-top: var(--space-4);
+    color: var(--color-electric-cyan);
+  }
+</style>
