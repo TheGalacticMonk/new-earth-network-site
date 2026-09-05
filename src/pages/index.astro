@@ -67,14 +67,6 @@ const stars = [
     <div class="shooting-star shooting-star-3"></div>
     <div class="shooting-star shooting-star-4"></div>
   </div>
-
-  <div class="p" aria-hidden="true">
-    <i><u><b><b><b><b></b></b></b></b></u><u><b><b><b><b></b></b></b></b></u><u><b><b><b><b></b></b></b></b></u><u><b><b><b><b></b></b></b></b></u></i>
-    <i><u><b><b><b><b></b></b></b></b></u><u><b><b><b><b></b></b></b></b></u><u><b><b><b><b></b></b></b></b></u><u><b><b><b><b></b></b></b></b></u></i>
-    <i><u><b><b><b><b></b></b></b></b></u><u><b><b><b><b></b></b></b></b></u><u><b><b><b><b></b></b></b></b></u><u><b><b><b><b></b></b></b></b></u></i>
-    <i><u><b><b><b><b></b></b></b></b></u><u><b><b><b><b></b></b></b></b></u><u><b><b><b><b></b></b></b></b></u><u><b><b><b><b></b></b></b></b></u></i>
-  </div>
-  <div class="l" aria-hidden="true"></div>
 </BaseLayout>
 
 <style>
@@ -89,14 +81,18 @@ const stars = [
     color: var(--color-text-body);
   }
 
-  :global(body:has(.p) .nav) {
-    background: var(--color-nav-glass);
-  }
-
-  :global(body:has(.p) .cities),
-  :global(body:has(.p) .signup),
-  :global(body:has(.p) .cta[data-tone='deep']),
-  :global(body:has(.p) .footer) {
+  /* Let the nebula background show through these sections instead of the flat
+     --color-bg-deep panel they'd otherwise sit on — this was previously gated on
+     the (now-removed) cursor lens's marker element; the look itself wasn't specific
+     to the cursor effect, so it stays. :has(.stars) is just an always-true anchor
+     (the star field is always present on this page) that gives this rule enough
+     specificity to beat each component's own scoped background rule regardless of
+     CSS bundle order — a bare `body .footer` has less specificity than Astro's
+     scoped `.footer[data-astro-cid-x]` and would silently lose to it. */
+  :global(body:has(.stars) .cities),
+  :global(body:has(.stars) .signup),
+  :global(body:has(.stars) .cta[data-tone='deep']),
+  :global(body:has(.stars) .footer) {
     background: transparent;
   }
 
@@ -109,7 +105,7 @@ const stars = [
     pointer-events: none;
   }
 
-  :global(body:has(.stars) main > :not(.stars):not(.p):not(.l)),
+  :global(body:has(.stars) main > :not(.stars)),
   :global(body:has(.stars) .footer) {
     position: relative;
     z-index: 1;
@@ -252,61 +248,6 @@ const stars = [
 
   @media (prefers-reduced-motion: reduce) {
     .shooting-star { display: none; }
-  }
-
-  .p { --x: 1.4s; --y: 1.4s; --X: 0px; --Y: 0px; position: fixed; z-index: 10; left: 50%; top: 50%; anchor-name: --p; transition: left var(--x) linear, top var(--y) linear; will-change: left, top; }
-  .p > i { position: absolute; width: 100vw; height: 100vh; overflow: hidden; }
-  .p > i:nth-child(odd) { right: 0; }
-  .p > i:nth-child(even) { left: 0; }
-  .p > i:nth-child(-n + 2) { bottom: 0; }
-  .p > i:nth-child(n + 3) { top: 0; }
-  .p:has(> i:first-child:hover) { --a: -12000px; --b: -12000px; }
-  .p:has(> i:nth-child(2):hover) { --a: calc(100vw + 12000px); --b: -12000px; }
-  .p:has(> i:nth-child(3):hover) { --a: -12000px; --b: calc(100vh + 12000px); }
-  .p:has(> i:last-child:hover) { --a: calc(100vw + 12000px); --b: calc(100vh + 12000px); }
-  .p:has(> i:hover) { left: calc(var(--a) + var(--X)); top: calc(var(--b) + var(--Y)); }
-  .p :is(u, b) { position: absolute; }
-  .p u { width: 100%; height: var(--s); }
-  .p b { height: 100%; width: var(--s); }
-  .p > i:nth-child(-n + 2) u { bottom: 0; }
-  .p > i:nth-child(n + 3) u { top: 0; }
-  .p > i:nth-child(odd) b { right: 0; }
-  .p > i:nth-child(even) b { left: 0; }
-  .p u:first-child, .p b { --s: 1800px; }
-  .p u:nth-child(2), .p b b { --s: 220px; }
-  .p u:nth-child(3), .p b b b { --s: 24px; }
-  .p u:last-child, .p b b b b { --s: 2px; }
-  .p:has(b:hover) { --x: 1.4s; --X: 0px; }
-  .p:has(b b:hover) { --x: 8s; --X: 1px; }
-  .p:has(b b b:hover) { --x: 70s; --X: 2px; }
-  .p:has(b b b b:hover) { --x: 700s; --X: 3px; }
-  .p:has(u:first-child:hover) { --y: 1.4s; --Y: 0px; }
-  .p:has(u:nth-child(2):hover) { --y: 8s; --Y: 1px; }
-  .p:has(u:nth-child(3):hover) { --y: 70s; --Y: 2px; }
-  .p:has(u:last-child:hover) { --y: 700s; --Y: 3px; }
-  .p:has(u:last-child:hover):has(b b b b:hover) { --x: 99999s; --y: 99999s; }
-  .l { position: fixed; position-anchor: --p; z-index: 11; left: anchor(center); top: anchor(center); pointer-events: none; transition: left .07s ease-out, top .07s ease-out; will-change: left, top; isolation: isolate; }
-  .l::before { content: ''; position: absolute; width: 300px; aspect-ratio: 1; translate: -50% -50%; border-radius: 50%; background: radial-gradient(circle, var(--color-nebula-violet-soft) 0, var(--color-nebula-orchid-soft) 35%, var(--color-nebula-cyan-soft) 52%, transparent 72%); }
-  /* backdrop-filter here is the single most expensive effect on the page: it
-     resamples everything behind a circle that re-renders on every mouse move.
-     Stacking blur+saturate+contrast+hue-rotate was four expensive passes recomputed
-     continuously; blur alone keeps the frosted-lens look at a fraction of the cost. */
-  .l::after { content: ''; position: absolute; width: 150px; aspect-ratio: 1; translate: -50% -50%; border-radius: 50%; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); -webkit-mask: radial-gradient(circle, #000 38%, #000d 57%, #0007 73%, #0002 87%, #0000); mask: radial-gradient(circle, #000 38%, #000d 57%, #0007 73%, #0002 87%, #0000); }
-
-  :global(body:has(.p) a),
-  :global(body:has(.p) button),
-  :global(body:has(.p) input),
-  :global(body:has(.p) select),
-  :global(body:has(.p) textarea) { position: relative; z-index: 12; }
-
-  :global(body:has(.p) .card) {
-    position: relative;
-    z-index: 12;
-  }
-
-  @media (prefers-reduced-motion: reduce), (hover: none), (pointer: coarse) {
-    .p,
-    .l { display: none; }
   }
 
   @media (prefers-reduced-motion: reduce) {

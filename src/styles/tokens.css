@@ -115,7 +115,7 @@
   /* ---- Layout ---- */
   --container-max: 1200px;
   --container-padding: clamp(1.25rem, 4vw, 3rem);
-  --nav-height: 108px;
+  --nav-height: 122px;
 
   /* ---- Z-index scale ---- */
   --z-nav: 100;

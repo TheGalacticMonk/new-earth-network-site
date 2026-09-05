@@ -141,7 +141,7 @@ const currentPath = Astro.url.pathname;
        windows to find the plateau before the wordmark starts contaminating it, not
        assumed from the crop boundary (the sparkle accents make the icon visually
        off-center within its own crop). */
-    --nav-logo-height: 92px;
+    --nav-logo-height: 106px;
     --nav-icon-center-x: calc(var(--nav-logo-height) * 0.4975);
   }
 
@@ -160,10 +160,12 @@ const currentPath = Astro.url.pathname;
     position: absolute;
     top: calc(var(--nav-logo-height) / 2);
     left: var(--nav-icon-center-x);
-    width: 100px;
-    height: 100px;
+    /* Sized off the logo height (not fixed px) so the ring keeps the same
+       proportion to the icon — always a bit larger than it — as the logo grows. */
+    width: calc(var(--nav-logo-height) * 1.09);
+    height: calc(var(--nav-logo-height) * 1.09);
     translate: -50% -50%;
-    border: 12px solid var(--color-electric-rose);
+    border: calc(var(--nav-logo-height) * 0.13) solid var(--color-electric-rose);
     border-radius: 50%;
     opacity: 0;
     pointer-events: none;
@@ -177,7 +179,7 @@ const currentPath = Astro.url.pathname;
 
   @keyframes nav-signal-pulse {
     0% {
-      border-width: 12px;
+      border-width: calc(var(--nav-logo-height) * 0.13);
       transform: scale(0);
       opacity: 0.55;
     }
@@ -249,7 +251,7 @@ const currentPath = Astro.url.pathname;
     display: block;
   }
 
-  @media (min-width: 900px) {
+  @media (min-width: 1180px) {
     .desktop-nav,
     .desktop-cta {
       display: flex;
