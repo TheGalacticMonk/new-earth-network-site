@@ -217,8 +217,14 @@ import Container from '../Container.astro';
        Subscribe button. */
     font-family: var(--font-display);
     font-size: var(--text-sm);
-    color: var(--color-bg-deep);
-    background: var(--color-electric-cyan);
+    /* Solid cyan fill with dark text first, now a cyan-glass fill with a
+       cyan ring instead — same border weight as the nav Subscribe button
+       (--cta-border-width) so the site's two primary CTAs read as one
+       family. Text moved to --color-text-primary because the fill is no
+       longer solid and bright enough for dark text to hold contrast. */
+    color: var(--color-text-primary);
+    background: var(--color-hero-cta-fill);
+    border: var(--cta-border-width) solid var(--color-electric-cyan);
     border-radius: var(--radius-full);
     transition:
       box-shadow var(--duration-base) var(--ease-out),

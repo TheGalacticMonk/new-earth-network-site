@@ -71,6 +71,37 @@
      --color-bg-veil-clear rather than relying on the `transparent` keyword. */
   --color-nav-glass-clear: rgba(23, 13, 32, 0);
   --color-overlay-surface: rgba(23, 13, 32, 0.84);
+  /* Experiment: the Subscribe button's fill, tried as semi-transparent glass
+     instead of the solid --color-bg-elevated plum, so the sky and the nav's
+     own glass blur show through the pill rather than sitting on a flat card
+     colour. True black was tried first and read as out of place against the
+     plum site; this is --color-field-grey's rgb (the site's one other
+     genuinely-grey, not-violet-black reference point) at the same alpha,
+     which keeps the neutral, off-hue backdrop the ring and hearts need
+     without black's starker contrast against the surrounding plum. */
+  --color-signal-btn-fill: rgba(58, 55, 63, 0.45);
+  /* The Subscribe button's ring, tried as a single solid hue (gold, then pink,
+     then cyan) before landing on a blend of the three colours already anchoring
+     the site's palette — cyan (the logo/primary signal), pink (broadcast rings,
+     shooting stars), and blue (the nebula's cool counterweight) — so the ring
+     reads as one continuous sweep through hues the site already uses, rather
+     than a fourth new one. 135deg runs the sweep corner-to-corner across the
+     pill so the blend reads as one continuous transition, not a hard stripe. */
+  --gradient-signal-ring: linear-gradient(
+    135deg,
+    var(--color-electric-cyan),
+    var(--color-electric-pink),
+    var(--color-electric-blue)
+  );
+  /* Shared so any CTA's ring/border reads as the same weight as the nav
+     Subscribe button's — currently also the Hero "Get Started" button. */
+  --cta-border-width: 2px;
+  /* The Hero "Get Started" button's fill, same glass treatment as the
+     Subscribe button's grey (--color-signal-btn-fill) but tinted with the
+     button's own cyan instead of a neutral grey — it's a solid-cyan button
+     turning translucent, not a dark surface picking up a tint, so the hue
+     stays in the fill rather than fading toward grey. */
+  --color-hero-cta-fill: rgba(122, 243, 255, 0.2);
   /* --color-bg-deep at 30%. Full-bleed "deep" bands (sections, the CTA, the footer)
      were opaque, which sealed the atmosphere off wherever one landed; the homepage
      worked around that by punching holes in their backgrounds with a :has() specificity
@@ -98,11 +129,20 @@
 
   /* ---- Color: accent (use sparingly — CTAs, active states, small celestial detail) ---- */
   --color-electric-blue: #5b8cff;
+  /* Companion to --color-electric-pink-glow/--color-electric-cyan-glow below —
+     the three make up the Subscribe button's gradient ring glow. Not the same
+     token as --color-accent-glow (also cyan-based, at a much lower 0.32 alpha
+     for sitewide ambient use): this trio is tuned to sit at comparable strength
+     to each other specifically, so no one hue in the blend dominates the other
+     two just because it was tuned for a different job first. */
+  --color-electric-blue-glow: rgba(91, 140, 255, 0.45);
   --color-electric-cyan: #7af3ff;
+  --color-electric-cyan-glow: rgba(122, 243, 255, 0.5);
   --color-accent-glow: rgba(122, 243, 255, 0.32);
-  /* Broadcast rings, shooting stars and heart bursts use the opaque signal pink.
-     The nebula uses a deeper magenta at low alpha in a smaller, diffused region. */
+  /* Broadcast rings and shooting stars use the opaque signal pink. The nebula uses
+     a deeper magenta at low alpha in a smaller, diffused region. */
   --color-electric-pink: #ff4fa3;
+  --color-electric-pink-glow: rgba(255, 79, 163, 0.6);
   /* Solid version of --color-nebula-violet — same reasoning: the nav menu-item
      activation lines need a purple that reads against the dark nav, not the
      atmospheric wash. */
@@ -111,8 +151,11 @@
      heavy for the nav menu-item activation lines, which are meant to be a light
      sweep, not a bold bar. */
   --color-electric-violet-soft: rgba(151, 91, 255, 0.75);
-  /* Semi-transparent hot pink reserved for the nav Subscribe heart burst. */
-  --color-heart-pink: rgba(255, 79, 163, 0.72);
+  /* Semi-transparent white, reserved for the nav Subscribe heart burst — kept
+     as its own token since the alpha (0.72) is tuned to this one effect, and
+     white reads clearly against the button's gradient ring rather than
+     blending into whichever hue of it a heart happens to fly past. */
+  --color-heart-white: rgba(255, 255, 255, 0.72);
   /* Neutral warm-grey field fill — the hero email input first used
      --color-bg-deep (near-black) to look "recessed," but against the dark page
      that read as barely visible rather than distinct; this is genuinely grey
@@ -121,7 +164,7 @@
      new field's median luminance, meaning the control had become the same brightness as
      the page behind it. A form field has to be the lighter thing. This is 1.35x. */
   --color-field-grey: #3a373f;
-  /* Warm signal accent for the Subscribe outline and hero wand. */
+  /* Warm signal accent for the hero wand. */
   --color-electric-gold: #ffb766;
   --color-electric-gold-glow: rgba(255, 183, 102, 0.6);
   /* Starlight — a white point radiating the logo's electric blue/cyan, so the stars
@@ -215,6 +258,15 @@
   --shadow-float-hover: 0 32px 64px -16px rgba(0, 0, 0, 0.6), 0 0 32px var(--color-accent-glow);
   --shadow-glow-sm: 0 0 24px var(--color-accent-glow);
   --shadow-glow-md: 0 0 48px var(--color-accent-glow);
+  /* Three-hue companion to --gradient-signal-ring: one soft, centred glow per
+     ring colour, stacked so they overlap into a single blended halo instead of
+     three visibly separate coloured blurs — each layer's blur radius is the
+     only thing that changes between rest and hover, same as every other
+     button's glow on the site. */
+  --shadow-signal-glow: 0 0 24px var(--color-electric-cyan-glow), 0 0 24px var(--color-electric-pink-glow),
+    0 0 24px var(--color-electric-blue-glow);
+  --shadow-signal-glow-hover: 0 0 48px var(--color-electric-cyan-glow),
+    0 0 48px var(--color-electric-pink-glow), 0 0 48px var(--color-electric-blue-glow);
 
   /* ---- Motion ---- */
   --ease-out: cubic-bezier(0.2, 0, 0, 1);
@@ -419,7 +471,14 @@
   );
 
   /* ---- Layout ---- */
-  --container-max: 1200px;
+  /* Widened from 1200px so the Offerings grid's six fixed-size 190px cards
+     (1260px of cards + gaps) fit on one row instead of wrapping a lone sixth
+     card to its own line, with room left over for the nav to carry a sixth
+     link. This is the one shared content rail (Container.astro) every page
+     and the nav use, so the change is sitewide by design, not scoped to one
+     section — prose content opts out via Container's `narrow` variant
+     (max-width: 760px), so line length elsewhere is unaffected. */
+  --container-max: 1440px;
   --container-padding: clamp(1.25rem, 4vw, 3rem);
   --nav-height: 122px;
   --nav-logo-height: clamp(5rem, 25vw, 6.625rem);

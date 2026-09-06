@@ -1,0 +1,34 @@
+---
+import Container from '../Container.astro';
+import OfferingCard from '../OfferingCard.astro';
+
+/*
+  Six identical placeholder cards for now — copy and per-card differentiation are
+  the next pass (see OfferingCard.astro's header comment), same as the card's
+  neon palette. This just proves out the 6-card grid and spacing.
+*/
+const cards = Array.from({ length: 6 });
+---
+
+<section class="offerings">
+  <Container>
+    <div class="grid">
+      {cards.map(() => (
+        <OfferingCard titleTop="CYBER" titleBottom="CARD" subtitle="INTERACTIVE" highlight="3D EFFECT" />
+      ))}
+    </div>
+  </Container>
+</section>
+
+<style>
+  .offerings {
+    padding-block: var(--space-section);
+  }
+
+  .grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-6);
+  }
+</style>

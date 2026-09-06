@@ -6,9 +6,11 @@ import MobileNavigation from './MobileNavigation.astro';
 
 const links = [
   { label: 'Events', href: '/events' },
-  { label: 'Docs', href: '/docs' },
-  { label: 'Films', href: '/films' },
+  { label: 'Series', href: '/series' },
+  { label: 'Docs & Films', href: '/docs-films' },
+  { label: 'Music', href: '/music' },
   { label: 'Courses', href: '/courses' },
+  { label: 'Shop', href: '/shop' },
 ];
 
 const currentPath = Astro.url.pathname;
@@ -133,6 +135,19 @@ const currentPath = Astro.url.pathname;
       event.preventDefault();
       first.focus();
     }
+  });
+
+  /* The panel's own open/closed state is tracked only by the `hidden` attribute
+     above — nothing in its CSS hides it at desktop widths, because it isn't
+     meant to exist at desktop widths at all; .toggle (the only thing that can
+     close it) disappears there instead. Resize the window past that breakpoint
+     while the panel is open — e.g. narrow, open the menu, then widen — and
+     there is no longer any control left that can close it, while the desktop
+     nav renders underneath it and the page stays scroll-locked. This breakpoint
+     must match the `min-width` below, where .toggle is hidden. */
+  const desktopQuery = window.matchMedia('(min-width: 1180px)');
+  desktopQuery.addEventListener('change', (event) => {
+    if (event.matches && toggle?.getAttribute('aria-expanded') === 'true') closeMenu();
   });
 </script>
 

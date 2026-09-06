@@ -61,7 +61,7 @@ const heartPath =
     justify-content: center;
     align-items: center;
     border-radius: var(--radius-full);
-    background: var(--color-bg-elevated);
+    background: var(--color-signal-btn-fill);
     color: var(--color-text-primary);
     /* Exact same typography as the nav menu items next to it — same family,
        size, and weight, no bolding or extra tracking of its own. */
@@ -69,21 +69,48 @@ const heartPath =
     font-size: var(--text-sm);
     text-decoration: none;
     cursor: pointer;
-    /* Plum fill with a gold ring — the one deliberate exception to the site's
-       borderless surfaces, matching the reference gold CTA this button is
-       modeled on for this specific button only. */
-    border: 2px solid var(--color-electric-gold);
-    box-shadow: var(--shadow-float), 0 0 28px var(--color-electric-gold-glow);
+    /* Semi-transparent grey glass fill with a gradient ring — the one
+       deliberate exception to the site's borderless surfaces. The ring went
+       solid gold, then solid pink, then solid cyan before landing on a blend
+       of cyan/pink/blue (see --gradient-signal-ring): a single hue kept
+       reading as one more arbitrary accent colour, where the blend reads as
+       the site's existing signal colours gathered into one CTA rather than a
+       new one competing with them. The fill was tried as solid
+       --color-bg-elevated plum, then true black, before landing on grey (see
+       --color-signal-btn-fill): black read as out of place against the plum
+       site, where a neutral grey lets the sky and the nav's own glass blur
+       show through without a jarring hue jump from the plum around it. */
+    box-shadow: var(--shadow-float), var(--shadow-signal-glow);
     transition:
       box-shadow var(--duration-base) var(--ease-out),
       transform var(--duration-fast) var(--ease-out);
   }
 
+  /* The gradient ring itself: `border` can't take a gradient, so this pseudo
+     paints the full gradient behind the button and a mask subtracts everything
+     except a --cta-border-width-thick band at the edge — the standard
+     technique for a gradient border that still respects border-radius (a
+     literal border-image does not). z-index is left at auto: .box's explicit
+     z-index: 20 already keeps the label above this regardless of DOM order,
+     and this sits before the hearts in source order so they still fly out
+     over the top of it, not behind it. */
+  .signal-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: var(--cta-border-width);
+    background: var(--gradient-signal-ring);
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
   .signal-btn:hover {
-    box-shadow:
-      var(--shadow-float-hover),
-      0 0 12px var(--color-electric-gold),
-      0 0 64px var(--color-electric-gold-glow);
+    box-shadow: var(--shadow-float-hover), var(--shadow-signal-glow-hover);
     transform: translateY(-1px);
   }
 
@@ -91,7 +118,7 @@ const heartPath =
     text-align: center;
     width: 100%;
     /* Same padding as the site's standard "md" button — the nav CTA doesn't need
-       to be bigger than any other button to read as the important one; the gold
+       to be bigger than any other button to read as the important one; the cyan
        ring and glow already do that job. */
     padding: var(--space-3) var(--space-6);
     color: var(--color-text-primary);
@@ -114,7 +141,7 @@ const heartPath =
     position: absolute;
     height: auto;
     opacity: 0;
-    color: var(--color-heart-pink);
+    color: var(--color-heart-white);
     filter: drop-shadow(0 0 0 currentColor);
     transition:
       opacity 0.5s var(--ease-out),
