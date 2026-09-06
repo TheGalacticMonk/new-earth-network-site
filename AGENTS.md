@@ -24,7 +24,9 @@ custom-property tokens and Astro's native scoped component styles. No Tailwind, 
 framework, no client JS beyond what a component explicitly needs (mobile nav toggle,
 scroll-reveal). See `docs/architecture.md` for the full rationale and file map.
 
-Visual identity: a dark muted violet (`#2E2A3F`) environment, with sparing electric blue/cyan
+Visual identity: a lit plum violet (`#281638`, hsl 272 44% 15%) environment — the nebula
+field needs that chroma to read as a sky rather than a grey wash, which is why it is not the
+more desaturated `#2E2A3F` this line used to name. Sparing electric blue/cyan
 signal and the New Earth Network logo (`src/assets/`) as the deliberately luminous element.
 The brand/typography specialist must recommend the leanest accessible, self-hosted typography
 system; Space Grotesk, Manrope and Michroma are candidates, not an automatic prescription.

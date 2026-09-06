@@ -64,6 +64,10 @@ body > main {
 
   Layer order is front-to-back, as CSS paints background images: the three star depths
   sit over the clouds, and the non-repeating dawn bloom sits behind them all.
+
+  Nothing about the sky's shape is written here — every radius, centre, period and phase
+  is a token, and the reasoning behind each rule lives with it in tokens.css. This block
+  is only the assembly order.
 */
 body::before {
   content: '';
@@ -72,15 +76,15 @@ body::before {
   z-index: -1;
   pointer-events: none;
   background-image:
-    radial-gradient(circle at 63% 27%, var(--color-stardust-near) 0 1px, transparent 1.6px),
-    radial-gradient(circle at 22% 71%, var(--color-stardust-mid) 0 1px, transparent 1.6px),
-    radial-gradient(circle at 81% 44%, var(--color-stardust-far) 0 1px, transparent 1.6px),
-    radial-gradient(52vw 34vh at 66% 50%, var(--color-nebula-gold), transparent 72%),
-    radial-gradient(78vw 56vh at 34% 50%, var(--color-nebula-rose), transparent 72%),
-    radial-gradient(88vw 62vh at 88% 50%, var(--color-nebula-orchid), transparent 72%),
-    radial-gradient(105vw 80vh at 14% 50%, var(--color-nebula-violet), transparent 72%),
-    radial-gradient(118vw 80vh at 84% 50%, var(--color-nebula-indigo), transparent 72%),
-    radial-gradient(92vw 52vh at 50% -4vh, var(--color-nebula-dawn), transparent 72%);
+    var(--gradient-stardust-near),
+    var(--gradient-stardust-mid),
+    var(--gradient-stardust-far),
+    var(--gradient-cloud-gold),
+    var(--gradient-cloud-rose),
+    var(--gradient-cloud-orchid),
+    var(--gradient-cloud-violet),
+    var(--gradient-cloud-indigo),
+    var(--gradient-cloud-dawn);
   background-size:
     var(--atmosphere-star-tile-near),
     var(--atmosphere-star-tile-mid),
@@ -91,6 +95,18 @@ body::before {
     100% var(--atmosphere-cycle-violet),
     100% var(--atmosphere-cycle-indigo),
     100% 100vh;
+  /* Only the five tiled clouds are phased; the stardust tiles are already mutually
+     prime and the dawn bloom does not repeat. */
+  background-position:
+    0 0,
+    0 0,
+    0 0,
+    0 var(--atmosphere-phase-gold),
+    0 var(--atmosphere-phase-rose),
+    0 var(--atmosphere-phase-orchid),
+    0 var(--atmosphere-phase-violet),
+    0 var(--atmosphere-phase-indigo),
+    0 0;
   background-repeat: repeat, repeat, repeat, repeat-y, repeat-y, repeat-y, repeat-y,
     repeat-y, no-repeat;
 }

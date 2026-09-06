@@ -4,10 +4,34 @@
 */
 
 :root {
-  /* ---- Color: surfaces ---- */
-  --color-bg-primary: #140a1d; /* black-plum — the site’s night sky */
-  --color-bg-deep: #09050f; /* recessed panels, the space between stars */
-  --color-bg-elevated: #24142d; /* cards, raised panels */
+  /* ---- Color: surfaces ----
+     The night sky is lit plum, not black. The environment used to be #140a1d
+     (L 0.0045), which is so close to black that the nebula clouds had to carry the
+     entire visual field on their own; wherever a cloud did not reach, the page fell
+     back to a near-black that read as a hole, and 7.6% of the page area was literally
+     bare base colour. Lifting the floor is what makes the field read as evenly lit —
+     the clouds now modulate a sky that is already there rather than being the only
+     light in it. Same hue and nearly the same saturation as the old value
+     (hsl 272 44% 15% vs hsl 272 49% 8%), so it is the same plum, turned up.
+
+     This also closes a documented drift: the written identity spec called for a dark
+     muted violet at #2E2A3F while the shipped token was #140a1d. #2E2A3F is not a
+     brighter version of this palette, it is a different one — hsl(251 20% 21%) against
+     this file's hue 271-272 surface ladder, a 21-degree shift toward blue at less than
+     half the saturation. Adopting it literally would mean re-deriving --color-bg-deep,
+     --color-bg-elevated, --color-nav-glass and --color-bg-veil to match, and the field
+     measures flatter for it (median saturation 0.53 -> 0.39, a grey wash). The prose
+     line was descriptive, not a derived system value; AGENTS.md now names #281638.
+     Creative-director sign-off: keep the chroma, correct the doc. */
+  --color-bg-primary: #281638; /* lit plum — the site's night sky */
+  /* The old --color-bg-primary's lightness, kept as the palette's darkest note:
+     recessed panels, the veil, the space between stars. */
+  --color-bg-deep: #170d20;
+  /* Cards and raised panels. Must sit ABOVE the sky's median luminance or a card reads
+     as a hole punched in the field rather than an object floating on it — at the
+     previous #24142d it measured 0.34x the new sky median, i.e. darker than its own
+     background. This is 1.19x, so the shadow lifts an already-lighter surface. */
+  --color-bg-elevated: #422a58;
 
   /* ---- Color: atmosphere ----
      The nebula field the whole site sits inside; composed in `body::before`
@@ -17,39 +41,61 @@
      the cyan is the message — keeping cyan out of the sky is precisely what lets a
      single cyan CTA still read as a signal rather than as more scenery.
 
-     Peak alphas are capped by contrast, not by taste. --color-text-muted (#b6afcc) is
-     the tightest text pairing on the site; at these values the brightest point the
-     layered field can reach anywhere (#512d69, where the violet and rose clouds cross)
-     holds 5.19:1 against it, over the 4.5:1 AA floor. Raising violet or orchid further
-     pushes that pairing under, so added vibrancy was bought with coverage and hue
-     count instead: the field now tints 87.6% of the page area rather than 35.3%. */
-  --color-nebula-violet: rgba(151, 91, 255, 0.3);
-  --color-nebula-orchid: rgba(221, 78, 185, 0.24);
-  --color-nebula-rose: rgba(255, 104, 145, 0.18);
-  --color-nebula-gold: rgba(255, 183, 102, 0.11);
+     Alphas are capped by contrast, not by taste. --color-text-muted (#b6afcc, L 0.4496)
+     is the tightest text pairing on the site, and the binding case is the brightest
+     point the layered field can reach anywhere. At these values that point is #583369
+     (L 0.05462), holding 4.78:1 — above the 4.5:1 AA floor with ~6% margin.
+
+     Every alpha here is roughly HALF what it was, and the field is still 2.2x brighter
+     than before. That is the whole idea: brightness now comes from the lifted base
+     (--color-bg-primary) and from full coverage, not from stacking steep peaks on top
+     of a near-black void. Measured over a 100vh scroll at 1440x900:
+
+                            before      after
+       peak contrast        5.06:1      4.78:1
+       median luminance     0.0134      0.0297   (2.2x brighter typical pixel)
+       p95/p05 spread       6.65x       2.14x    (3.1x more even)
+       peak/floor spread    10.7x       4.17x
+       bare base colour     7.6%        0.0%
+
+     Raising any single alpha from here spends the remaining 0.28 of contrast margin.
+     If more vibrancy is wanted, buy it with coverage or with the base, not with these. */
+  --color-nebula-violet: rgba(151, 91, 255, 0.16);
+  --color-nebula-orchid: rgba(221, 78, 185, 0.12);
+  --color-nebula-rose: rgba(255, 104, 145, 0.09);
+  --color-nebula-gold: rgba(255, 183, 102, 0.065);
   /* The cool counterweight. Violet/orchid/rose/gold is an unbroken warm run, and
      without a cold hue the field flattens into one purple wash instead of reading as
      depth. Blue-violet rather than cyan, for the reason in the note above. */
-  --color-nebula-indigo: rgba(74, 99, 255, 0.2);
-  /* The one non-repeating cloud, anchored to the top of every document so that no page
-     opens on flat background — this is what the sky looked like it was missing. Softer
-     than --color-nebula-violet because it sits directly behind the masthead and must
-     support the logo's own aura, not compete with it. */
-  --color-nebula-dawn: rgba(151, 91, 255, 0.22);
-  --color-nebula-orchid-soft: rgba(232, 88, 192, 0.14);
+  --color-nebula-indigo: rgba(74, 99, 255, 0.11);
+  /* The one non-repeating cloud, anchored to the top of every document. It no longer
+     has to rescue flat page tops — --atmosphere-phase-* does that structurally now — so
+     its remaining job is narrow: a bloom directly behind the masthead that supports the
+     logo's own aura. Measured contribution is +5% to first-viewport median luminance and
+     nothing to the minimum, which is exactly the size of job it should be doing. */
+  --color-nebula-dawn: rgba(151, 91, 255, 0.12);
+  /* Not part of the sky. This is the CityCard photo-placeholder wash, over
+     --color-bg-deep; it is tuned against that surface, not against the atmosphere,
+     which is why it did not move with the nebula alphas above. */
+  --color-nebula-orchid-soft: rgba(232, 88, 192, 0.16);
   /* Distant starfield tiled across the atmosphere layer, in three depths so the field
      has distance in it. Warm white (--color-text-primary's hue) rather than pure white,
      so the far stars read as the same light as the type and the logo, not a second
-     unrelated light source. */
-  --color-stardust-far: rgba(247, 244, 255, 0.22);
-  --color-stardust-mid: rgba(247, 244, 255, 0.34);
-  --color-stardust-near: rgba(247, 244, 255, 0.5);
-  --color-nav-glass: rgba(9, 5, 15, 0.54);
+     unrelated light source.
+
+     These alphas rose only enough to hold each depth's luminance ratio against the
+     brightened sky exactly where it was (far 3.97x, mid 6.71x, near 11.77x the local
+     sky). The stardust gets bigger — see --star-dust-* — it does not get brighter.
+     Light is earned; there are thousands of these dots and they are texture. */
+  --color-stardust-far: rgba(247, 244, 255, 0.25);
+  --color-stardust-mid: rgba(247, 244, 255, 0.39);
+  --color-stardust-near: rgba(247, 244, 255, 0.57);
+  --color-nav-glass: rgba(23, 13, 32, 0.54);
   /* Transparent endpoint for --gradient-nav-glass, named for the same reason as
      --color-bg-veil-clear rather than relying on the `transparent` keyword. */
-  --color-nav-glass-clear: rgba(9, 5, 15, 0);
-  --color-overlay-surface: rgba(9, 5, 15, 0.84);
-  /* --color-bg-deep at 38%. Full-bleed "deep" bands (sections, the CTA, the footer)
+  --color-nav-glass-clear: rgba(23, 13, 32, 0);
+  --color-overlay-surface: rgba(23, 13, 32, 0.84);
+  /* --color-bg-deep at 30%. Full-bleed "deep" bands (sections, the CTA, the footer)
      were opaque, which sealed the atmosphere off wherever one landed; the homepage
      worked around that by punching holes in their backgrounds with a :has() specificity
      hack, and every other page simply had no atmosphere to reveal. A veil keeps a band
@@ -58,16 +104,21 @@
      page bands — cards, media wells and the mobile nav overlay stay opaque, because an
      object floating on the field should occlude it.
 
-     Tuned down from an initial 0.62, which was dark enough to read as near-black and
-     cancelled the sky it was meant to sit in — 87.6% coverage means nothing if the
-     bands covering it are opaque. Contrast is monotonic in this alpha (the veil only
-     darkens), so the binding worst case is not this value but the fully transparent
-     fade edge below, which is identical to open sky. */
-  --color-bg-veil: rgba(9, 5, 15, 0.38);
+     These bands were the darkest areas on the site and the most common complaint: at
+     0.38 over --color-bg-deep #09050f they landed at L 0.0077, DARKER than the open sky
+     they were supposed to be a shade of. Two fixes, both here: the veil colour is the
+     lifted --color-bg-deep, and the alpha drops to 0.30. A veiled band now sits at
+     L 0.0201 — 2.6x brighter in absolute terms — while reading as 0.68x the open sky
+     around it, a clearer recession step than the 0.58x it had before. Recession is a
+     RATIO, so it is free to be brighter; it was only ever the absolute value that was
+     wrong. Contrast is monotonic in this alpha (the veil only darkens), so the binding
+     worst case is not this value but the fully transparent fade edge below, which is
+     identical to open sky. */
+  --color-bg-veil: rgba(23, 13, 32, 0.3);
   /* Explicit fully-transparent veil rather than the `transparent` keyword: gradient
      interpolation to a bare `transparent` is only reliably hue-preserving because
      engines premultiply, and naming the endpoint removes the question entirely. */
-  --color-bg-veil-clear: rgba(9, 5, 15, 0);
+  --color-bg-veil-clear: rgba(23, 13, 32, 0);
 
   /* ---- Color: accent (use sparingly — CTAs, active states, small celestial detail) ---- */
   --color-electric-blue: #5b8cff;
@@ -90,9 +141,10 @@
      --color-bg-deep (near-black) to look "recessed," but against the dark page
      that read as barely visible rather than distinct; this is genuinely grey
      (not another shade of the site's violet-black) so the field is easy to
-     spot at a glance. Pulled darker from an initial, too-light pass that
-     clashed against the rest of the site's deep palette. */
-  --color-field-grey: #302d34;
+     spot at a glance. Moved up with the sky: at the old #302d34 it measured 0.93x the
+     new field's median luminance, meaning the control had become the same brightness as
+     the page behind it. A form field has to be the lighter thing. This is 1.35x. */
+  --color-field-grey: #3a373f;
   /* Solid version of --color-nebula-gold — the nav CTA's border and pulse glow
      need a crisp, fully-opaque gold to read as a border/glow, not the atmospheric
      wash the nebula token is tuned for. */
@@ -201,31 +253,149 @@
   --ease-nav-activate: cubic-bezier(0.23, 1, 0.32, 1);
   --duration-nav-activate: 600ms;
 
-  /* ---- Atmosphere geometry ----
-     Vertical repeat period of each nebula cloud. Every cloud is a single tiled
-     gradient, and the periods are prime and mutually non-harmonic on purpose: the
-     layers only return to the same relative phase after tens of thousands of vh, so
-     scrolling never exposes a repeat even though each layer on its own is perfectly
-     regular. They are also all longer than a viewport, so a cloud is something you
-     travel through rather than a pattern that tiles inside one screen.
+  /* ---- Celestial scale ----
+     One geometric ladder, ratio 1.5, base 8px, carries every star on the site:
 
-     Each period MUST be comfortably greater than 1.44x its cloud's vertical radius
-     (2 x the 72% transparent stop). A background tile clips its gradient — it does
-     not bleed into the neighbouring tile — so a cloud wider than its own tile gets
-     sliced, and the leftover alpha at the cut becomes a hard horizontal line across
-     the page at every repeat. Keep the cloud centred at 50% of its tile and fading to
-     zero before the edge, and the joins are invisible. */
-  --atmosphere-cycle-violet: 137vh;
-  --atmosphere-cycle-orchid: 173vh;
-  --atmosphere-cycle-indigo: 191vh;
-  --atmosphere-cycle-rose: 229vh;
-  --atmosphere-cycle-gold: 311vh; /* the rare warm ember — seen least often */
+       ...  1  1.6  2.4  3.6  5.3 | 8  12  18  27  40  61  91  137  205 px
+
+     1.5 is wide enough that adjacent rungs read as genuinely different objects and
+     tight enough that the whole set reads as one sky. Nothing gets a size that is not
+     a rung, and a star's rung is an answer to a question, not a preference:
+
+     TEXTURE (--star-dust-*): three rungs at the bottom of the ladder, three rungs clear
+     of the smallest still star. That gap is the whole point — below ~4px you read a
+     point of light, above ~12px you read a shape. Keeping the two groups separated
+     rather than continuous is what stops the sky becoming an undifferentiated fizz.
+     Size is depth: near dust is 1.5x mid is 1.5x far, so the three depths now differ in
+     size as well as opacity. Previously all three were the same 2px dot.
+
+     STILL STARS (--star-size-*): size is DISTANCE, and the composition's depth axis
+     runs from the optical centre (far) out to the frame edge (near). You are looking
+     into the field, so the centre of the screen is the vanishing point and the edges
+     are the foreground. This is also why it serves the layout: the quietest, smallest
+     part of the sky sits exactly where the headline goes, and the frame is populated by
+     the largest. Four rungs, one apart, so each ring is unmistakably a different
+     distance rather than a slightly different size.
+
+     STREAKS (--star-streak-*): a streak is a still star with time in it. Its length is
+     the foreground still star (--star-size-fore, 40px) carried three or four rungs up
+     the same ladder — that is what makes a comet trail legibly the same object as a
+     point, smeared. Length skips rung 91px on purpose: that empty rung is the boundary
+     between "something in the sky" and "an event", and the hot pink streaks are events
+     (one every 20+ seconds, by design).
+
+     THICKNESS is not a free variable. A streak's thickness is its length ten rungs
+     down the same ladder (1.5^10 = 57.7), so every streak on the site — nav or body —
+     has the same 1:58 aspect and reads as the same kind of object at a different
+     distance. Rounded to whole device pixels, because a fractional-height 1-3px line
+     antialiases dimmer rather than thicker.
+
+     NAV STREAKS get their own length range, not a slot in the depth model, because
+     they are bounded by a container rather than by distance: the masthead is 122px tall
+     and past about half that a horizontal line stops reading as a streak and starts
+     reading as a rule competing with the nav's own structure. So the ceiling is 61px
+     (the rung nearest 122/2) and the floor is 18px (below that, a 1px hairline is a
+     dash). The ten-rungs-down rule puts all four nav lengths at or under 1.06px, which
+     is WHY nav streaks are hairlines and body streaks are not — they are shorter, not
+     arbitrarily thinner. */
+  --star-dust-far: 1.6px;
+  --star-dust-mid: 2.4px;
+  --star-dust-near: 3.6px;
+  --star-size-far: 12px; /* the single centre star — the vanishing point */
+  --star-size-mid: 18px; /* inner ring */
+  --star-size-near: 27px; /* outer ring + edge fill */
+  --star-size-fore: 40px; /* halo ring — the frame edge, the bright hero tier */
+  --star-streak-nav-1: 18px;
+  --star-streak-nav-2: 27px;
+  --star-streak-nav-3: 40px;
+  --star-streak-nav-4: 61px;
+  --star-streak-far: 137px; /* 40 x 1.5^3 — the steeper, more distant streaks */
+  --star-streak-near: 205px; /* 40 x 1.5^4 — the shallow, fast, near ones */
+  --star-streak-weight-nav: 1px; /* 61 / 57.7 = 1.06 */
+  --star-streak-weight-far: 2px; /* 137 / 57.7 = 2.4 */
+  --star-streak-weight-near: 3px; /* 205 / 57.7 = 3.6 */
+
+  /* ---- Atmosphere geometry ----
+     Five clouds, each one tiled radial gradient, assembled in `body::before`
+     (src/styles/global.css) which is the only place they are used.
+
+     THREE RULES, and between them they are the whole reason the field now reads as
+     evenly lit rather than as bright patches over dark gaps.
+
+     1. A cloud fades to zero at 100% of its own radius. It used to stop at 72%, which
+        meant each cloud was a steep cone occupying barely half the area its stated size
+        implied, with flat base colour in between. Moving the stop to the ellipse edge —
+        so the stated radius IS where the cloud ends, and there is no magic number —
+        raises the median luminance of the field by 29% at identical peak contrast and
+        cuts the p95/p05 spread from 3.43x to 2.57x. This was the single biggest fix.
+
+     2. The vertical period is the nearest prime at or above 2x the cloud's vertical
+        radius, so tiles meet edge to edge with zero alpha at the join. Below 2x the
+        gradient gets sliced by its own tile and the leftover alpha becomes a hard
+        horizontal line at every repeat; far above 2x you get the dark bands this
+        started with (gold was at 311vh for a 34vh cloud — an 84% duty cycle of
+        nothing). The periods stay prime and mutually non-harmonic so the five layers
+        do not return to the same relative phase for tens of thousands of vh.
+
+     3. The horizontal centres sit on an even 16% ladder — 18 / 34 / 50 / 66 / 82 — so
+        no column of the page is ever far from a cloud centre. They used to bunch
+        (orchid 88%, indigo 84%) which built a hot spot on the right and starved the
+        middle.
+
+     Cloud radii and centres live in the --gradient-cloud-* tokens below, so the
+     assembly in global.css is a list of token references and nothing about the sky's
+     shape is hard-coded outside this file. */
+  --atmosphere-cycle-gold: 97vh; /* 2 x 46vh */
+  --atmosphere-cycle-rose: 127vh; /* 2 x 58vh */
+  --atmosphere-cycle-orchid: 137vh; /* 2 x 66vh */
+  --atmosphere-cycle-violet: 149vh; /* 2 x 74vh */
+  --atmosphere-cycle-indigo: 151vh; /* 2 x 70vh */
+  /* Phase offset for each cloud's tile, applied as `background-position`.
+     Every tiled cloud is centred at 50% of its own tile, so with no offset every layer
+     sits at its tile SEAM — its darkest point — at y=0. That is why the top of every
+     page opened flat and why a separate non-repeating "dawn" cloud had to be bolted on
+     to cover it. Offsetting each layer puts three clouds over the first viewport by
+     construction, and staggers the seams so no two layers bottom out at the same scroll
+     depth. Measured: first-viewport minimum luminance 0.0045 -> 0.0177. */
+  --atmosphere-phase-gold: 71vh;
+  --atmosphere-phase-rose: 8vh;
+  --atmosphere-phase-orchid: -43vh;
+  --atmosphere-phase-violet: -64vh;
+  --atmosphere-phase-indigo: -20vh;
+  /* `transparent` rather than a named clear endpoint (cf. --color-bg-veil-clear): these
+     ramps end at zero alpha at the ellipse edge, where the hue is unobservable, so the
+     premultiplication question the veil token worries about cannot arise here. */
+  --gradient-cloud-gold: radial-gradient(72vw 46vh at 34% 50%, var(--color-nebula-gold), transparent);
+  --gradient-cloud-rose: radial-gradient(86vw 58vh at 66% 50%, var(--color-nebula-rose), transparent);
+  --gradient-cloud-orchid: radial-gradient(94vw 66vh at 82% 50%, var(--color-nebula-orchid), transparent);
+  --gradient-cloud-violet: radial-gradient(98vw 74vh at 18% 50%, var(--color-nebula-violet), transparent);
+  --gradient-cloud-indigo: radial-gradient(102vw 70vh at 50% 50%, var(--color-nebula-indigo), transparent);
+  /* The one non-repeating layer; see --color-nebula-dawn. Anchored above the top edge
+     so only its lower half is on the page, behind the masthead. */
+  --gradient-cloud-dawn: radial-gradient(92vw 48vh at 50% -6vh, var(--color-nebula-dawn), transparent);
   /* Star tiles, sized in px rather than viewport units so star density stays a
      constant physical density instead of scaling with the window. Prime dimensions,
      for the same non-repeating reason as the cycles above. */
   --atmosphere-star-tile-far: 191px 283px;
   --atmosphere-star-tile-mid: 251px 197px;
   --atmosphere-star-tile-near: 293px 347px;
+  /* One dot per tile, at a position that is deliberately not the tile centre so the
+     three depths never form a visible lattice. Radii come from --star-dust-*. */
+  --gradient-stardust-far: radial-gradient(
+    circle at 81% 44%,
+    var(--color-stardust-far) 0 calc(var(--star-dust-far) / 2),
+    transparent calc(var(--star-dust-far) / 2 + 0.4px)
+  );
+  --gradient-stardust-mid: radial-gradient(
+    circle at 22% 71%,
+    var(--color-stardust-mid) 0 calc(var(--star-dust-mid) / 2),
+    transparent calc(var(--star-dust-mid) / 2 + 0.6px)
+  );
+  --gradient-stardust-near: radial-gradient(
+    circle at 63% 27%,
+    var(--color-stardust-near) 0 calc(var(--star-dust-near) / 2),
+    transparent calc(var(--star-dust-near) / 2 + 0.8px)
+  );
 
   /* ---- Veil bands ----
      A flat veil gave every "deep" band a hard luminance step at its top and bottom
@@ -301,6 +471,32 @@
   --z-nav: 100;
   --z-overlay: 200;
   --z-toast: 300;
+}
+
+/* The whole celestial ladder steps down exactly one rung on a phone, rather than each
+   tier getting its own clamp() formula. One rung is the smallest step the system can
+   take, it preserves every ratio between tiers, and it means the sky on a 320px screen
+   is the same composition seen from further away — not a differently-designed sky.
+   The breakpoint matches the star-field's existing one in index.astro. */
+@media (max-width: 640px) {
+  :root {
+    --star-size-far: 8px;
+    --star-size-mid: 12px;
+    --star-size-near: 18px;
+    --star-size-fore: 27px;
+    --star-streak-nav-1: 12px;
+    --star-streak-nav-2: 18px;
+    --star-streak-nav-3: 27px;
+    --star-streak-nav-4: 40px;
+    /* Shooting stars stay visible at this width (only `prefers-reduced-motion` hides
+       them — see index.astro); what IS display:none here is the edge-fill still stars.
+       These two rungs are simply the streaks' mobile step, two down, keeping the
+       1:58 aspect, same as every other tier in this block. */
+    --star-streak-far: 61px;
+    --star-streak-near: 91px;
+    --star-streak-weight-far: 1px;
+    --star-streak-weight-near: 2px;
+  }
 }
 
 @media (prefers-color-scheme: light) {

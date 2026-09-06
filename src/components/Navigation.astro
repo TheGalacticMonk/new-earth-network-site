@@ -179,7 +179,7 @@ const currentPath = Astro.url.pathname;
     left: -10rem;
     top: var(--star-top);
     width: var(--star-length);
-    height: 1px;
+    height: var(--star-streak-weight-nav);
     pointer-events: none;
     opacity: var(--star-opacity);
     background: linear-gradient(90deg, transparent, var(--color-star-light));
@@ -190,20 +190,25 @@ const currentPath = Astro.url.pathname;
     animation: nav-star-flight var(--star-duration) linear var(--star-delay) infinite;
   }
 
-  .star-1 { --star-top: 14%; --star-length: 22px; --star-angle: -4deg; --star-opacity: 0.56; --star-duration: 6.8s; --star-delay: -1.2s; }
-  .star-2 { --star-top: 31%; --star-length: 11px; --star-angle: 3deg; --star-opacity: 0.34; --star-duration: 10.4s; --star-delay: -7.8s; }
-  .star-3 { --star-top: 49%; --star-length: 30px; --star-angle: -2deg; --star-opacity: 0.46; --star-duration: 8.1s; --star-delay: -4.1s; }
-  .star-4 { --star-top: 71%; --star-length: 15px; --star-angle: 5deg; --star-opacity: 0.28; --star-duration: 12.6s; --star-delay: -2.5s; }
-  .star-5 { --star-top: 86%; --star-length: 25px; --star-angle: -5deg; --star-opacity: 0.42; --star-duration: 7.4s; --star-delay: -5.6s; }
-  .star-6 { --star-top: 23%; --star-length: 9px; --star-angle: 2deg; --star-opacity: 0.24; --star-duration: 14.2s; --star-delay: -9.4s; }
-  .star-7 { --star-top: 60%; --star-length: 19px; --star-angle: -3deg; --star-opacity: 0.38; --star-duration: 9.3s; --star-delay: -6.2s; }
-  .star-8 { --star-top: 40%; --star-length: 34px; --star-angle: 4deg; --star-opacity: 0.48; --star-duration: 6.3s; --star-delay: -3.6s; }
-  .star-9 { --star-top: 78%; --star-length: 12px; --star-angle: -1deg; --star-opacity: 0.3; --star-duration: 11.7s; --star-delay: -8.7s; }
-  .star-10 { --star-top: 7%; --star-length: 17px; --star-angle: 3deg; --star-opacity: 0.36; --star-duration: 8.8s; --star-delay: -0.8s; }
-  .star-11 { --star-top: 18%; --star-length: 14px; --star-angle: 1deg; --star-opacity: 0.32; --star-duration: 13.1s; --star-delay: -10.2s; }
-  .star-12 { --star-top: 36%; --star-length: 27px; --star-angle: -6deg; --star-opacity: 0.44; --star-duration: 7.1s; --star-delay: -5.1s; }
-  .star-13 { --star-top: 55%; --star-length: 8px; --star-angle: 4deg; --star-opacity: 0.22; --star-duration: 15.4s; --star-delay: -12.6s; }
-  .star-14 { --star-top: 67%; --star-length: 21px; --star-angle: -2deg; --star-opacity: 0.4; --star-duration: 9.8s; --star-delay: -1.9s; }
+  /* Four rungs of --star-streak-nav-*, not fourteen bespoke lengths. Distribution is
+     5/4/3/2 from shortest to longest: a depth field has more far objects than near
+     ones, and it keeps the two longest streaks rare enough to stay events. Each star
+     sits on the rung its old length ranked into, so length still tracks --star-opacity
+     the way it did — longer reads nearer, and nearer reads brighter. */
+  .star-1 { --star-top: 14%; --star-length: var(--star-streak-nav-3); --star-angle: -4deg; --star-opacity: 0.56; --star-duration: 6.8s; --star-delay: -1.2s; }
+  .star-2 { --star-top: 31%; --star-length: var(--star-streak-nav-1); --star-angle: 3deg; --star-opacity: 0.34; --star-duration: 10.4s; --star-delay: -7.8s; }
+  .star-3 { --star-top: 49%; --star-length: var(--star-streak-nav-4); --star-angle: -2deg; --star-opacity: 0.46; --star-duration: 8.1s; --star-delay: -4.1s; }
+  .star-4 { --star-top: 71%; --star-length: var(--star-streak-nav-2); --star-angle: 5deg; --star-opacity: 0.28; --star-duration: 12.6s; --star-delay: -2.5s; }
+  .star-5 { --star-top: 86%; --star-length: var(--star-streak-nav-3); --star-angle: -5deg; --star-opacity: 0.42; --star-duration: 7.4s; --star-delay: -5.6s; }
+  .star-6 { --star-top: 23%; --star-length: var(--star-streak-nav-1); --star-angle: 2deg; --star-opacity: 0.24; --star-duration: 14.2s; --star-delay: -9.4s; }
+  .star-7 { --star-top: 60%; --star-length: var(--star-streak-nav-2); --star-angle: -3deg; --star-opacity: 0.38; --star-duration: 9.3s; --star-delay: -6.2s; }
+  .star-8 { --star-top: 40%; --star-length: var(--star-streak-nav-4); --star-angle: 4deg; --star-opacity: 0.48; --star-duration: 6.3s; --star-delay: -3.6s; }
+  .star-9 { --star-top: 78%; --star-length: var(--star-streak-nav-1); --star-angle: -1deg; --star-opacity: 0.3; --star-duration: 11.7s; --star-delay: -8.7s; }
+  .star-10 { --star-top: 7%; --star-length: var(--star-streak-nav-2); --star-angle: 3deg; --star-opacity: 0.36; --star-duration: 8.8s; --star-delay: -0.8s; }
+  .star-11 { --star-top: 18%; --star-length: var(--star-streak-nav-1); --star-angle: 1deg; --star-opacity: 0.32; --star-duration: 13.1s; --star-delay: -10.2s; }
+  .star-12 { --star-top: 36%; --star-length: var(--star-streak-nav-3); --star-angle: -6deg; --star-opacity: 0.44; --star-duration: 7.1s; --star-delay: -5.1s; }
+  .star-13 { --star-top: 55%; --star-length: var(--star-streak-nav-1); --star-angle: 4deg; --star-opacity: 0.22; --star-duration: 15.4s; --star-delay: -12.6s; }
+  .star-14 { --star-top: 67%; --star-length: var(--star-streak-nav-2); --star-angle: -2deg; --star-opacity: 0.4; --star-duration: 9.8s; --star-delay: -1.9s; }
 
   @keyframes nav-star-flight {
     from { transform: translateX(0) rotate(var(--star-angle)); }

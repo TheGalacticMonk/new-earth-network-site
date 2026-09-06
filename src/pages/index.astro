@@ -97,14 +97,20 @@ const stars = [
     fill: var(--color-star-light);
     opacity: 0.28;
     translate: -50% -50%;
+    /* Every star's size comes from --star-size, which each depth ring sets once to
+       its rung on the celestial ladder (tokens.css). Width and glow both read it, so
+       a star's halo is always a fixed fraction of the star — one rule, no per-tier
+       filter arithmetic, and the phone step-down in tokens.css carries the glow with
+       it automatically. */
+    width: var(--star-size);
     /* Blue/cyan glow, not white-on-white — a white point radiating a plain white
        halo barely reads against itself and loses the tie to the logo's own
        electric blue/cyan aura, which is the whole point of these being "the
        same signal" rather than generic decorative sparkles. One drop-shadow, not
        three — this runs on 27 permanently-animating elements, so its cost is
        constant and multiplies fast. The fuller 3-layer bloom is reserved for the
-       two halo "hero" stars below, the only ones meant to read as genuinely bright. */
-    filter: drop-shadow(0 0 6px var(--color-star-glow-soft));
+       halo "hero" stars below, the only ones meant to read as genuinely bright. */
+    filter: drop-shadow(0 0 calc(var(--star-size) * 0.25) var(--color-star-glow-soft));
   }
 
   .center { top: 50%; left: 50%; }
@@ -137,12 +143,17 @@ const stars = [
   .edge-left-4 { top: 84%; left: 6%; }
   .edge-right-4 { top: 84%; left: 94%; }
 
-  .center { width: 8px; }
-  .inner-east, .inner-northeast, .inner-northwest, .inner-west, .inner-southwest, .inner-southeast { width: 12px; }
-  .outer-east, .outer-northeast, .outer-northwest, .outer-west, .outer-southwest, .outer-southeast { width: clamp(22px, 2.25vw, 34px); }
-  .halo-east, .halo-northeast, .halo-northwest, .halo-west, .halo-southwest, .halo-southeast { width: clamp(18px, 1.8vw, 28px); }
-  .edge-left-1, .edge-right-1, .edge-left-4, .edge-right-4 { width: clamp(20px, 2vw, 30px); }
-  .edge-left-2, .edge-right-2, .edge-left-3, .edge-right-3 { width: clamp(16px, 1.6vw, 24px); }
+  /* Size is distance. The centre of the screen is the vanishing point and the frame
+     edge is the foreground, so each ring out gets the next rung up the ladder. The
+     edge fill sits at the same depth as the outer ring and now shares its rung — it
+     used to have two clamp() widths of its own, which put edge stars in front of the
+     outer ring on wide screens and behind it on narrow ones for no reason. */
+  .center { --star-size: var(--star-size-far); }
+  .inner-east, .inner-northeast, .inner-northwest, .inner-west, .inner-southwest, .inner-southeast { --star-size: var(--star-size-mid); }
+  .outer-east, .outer-northeast, .outer-northwest, .outer-west, .outer-southwest, .outer-southeast,
+  .edge-left-1, .edge-right-1, .edge-left-2, .edge-right-2,
+  .edge-left-3, .edge-right-3, .edge-left-4, .edge-right-4 { --star-size: var(--star-size-near); }
+  .halo-east, .halo-northeast, .halo-northwest, .halo-west, .halo-southwest, .halo-southeast { --star-size: var(--star-size-fore); }
 
   .center { opacity: 0.16; }
   .inner-east, .inner-northeast, .inner-northwest, .inner-west, .inner-southwest, .inner-southeast { opacity: 0.2; }
@@ -150,12 +161,16 @@ const stars = [
   .halo-east, .halo-northeast, .halo-northwest, .halo-west, .halo-southwest, .halo-southeast { opacity: 0.25; }
   .edge-left-1, .edge-right-1, .edge-left-4, .edge-right-4 { opacity: 0.22; }
   .edge-left-2, .edge-right-2, .edge-left-3, .edge-right-3 { opacity: 0.16; }
+  /* The hero tier's 3-layer bloom: core, mid, wide at 0.2 / 0.6 / 1.2 of the star's
+     own size — 8 / 24 / 48px against the 40px foreground rung. Same ratios as the
+     one-layer ambient glow above, just carried out further, so a halo star reads as
+     the same object radiating harder rather than a differently-lit one. */
   .halo-east, .halo-northeast, .halo-northwest, .halo-west, .halo-southwest, .halo-southeast {
     opacity: 0.65;
     filter:
-      drop-shadow(0 0 6px var(--color-star-glow))
-      drop-shadow(0 0 18px var(--color-star-glow-soft))
-      drop-shadow(0 0 34px var(--color-star-glow-wide));
+      drop-shadow(0 0 calc(var(--star-size) * 0.2) var(--color-star-glow))
+      drop-shadow(0 0 calc(var(--star-size) * 0.6) var(--color-star-glow-soft))
+      drop-shadow(0 0 calc(var(--star-size) * 1.2) var(--color-star-glow-wide));
   }
   /*
     Shooting stars — same idea as the reference button (a thin streak falling on a
@@ -178,18 +193,31 @@ const stars = [
   */
   .shooting-star {
     position: absolute;
-    width: 110px;
-    height: 1.5px;
     border-radius: var(--radius-full);
     background: linear-gradient(90deg, var(--color-star-shooting), transparent);
     filter: drop-shadow(0 0 6px var(--color-star-shooting-glow));
     opacity: 0;
   }
 
+  /* Length and thickness are set by depth, and depth is already encoded in each
+     streak's angle: a shallow path across the frame is something passing nearby, a
+     steep one is something falling away in the distance. So the two shallow streaks
+     (-18deg, -25deg) take the near rung and the two steep ones (-48deg, -52deg) take
+     the far rung, and thickness follows from length by the fixed 1:58 aspect. */
+  .shooting-star-1, .shooting-star-3 {
+    width: var(--star-streak-near);
+    height: var(--star-streak-weight-near);
+  }
+
+  .shooting-star-2, .shooting-star-4 {
+    width: var(--star-streak-far);
+    height: var(--star-streak-weight-far);
+  }
+
   .shooting-star-1 { top: -4%; left: 78%; animation: shoot-1 12s 2s ease-in infinite; }
-  .shooting-star-2 { top: 8%; left: 54%; width: 90px; animation: shoot-2 16s 7s ease-in infinite; }
-  .shooting-star-3 { top: -6%; left: 34%; width: 130px; animation: shoot-3 18s 11s ease-in infinite; }
-  .shooting-star-4 { top: 14%; left: 94%; width: 90px; animation: shoot-4 14s 4s ease-in infinite; }
+  .shooting-star-2 { top: 8%; left: 54%; animation: shoot-2 16s 7s ease-in infinite; }
+  .shooting-star-3 { top: -6%; left: 34%; animation: shoot-3 18s 11s ease-in infinite; }
+  .shooting-star-4 { top: 14%; left: 94%; animation: shoot-4 14s 4s ease-in infinite; }
 
   @keyframes shoot-1 {
     0%, 100% { opacity: 0; transform: rotate(-25deg) translateX(0); }
@@ -228,7 +256,10 @@ const stars = [
     .star { opacity: 0.18; }
     .center { opacity: 0.1; }
     .inner-east, .inner-northeast, .inner-northwest, .inner-west, .inner-southwest, .inner-southeast { opacity: 0.18; }
-    .outer-east, .outer-northeast, .outer-northwest, .outer-west, .outer-southwest, .outer-southeast { width: 16px; opacity: 0.2; }
+    /* No width override here any more: tokens.css steps the whole ladder down one
+       rung at this same breakpoint, so every tier shrinks together and the sky stays
+       the same composition seen from further away. Only opacity is a mobile decision. */
+    .outer-east, .outer-northeast, .outer-northwest, .outer-west, .outer-southwest, .outer-southeast { opacity: 0.2; }
     /* Halo stars are the only ones meant to read as genuinely bright (see their
        rule above) — hiding them on mobile removes the one thing actually making
        the sky look populated, leaving only the dimmed inner/outer rings, which
@@ -244,9 +275,9 @@ const stars = [
     .halo-east, .halo-west {
       opacity: 0.65;
       filter:
-        drop-shadow(0 0 6px var(--color-star-glow))
-        drop-shadow(0 0 18px var(--color-star-glow-soft))
-        drop-shadow(0 0 34px var(--color-star-glow-wide));
+        drop-shadow(0 0 calc(var(--star-size) * 0.2) var(--color-star-glow))
+        drop-shadow(0 0 calc(var(--star-size) * 0.6) var(--color-star-glow-soft))
+        drop-shadow(0 0 calc(var(--star-size) * 1.2) var(--color-star-glow-wide));
     }
     .edge-left-1, .edge-right-1, .edge-left-2, .edge-right-2,
     .edge-left-3, .edge-right-3, .edge-left-4, .edge-right-4 { display: none; }
