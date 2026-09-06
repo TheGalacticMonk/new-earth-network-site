@@ -82,6 +82,11 @@ const stars = [
   .stars {
     --inner-orbit: min(15vw, 20vh);
     --outer-orbit: calc(var(--inner-orbit) * 2);
+    /* Where Container.astro's content actually starts: half the leftover space
+       once the page is wider than --container-max, plus the container's own
+       padding — the exact box model .hero-content sits inside. halo-west/east
+       are pinned to this rather than a raw viewport percentage (see below). */
+    --content-inset: calc(max(0px, (100vw - var(--container-max)) / 2) + var(--container-padding));
     position: fixed;
     inset: 0;
     z-index: 0;
@@ -128,10 +133,18 @@ const stars = [
   .outer-west { top: 50%; left: calc(50% - var(--outer-orbit)); }
   .outer-southwest { top: calc(50% + (var(--outer-orbit) * .866)); left: calc(50% - (var(--outer-orbit) * .5)); }
   .outer-southeast { top: calc(50% + (var(--outer-orbit) * .866)); left: calc(50% + (var(--outer-orbit) * .5)); }
-  .halo-east { top: 50%; left: 94%; }
+  /* halo-east/west sit at the same height as the hero copy (top: 50% lands right
+     in the headline's band), so unlike every other star here they can't just be a
+     viewport percentage — a flat 6%/94% was tuned against the old 1200px
+     --container-max, and widening it (see tokens.css) pulled the hero content's
+     left edge in far enough that this star ended up sitting behind "Stop asking."
+     Pinning to --content-inset instead keeps a fixed 32px clearance from wherever
+     the content edge actually is, so this stays correct if the container width
+     (or the viewport) changes again instead of silently drifting back into text. */
+  .halo-east { top: 50%; right: calc(var(--content-inset) - 32px); }
   .halo-northeast { top: max(14%, calc(var(--nav-height) + var(--space-8))); left: 72%; }
   .halo-northwest { top: max(14%, calc(var(--nav-height) + var(--space-8))); left: 28%; }
-  .halo-west { top: 50%; left: 6%; }
+  .halo-west { top: 50%; left: calc(var(--content-inset) - 32px); }
   .halo-southwest { top: 86%; left: 28%; }
   .halo-southeast { top: 86%; left: 72%; }
 
@@ -273,7 +286,12 @@ const stars = [
        without this, that generic rule would silently win on mobile and dim
        these back down anyway. */
     .halo-west { left: 10%; }
-    .halo-east { left: 90%; }
+    /* right, not left: the desktop rule above now sets halo-east's `right`
+       (see --content-inset), and leaving a `left` here too would set both
+       properties at once on the same absolutely-positioned, non-auto-width
+       element — over-constrained, so `right` would be silently dropped as
+       redundant instead of taking over at this breakpoint as intended. */
+    .halo-east { right: 10%; }
     .halo-east, .halo-west {
       opacity: 0.65;
       filter:
