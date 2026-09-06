@@ -240,8 +240,20 @@
   --space-24: 6rem; /* 96 */
   --space-32: 8rem; /* 128 */
 
-  /* section rhythm — fluid so it compresses gracefully on small screens */
-  --space-section: clamp(4rem, 3rem + 5vw, 8rem);
+  /* section rhythm — fluid so it compresses gracefully on small screens.
+     Every section (Section.astro and each home/*.astro component) applies
+     this as padding-block, symmetric top and bottom. That means the visible
+     gap at any junction between two sections is this value TWICE — the first
+     section's bottom padding plus the second section's top padding stacking,
+     since padding never collapses the way adjacent margins would. Sized here
+     so that stacked gap reads as one section's worth of breathing room, not
+     two: half of what it would take to hit the same visual rhythm if this
+     were the only padding in play. Halving it here (rather than leaving the
+     value alone and switching every section from padding to margin so
+     adjacent gaps could collapse) was the smaller, lower-risk change — same
+     fix, one line, no risk of a margin collapsing through some section's
+     background in a way padding wouldn't. */
+  --space-section: clamp(2rem, 1.5rem + 2.5vw, 4rem);
 
   /* ---- Radius ---- */
   --radius-sm: 6px;
