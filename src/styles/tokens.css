@@ -124,9 +124,16 @@
   --color-electric-blue: #5b8cff;
   --color-electric-cyan: #7af3ff;
   --color-accent-glow: rgba(122, 243, 255, 0.32);
-  /* Solid version of --color-nebula-rose — a crisp UI color (the nav logo's pulse
-     ring) needs full opacity, not the atmospheric wash the nebula token is tuned for. */
-  --color-electric-rose: #ff6891;
+  /* The nav logo's broadcast rings. Deliberately the same RGB as --color-heart-pink
+     and --color-star-shooting below: the site has exactly two pinks, and this one
+     used to be on the wrong one. It was the solid twin of --color-nebula-rose
+     (255,104,145) — the ambient sky wash — which put a signal event in the same
+     register as the background weather. The rings, the shooting stars and the
+     Subscribe heart burst are all brief, bright, deliberate events, so they now share
+     one hot pink and the nebula rose is left to the sky. Hotter and more saturated
+     than the old rose was, which is also what the site owner asked for; this is not a
+     fourth pink, it is the ring joining a register that already existed. */
+  --color-electric-pink: #ff4fa3;
   /* Solid version of --color-nebula-violet — same reasoning: the nav menu-item
      activation lines need a purple that reads against the dark nav, not the
      atmospheric wash. */
@@ -252,6 +259,30 @@
      Kept as its own pair rather than changed sitewide. */
   --ease-nav-activate: cubic-bezier(0.23, 1, 0.32, 1);
   --duration-nav-activate: 600ms;
+  /* One-off, and deliberately an order of magnitude outside the 150–250ms interaction
+     range above: the nav logo's broadcast is ambient presence, not feedback on an
+     action, so it is timed like a beacon rather than a transition.
+
+     How the cycle actually divides, because the useful number is not written here:
+     each ring travels for the first 50% of --cycle (2s), and the third ring starts two
+     --staggers late, so the burst runs 0s → 3s and the true silence between bursts is
+     --cycle minus 3s. At 4s that gap is 1s. It was 2s and the site owner asked for less;
+     it is not zero, and should not go there. An always-visible sticky-nav element that
+     never stops moving is noise, and the pause is the thing that makes a burst read as
+     a transmission rather than a throb. The perceived rest is a little longer than 1s
+     anyway, because each ring's last half-second is already nearly transparent.
+
+     Shortening the gap is done by cutting --cycle *and* raising the travel stop in
+     @keyframes nav-signal-pulse together, so travel stays 2s in absolute time. Cutting
+     --cycle alone would speed the wavefronts up instead of shortening the rest, which
+     is a different change than the one being asked for.
+
+     --stagger is the ring-to-ring offset inside one burst, which is a separate control
+     from the gap between bursts — do not reach for it to fix rhythm. It must stay well
+     under the 50% of --cycle each ring spends travelling, or the rings emit one at a
+     time and the concentric "signal" read collapses back into a single repeating ping. */
+  --duration-nav-signal-cycle: 4s;
+  --duration-nav-signal-stagger: 0.5s;
 
   /* ---- Celestial scale ----
      One geometric ladder, ratio 1.5, base 8px, carries every star on the site:

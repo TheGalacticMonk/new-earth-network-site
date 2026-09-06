@@ -34,6 +34,11 @@ const currentPath = Astro.url.pathname;
   <Container>
     <div class="nav-row">
       <a href="/" class="brand" aria-label="New Earth Network — home">
+        {/* The third wavefront. .brand's ::before and ::after carry the first two;
+            a third ring needs a real node, and an empty aria-hidden span inside a
+            link that already carries its own aria-label is the smallest one that
+            changes nothing about the logo's markup or its accessible name. */}
+        <span class="brand-ring" aria-hidden="true"></span>
         <Logo variant="full" priority width={500} />
       </a>
 
@@ -240,45 +245,149 @@ const currentPath = Astro.url.pathname;
     width: auto;
   }
 
+  /*
+    Three wavefronts leaving the logo mark — the transmitter metaphor made literal.
+    Why three and not two: two rings can only ever alternate, and alternation reads
+    as one ring repeating. Three is the smallest count where you see concentric
+    circles at different radii *at the same time*, which is the entire idea. A fourth
+    adds no new information and crowds the ~20px of travel the nav's clip allows.
+
+    Geometry is measured off the mark, not guessed: the icon's circle stroke has an
+    outer diameter of 0.777 x --nav-logo-height (its glow reaches 0.879). The rings
+    are therefore born at 0.78 and only ever travel outward — the previous version
+    started at scale(0) and spent most of its life expanding *behind* the artwork,
+    where the mark's transparent interior let it show through. That, not the ring
+    count, is what made it read as a blob rather than a signal.
+
+    Each ring differs in reach, peak brightness and stroke weight, and all three are
+    born at the same rim: one source, successive emissions, each carrying less energy
+    than the last. Energy is the only dimension that varies, and the hue deliberately
+    does not. A different colour per ring would read as different *sources*, which is
+    the opposite of the idea — concentric wavefronts mean one transmitter emitting
+    repeatedly. At 2–3px wide, three hues would also read as chromatic fringing rather
+    than as three colours. So all three are --color-electric-pink, and the hot pink is
+    the only warm thing near a mark that glows cyan: the contrast against the logo's
+    own aura is what lets the emission read as leaving the mark rather than as part
+    of it.
+
+    The peaks are a ladder, not three independent numbers — 0.9 / 0.62 / 0.38 holds
+    the same 1 : 0.69 : 0.42 decay the dimmer first pass had. When the site owner
+    asked for more presence, the whole ladder was scaled rather than flattened,
+    because the falloff between rings *is* the meaning: flatten it and three equal
+    rings stop being one transmitter losing energy and become three unrelated circles.
+    --ring-peak is the knob for overall intensity; keep the ratios if you turn it.
+  */
+  /* `content` is set only on the pseudos — on a real element it would make
+     .brand-ring a replaced element with no intrinsic size. */
   .brand::before,
   .brand::after {
     content: '';
+  }
+
+  .brand::before,
+  .brand::after,
+  .brand-ring {
     position: absolute;
     top: calc(var(--nav-logo-height) / 2);
     left: var(--nav-icon-center-x);
-    width: calc(var(--nav-logo-height) * 1.09);
-    height: calc(var(--nav-logo-height) * 1.09);
+    /* Birth diameter: just outside the mark's circle stroke (0.777) and still inside
+       its glow (0.879), so each wavefront appears to detach from the mark rather
+       than fade up in empty space. */
+    width: calc(var(--nav-logo-height) * 0.78);
+    height: calc(var(--nav-logo-height) * 0.78);
     translate: -50% -50%;
-    border: calc(var(--nav-logo-height) * 0.13) solid var(--color-electric-rose);
+    border: var(--ring-weight) solid var(--color-electric-pink);
     border-radius: 50%;
     opacity: 0;
     pointer-events: none;
     z-index: -1;
-    animation: nav-signal-pulse 3s ease-out infinite;
+    /*
+      linear, not --ease-out, and this is the one place on the site where that is the
+      right answer: a wavefront travels at constant speed. --ease-out would fling all
+      three rings to their outer radius in the first third of the cycle, where they
+      would pile up on top of each other — the concentric spacing that carries the
+      whole read only survives constant velocity.
+    */
+    animation: nav-signal-pulse var(--duration-nav-signal-cycle) linear var(--ring-delay) infinite;
+  }
+
+  /* --ring-reach is a multiple of the birth diameter, and the lead ring's 1.45 is a
+     hard ceiling, not a taste call: the nav is 122px tall with `overflow: hidden`, so
+     anything past a 61px radius gets sliced flat by the top and bottom edges. 1.45
+     lands at 60px at the largest logo size. Measured, not assumed — 1.56 was tried and
+     the arc is visibly guillotined at the masthead's top edge. */
+  .brand::before {
+    --ring-reach: 1.45;
+    --ring-peak: 0.9;
+    --ring-weight: calc(var(--nav-logo-height) * 0.024);
+    --ring-delay: 0s;
   }
 
   .brand::after {
-    animation-delay: 1.5s;
+    --ring-reach: 1.3;
+    --ring-peak: 0.62;
+    --ring-weight: calc(var(--nav-logo-height) * 0.019);
+    --ring-delay: var(--duration-nav-signal-stagger);
   }
 
+  .brand-ring {
+    --ring-reach: 1.16;
+    --ring-peak: 0.38;
+    --ring-weight: calc(var(--nav-logo-height) * 0.015);
+    --ring-delay: calc(var(--duration-nav-signal-stagger) * 2);
+  }
+
+  /*
+    Transform and opacity only — neither triggers layout or repaint, so all three
+    rings run on the compositor. (The version this replaces animated border-width,
+    which is a layout property; adding a third ring to that would have put 50% more
+    per-frame main-thread work into a sticky nav that is on screen on every page.
+    This version removes that cost rather than growing it.)
+
+    Travel occupies the first 50% of the cycle; the rest is held at zero opacity and
+    is this ring's share of the silence between transmissions.
+
+    These stops look like odd numbers because they are absolute times expressed as
+    percentages of a --cycle that has changed once. Against the current 4s they are
+    0.35s ignition, 1.5s half-brightness, 2s death. When the burst gap was shortened
+    from 2s to 1s, --cycle went 5s → 4s and every stop was rescaled by 5/4 so those
+    three absolute times — and therefore the wavefront's velocity and the shape of its
+    fade — came through the change untouched. Keep doing that: the percentages are
+    derived from --cycle, not independent taste.
+
+    The fade is shaped rather than linear: a fast ignition, then a long plateau that
+    only collapses in the last quarter of the travel. A straight linear fade is the
+    physically honest version, but it makes each wavefront dimmest exactly when it is
+    furthest out and therefore most separated from the others — which erases the
+    concentric structure at the one moment it is legible.
+  */
   @keyframes nav-signal-pulse {
     0% {
-      border-width: calc(var(--nav-logo-height) * 0.13);
-      transform: scale(0);
-      opacity: 0.55;
-    }
-    100% {
-      border-width: 0;
       transform: scale(1);
       opacity: 0;
     }
+    8.75% {
+      opacity: var(--ring-peak);
+    }
+    37.5% {
+      opacity: calc(var(--ring-peak) * 0.5);
+    }
+    50%,
+    100% {
+      transform: scale(var(--ring-reach));
+      opacity: 0;
+    }
   }
 
+  /* The global blanket rule collapses animation-duration, which is not enough on its
+     own for an infinite ambient loop — this stops it outright. No opacity reset is
+     needed: the rings' resting opacity is already 0, so with no animation running
+     nothing paints. */
   @media (prefers-reduced-motion: reduce) {
     .brand::before,
-    .brand::after {
+    .brand::after,
+    .brand-ring {
       animation: none;
-      opacity: 0;
     }
   }
 
