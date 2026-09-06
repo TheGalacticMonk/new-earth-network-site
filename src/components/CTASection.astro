@@ -63,10 +63,17 @@ const { kicker, heading, primaryLabel, primaryHref, secondaryLabel, secondaryHre
   }
 
   .actions {
+    max-width: 100%;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: var(--space-4);
     margin-top: var(--space-2);
+  }
+
+  .actions :global(.btn) {
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
 </style>

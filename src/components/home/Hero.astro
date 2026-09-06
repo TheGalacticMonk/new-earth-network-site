@@ -8,6 +8,7 @@ import Container from '../Container.astro';
       <div class="hero-content">
         <h1 class="headline">Stop asking&hellip;and&hellip;<br />Start commanding!</h1>
         <div class="tagline">
+          <p class="subhead">Enter your email to get started.</p>
           <span class="wand" aria-hidden="true">
             <svg viewBox="0 -960 960 960" fill="currentColor">
               <path
@@ -15,7 +16,6 @@ import Container from '../Container.astro';
               ></path>
             </svg>
           </span>
-          <p class="subhead">Enter your email to get started.</p>
         </div>
 
         <!--
@@ -87,20 +87,19 @@ import Container from '../Container.astro';
     position: relative;
     display: flex;
     flex-direction: column;
-    /* Centered by default (mobile, single column, no visual beside it) —
-       left-aligned text reads lopsided when it's the only thing on the
-       screen. Switches to left-aligned at 900px, once it's paired with the
-       Earth in a two-column split, where left-align is what makes the pair
-       read as a composition. */
-    align-items: center;
+    /* One content rail at every viewport, shared with the navigation logo. */
+    align-items: flex-start;
     gap: var(--space-6);
-    text-align: center;
-    max-width: 34rem;
-    margin-inline: auto;
+    text-align: left;
+    width: 100%;
+    max-width: var(--hero-content-max);
     min-width: 0;
+    container-type: inline-size;
   }
 
   .headline {
+    width: 100%;
+    text-wrap: wrap;
     font-family: var(--font-hero);
     font-size: var(--text-hero);
     font-weight: 600;
@@ -113,14 +112,12 @@ import Container from '../Container.astro';
     overflow-wrap: break-word;
   }
 
-  /* Wand sits beside the subhead instead of under the headline, filling the
-     line the subhead used to sit alone on. */
+  /* Supporting copy keeps the rail; its small flourish follows the text. */
   .tagline {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: var(--space-3);
-    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: var(--space-2);
   }
 
   /* Decorative flourish only — the headline text already carries the meaning,
@@ -129,18 +126,13 @@ import Container from '../Container.astro';
   .wand {
     display: inline-flex;
     flex-shrink: 0;
-    /* Pinned to the headline's own size so the wand's scale stays tied to it
-       regardless of what it's sitting next to in the layout (the subhead is
-       much smaller than the headline, so inheriting font-size here would
-       otherwise shrink the wand along with it). */
-    font-size: var(--text-hero);
     color: var(--color-electric-gold);
     filter: drop-shadow(0 0 8px var(--color-electric-gold-glow));
   }
 
   .wand svg {
-    width: 1.5em;
-    height: 1.5em;
+    width: var(--hero-wand-size);
+    height: var(--hero-wand-size);
   }
 
   .subhead {
@@ -148,24 +140,23 @@ import Container from '../Container.astro';
        add a new font, just a companion style to the one already in use. */
     font-family: var(--font-hero);
     font-style: italic;
-    font-size: var(--text-md);
+    font-size: var(--text-hero-subhead);
     color: var(--color-text-muted);
   }
 
   .form {
     width: 100%;
-    max-width: 27.5rem;
+    max-width: var(--hero-form-max);
     margin-top: var(--space-2);
   }
 
   .field-group {
     display: flex;
-    align-items: center;
-    gap: var(--space-1);
+    align-items: stretch;
+    gap: var(--space-2);
     width: 100%;
     background: transparent;
     border-radius: var(--radius-full);
-    padding: var(--space-1);
   }
 
   input {
@@ -185,7 +176,8 @@ import Container from '../Container.astro';
        undifferentiated dark bar running straight into the button. */
     background: var(--color-field-grey);
     color: var(--color-text-primary);
-    font-size: var(--text-sm);
+    font-size: var(--text-base);
+    min-height: var(--target-min);
     /* At narrow widths the fixed-size button leaves little room for the input;
        ellipsize rather than hard-clip so a partially visible placeholder reads
        as intentional truncation, not a layout bug. */
@@ -202,6 +194,7 @@ import Container from '../Container.astro';
   }
 
   button {
+    min-height: var(--target-min);
     flex-shrink: 0;
     padding: var(--space-3) var(--space-6);
     /* Mixed case, same family as the headline — not the site's uppercase
@@ -232,36 +225,19 @@ import Container from '../Container.astro';
     font-size: var(--text-sm);
   }
 
-  /* Rotating Earth — the site owner's own template, with the accompanying
-     twinkling-star sparkles left out (not needed here; the page already has
-     its own starfield). Values below (box-shadow shading, animation timing)
-     are kept as given rather than rebuilt from tokens, same treatment as the
-     other borrowed-template effects on this site (see the nav menu-item
-     activation animation). Expects the actual image at
-     /public/images/earth.jpg — add that file the same way the wand SVG was
-     added to src/assets/. */
+  /* Size the layout box and its lighting together so the globe stays in its
+     column, including immediately after the two-column breakpoint. */
   .earth {
-    width: 250px;
-    height: 250px;
+    font-size: var(--hero-earth-size);
+    width: 1em;
+    height: 1em;
     margin-inline: auto;
     border-radius: 50%;
     background: url('/images/earth.jpg');
     background-size: cover;
     background-position: left;
-    box-shadow:
-      0px 0 20px rgba(255, 255, 255, 0.2),
-      -5px 0px 8px #c3f4ff inset,
-      15px 2px 25px #000 inset,
-      -24px -2px 34px #c3f4ff99 inset,
-      250px 0px 44px #00000066 inset,
-      150px 0px 38px #000000aa inset;
-    animation: earth-rotate 30s linear infinite;
-    /* Shrink the whole sphere via transform, not width/height — the shading
-       box-shadow above is a set of fixed-px offsets tuned for a 250px circle,
-       so resizing the box directly would throw the borrowed lighting out of
-       proportion. transform: scale() shrinks the sphere and its shadow
-       together, keeping the exact same look at a smaller size. */
-    transform: scale(0.72);
+    box-shadow: var(--hero-earth-shadow);
+    animation: earth-rotate var(--hero-earth-duration) linear infinite;
   }
 
   @keyframes earth-rotate {
@@ -269,34 +245,25 @@ import Container from '../Container.astro';
       background-position: 0 0;
     }
     100% {
-      background-position: 400px 0;
+      background-position: var(--hero-earth-travel) 0;
     }
   }
 
-  @media (min-width: 480px) {
-    .earth {
-      transform: scale(0.88);
+  @media (max-width: 479px) {
+    .field-group {
+      flex-direction: column;
+      align-items: stretch;
     }
   }
 
   @media (min-width: 900px) {
     .hero-grid {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       align-items: center;
     }
 
-    .hero-content {
-      align-items: flex-start;
-      text-align: left;
-      margin-inline: 0;
-    }
-
-    .tagline {
-      justify-content: flex-start;
-    }
-
     .earth {
-      transform: none;
+      font-size: var(--hero-earth-size-desktop);
     }
   }
 </style>

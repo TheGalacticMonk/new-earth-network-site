@@ -96,11 +96,9 @@
   --text-xl: clamp(2rem, 1.6rem + 2vw, 3rem);
   --text-2xl: clamp(2.75rem, 2rem + 3.5vw, 4.5rem);
   --text-3xl: clamp(3.5rem, 2.5rem + 5vw, 6.5rem);
-  /* The homepage hero headline lives in a ~50%-width column (a two-column split,
-     empty column reserved for future content) rather than a full-width centered
-     block, so it needs to stay legible and break in two deliberate lines at
-     roughly half the viewport's worth of vw scaling that text-2xl/3xl assume. */
-  --text-hero: clamp(2.25rem, 1.75rem + 1.7vw, 3.25rem);
+  /* Hero type follows its content column, including the desktop grid switch. */
+  --text-hero: clamp(2rem, 1.25rem + 3.5cqi, 3.25rem);
+  --text-hero-subhead: clamp(1.0625rem, 0.9rem + 0.7cqi, 1.25rem);
 
   --leading-tight: 1.08;
   --leading-snug: 1.25;
@@ -159,6 +157,25 @@
   --container-max: 1200px;
   --container-padding: clamp(1.25rem, 4vw, 3rem);
   --nav-height: 122px;
+  --nav-logo-height: clamp(5rem, 25vw, 6.625rem);
+  /* Solid artwork begins ~100px into the 925px-high source; let glow hang
+     outside the content rail instead of aligning to transparent image padding. */
+  --nav-logo-optical-inset: calc(var(--nav-logo-height) * 100 / 925);
+  --target-min: 2.75rem;
+  --hero-content-max: 34rem;
+  --hero-form-max: 27.5rem;
+  --hero-wand-size: 1.5rem;
+  --hero-earth-size: clamp(11.25rem, 28vw, 16rem);
+  --hero-earth-size-desktop: clamp(18rem, 32vw, 26.5rem);
+  /* Relative shadow lengths preserve the original globe lighting as it scales. */
+  --hero-earth-shadow: 0 0 0.08em rgba(255, 255, 255, 0.2),
+    -0.02em 0 0.032em #c3f4ff inset,
+    0.06em 0.008em 0.1em #000 inset,
+    -0.096em -0.008em 0.136em #c3f4ff99 inset,
+    1em 0 0.176em #00000066 inset,
+    0.6em 0 0.152em #000000aa inset;
+  --hero-earth-travel: 1.6em;
+  --hero-earth-duration: 30s;
 
   /* ---- Z-index scale ---- */
   --z-nav: 100;
