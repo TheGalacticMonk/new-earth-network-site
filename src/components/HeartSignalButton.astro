@@ -77,27 +77,9 @@ const heartPath =
     transition:
       box-shadow var(--duration-base) var(--ease-out),
       transform var(--duration-fast) var(--ease-out);
-    /* A breathing gold glow at rest, between a soft baseline and a bright peak —
-       the plum fill is deliberately subtle against the nav, so this (and the
-       border above) is what actually catches the eye and invites the click. */
-    animation: signal-btn-pulse 2.4s ease-in-out infinite;
-  }
-
-  @keyframes signal-btn-pulse {
-    0%,
-    100% {
-      box-shadow: var(--shadow-float), 0 0 28px var(--color-electric-gold-glow);
-    }
-    50% {
-      box-shadow:
-        var(--shadow-float),
-        0 0 12px var(--color-electric-gold),
-        0 0 64px var(--color-electric-gold-glow);
-    }
   }
 
   .signal-btn:hover {
-    animation-play-state: paused;
     box-shadow:
       var(--shadow-float-hover),
       0 0 12px var(--color-electric-gold),
