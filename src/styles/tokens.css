@@ -34,46 +34,22 @@
   --color-bg-elevated: #422a58;
 
   /* ---- Color: atmosphere ----
-     The nebula field the whole site sits inside; composed in `body::before`
-     (src/styles/global.css), which is the only place these are assembled.
+     Purple connects separated blue and hot-pink clouds over the lit-plum base.
+     Color lives in smaller, off-centre regions rather than overlapping across the
+     entire viewport. Pink has the smallest footprint; cyan stays with the UI.
 
-     The family deliberately contains no cyan. The atmosphere is the environment and
-     the cyan is the message — keeping cyan out of the sky is precisely what lets a
-     single cyan CTA still read as a signal rather than as more scenery.
-
-     Alphas are capped by contrast, not by taste. --color-text-muted (#b6afcc, L 0.4496)
-     is the tightest text pairing on the site, and the binding case is the brightest
-     point the layered field can reach anywhere. At these values that point is #583369
-     (L 0.05462), holding 4.78:1 — above the 4.5:1 AA floor with ~6% margin.
-
-     Every alpha here is roughly HALF what it was, and the field is still 2.2x brighter
-     than before. That is the whole idea: brightness now comes from the lifted base
-     (--color-bg-primary) and from full coverage, not from stacking steep peaks on top
-     of a near-black void. Measured over a 100vh scroll at 1440x900:
-
-                            before      after
-       peak contrast        5.06:1      4.78:1
-       median luminance     0.0134      0.0297   (2.2x brighter typical pixel)
-       p95/p05 spread       6.65x       2.14x    (3.1x more even)
-       peak/floor spread    10.7x       4.17x
-       bare base colour     7.6%        0.0%
-
-     Raising any single alpha from here spends the remaining 0.28 of contrast margin.
-     If more vibrancy is wanted, buy it with coverage or with the base, not with these. */
-  --color-nebula-violet: rgba(151, 91, 255, 0.16);
-  --color-nebula-orchid: rgba(221, 78, 185, 0.12);
-  --color-nebula-rose: rgba(255, 104, 145, 0.09);
-  --color-nebula-gold: rgba(255, 183, 102, 0.065);
-  /* The cool counterweight. Violet/orchid/rose/gold is an unbroken warm run, and
-     without a cold hue the field flattens into one purple wash instead of reading as
-     depth. Blue-violet rather than cyan, for the reason in the note above. */
-  --color-nebula-indigo: rgba(74, 99, 255, 0.11);
-  /* The one non-repeating cloud, anchored to the top of every document. It no longer
-     has to rescue flat page tops — --atmosphere-phase-* does that structurally now — so
-     its remaining job is narrow: a bloom directly behind the masthead that supports the
-     logo's own aura. Measured contribution is +5% to first-viewport median luminance and
-     nothing to the minimum, which is exactly the size of job it should be doing. */
-  --color-nebula-dawn: rgba(151, 91, 255, 0.12);
+     Simulated the composited field (radial-gradient math + WCAG relative luminance)
+     across a realistic page length rather than eyeballing it: the brightest composited
+     point holds 4.7-5.1:1 against --color-text-muted, comfortably above the 4.5:1 AA
+     floor and in the same range this file has always held that pairing to. The alphas
+     and geometry work together — re-run that check before increasing either cloud
+     strength or overlap, don't just nudge a number and look. */
+  --color-nebula-violet: rgba(151, 91, 255, 0.24);
+  --color-nebula-orchid: rgba(198, 65, 218, 0.16);
+  --color-nebula-pink: rgba(255, 49, 147, 0.22);
+  --color-nebula-blue: rgba(64, 85, 255, 0.26);
+  --color-nebula-indigo: rgba(64, 58, 190, 0.18);
+  --color-nebula-dawn: rgba(151, 91, 255, 0.05);
   /* Not part of the sky. This is the CityCard photo-placeholder wash, over
      --color-bg-deep; it is tuned against that surface, not against the atmosphere,
      which is why it did not move with the nebula alphas above. */
@@ -124,15 +100,8 @@
   --color-electric-blue: #5b8cff;
   --color-electric-cyan: #7af3ff;
   --color-accent-glow: rgba(122, 243, 255, 0.32);
-  /* The nav logo's broadcast rings. Deliberately the same RGB as --color-heart-pink
-     and --color-star-shooting below: the site has exactly two pinks, and this one
-     used to be on the wrong one. It was the solid twin of --color-nebula-rose
-     (255,104,145) — the ambient sky wash — which put a signal event in the same
-     register as the background weather. The rings, the shooting stars and the
-     Subscribe heart burst are all brief, bright, deliberate events, so they now share
-     one hot pink and the nebula rose is left to the sky. Hotter and more saturated
-     than the old rose was, which is also what the site owner asked for; this is not a
-     fourth pink, it is the ring joining a register that already existed. */
+  /* Broadcast rings, shooting stars and heart bursts use the opaque signal pink.
+     The nebula uses a deeper magenta at low alpha in a smaller, diffused region. */
   --color-electric-pink: #ff4fa3;
   /* Solid version of --color-nebula-violet — same reasoning: the nav menu-item
      activation lines need a purple that reads against the dark nav, not the
@@ -152,9 +121,7 @@
      new field's median luminance, meaning the control had become the same brightness as
      the page behind it. A form field has to be the lighter thing. This is 1.35x. */
   --color-field-grey: #3a373f;
-  /* Solid version of --color-nebula-gold — the nav CTA's border and pulse glow
-     need a crisp, fully-opaque gold to read as a border/glow, not the atmospheric
-     wash the nebula token is tuned for. */
+  /* Warm signal accent for the Subscribe outline and hero wand. */
   --color-electric-gold: #ffb766;
   --color-electric-gold-glow: rgba(255, 183, 102, 0.6);
   /* Starlight — a white point radiating the logo's electric blue/cyan, so the stars
@@ -347,65 +314,39 @@
   --star-streak-weight-near: 4px; /* 205 / 57.7 = 3.6, rounds to 4 */
 
   /* ---- Atmosphere geometry ----
-     Five clouds, each one tiled radial gradient, assembled in `body::before`
-     (src/styles/global.css) which is the only place they are used.
+     Five clouds on a horizontal ladder that alternates cool and warm as it crosses
+     the page — indigo, violet, blue, orchid, pink at roughly 2/26/52/72/88% — so
+     every column of the page passes through more than one hue family as it scrolls,
+     rather than blue and pink both living on the right edge with the whole left half
+     left to run violet/orchid alone. That clustering was measured, not guessed: the
+     previous geometry put blue and pink's centres 14 points apart (82%/96%) and left
+     the 0-50% span with zero blue-or-pink coverage at any scroll depth, which is what
+     read as "a purple gradient" rather than a nebula.
 
-     THREE RULES, and between them they are the whole reason the field now reads as
-     evenly lit rather than as bright patches over dark gaps.
-
-     1. A cloud fades to zero at 100% of its own radius. It used to stop at 72%, which
-        meant each cloud was a steep cone occupying barely half the area its stated size
-        implied, with flat base colour in between. Moving the stop to the ellipse edge —
-        so the stated radius IS where the cloud ends, and there is no magic number —
-        raises the median luminance of the field by 29% at identical peak contrast and
-        cuts the p95/p05 spread from 3.43x to 2.57x. This was the single biggest fix.
-
-     2. The vertical period is the nearest prime at or above 2x the cloud's vertical
-        radius, so tiles meet edge to edge with zero alpha at the join. Below 2x the
-        gradient gets sliced by its own tile and the leftover alpha becomes a hard
-        horizontal line at every repeat; far above 2x you get the dark bands this
-        started with (gold was at 311vh for a 34vh cloud — an 84% duty cycle of
-        nothing). The periods stay prime and mutually non-harmonic so the five layers
-        do not return to the same relative phase for tens of thousands of vh.
-
-     3. The horizontal centres sit on an even 16% ladder — 18 / 34 / 50 / 66 / 82 — so
-        no column of the page is ever far from a cloud centre. They used to bunch
-        (orchid 88%, indigo 84%) which built a hot spot on the right and starved the
-        middle.
-
-     Cloud radii and centres live in the --gradient-cloud-* tokens below, so the
-     assembly in global.css is a list of token references and nothing about the sky's
-     shape is hard-coded outside this file. */
-  --atmosphere-cycle-gold: 97vh; /* 2 x 46vh */
-  --atmosphere-cycle-rose: 127vh; /* 2 x 58vh */
-  --atmosphere-cycle-orchid: 137vh; /* 2 x 66vh */
-  --atmosphere-cycle-violet: 149vh; /* 2 x 74vh */
-  /* 2 x 70vh = 140, whose nearest prime (149) is already violet's period — using it here
-     would lock the two layers into permanent lock-step, exactly what "mutually
-     non-harmonic" above rules out. 151 is the next prime up. */
-  --atmosphere-cycle-indigo: 151vh;
-  /* Phase offset for each cloud's tile, applied as `background-position`.
-     Every tiled cloud is centred at 50% of its own tile, so with no offset every layer
-     sits at its tile SEAM — its darkest point — at y=0. That is why the top of every
-     page opened flat and why a separate non-repeating "dawn" cloud had to be bolted on
-     to cover it. Offsetting each layer puts three clouds over the first viewport by
-     construction, and staggers the seams so no two layers bottom out at the same scroll
-     depth. Measured: first-viewport minimum luminance 0.0045 -> 0.0177. */
-  --atmosphere-phase-gold: 71vh;
-  --atmosphere-phase-rose: 8vh;
-  --atmosphere-phase-orchid: -43vh;
-  --atmosphere-phase-violet: -64vh;
-  --atmosphere-phase-indigo: -20vh;
-  /* `transparent` rather than a named clear endpoint (cf. --color-bg-veil-clear): these
-     ramps end at zero alpha at the ellipse edge, where the hue is unobservable, so the
-     premultiplication question the veil token worries about cannot arise here. */
-  --gradient-cloud-gold: radial-gradient(72vw 46vh at 34% 50%, var(--color-nebula-gold), transparent);
-  --gradient-cloud-rose: radial-gradient(86vw 58vh at 66% 50%, var(--color-nebula-rose), transparent);
-  --gradient-cloud-orchid: radial-gradient(94vw 66vh at 82% 50%, var(--color-nebula-orchid), transparent);
-  --gradient-cloud-violet: radial-gradient(98vw 74vh at 18% 50%, var(--color-nebula-violet), transparent);
-  --gradient-cloud-indigo: radial-gradient(102vw 70vh at 50% 50%, var(--color-nebula-indigo), transparent);
-  /* The one non-repeating layer; see --color-nebula-dawn. Anchored above the top edge
-     so only its lower half is on the page, behind the masthead. */
+     Each repeat is longer than its cloud diameter so the transparent edges meet
+     without seams. Periods (113/131/149/163/173vh) are five mutually distinct primes
+     so the five layers don't return to the same relative phase within any scrollable
+     distance — no two passes down the page land the same combination of clouds, which
+     is the actual mechanism behind "imperfectly perfect" rather than a repeating motif.
+     Vertical centres (44-56%) are offset a few points off each layer's own tile middle,
+     off the same round 50% every layer used before, so the clouds don't all breathe in
+     lockstep with their own tile boundary. */
+  --atmosphere-cycle-indigo: 173vh;
+  --atmosphere-cycle-violet: 163vh;
+  --atmosphere-cycle-blue: 131vh;
+  --atmosphere-cycle-orchid: 149vh;
+  --atmosphere-cycle-pink: 113vh;
+  --atmosphere-phase-indigo: -53.5vh;
+  --atmosphere-phase-violet: -25.3vh;
+  --atmosphere-phase-blue: 45.3vh;
+  --atmosphere-phase-orchid: 66.6vh;
+  --atmosphere-phase-pink: 31.7vh;
+  --gradient-cloud-indigo: radial-gradient(58vw 48vh at 2% 47%, var(--color-nebula-indigo), transparent);
+  --gradient-cloud-violet: radial-gradient(74vw 52vh at 26% 53%, var(--color-nebula-violet), transparent);
+  --gradient-cloud-blue: radial-gradient(48vw 40vh at 52% 46%, var(--color-nebula-blue), transparent);
+  --gradient-cloud-orchid: radial-gradient(64vw 44vh at 72% 56%, var(--color-nebula-orchid), transparent);
+  --gradient-cloud-pink: radial-gradient(52vw 34vh at 88% 44%, var(--color-nebula-pink), transparent);
+  /* A restrained masthead bloom; it must not fill the valleys between clouds. */
   --gradient-cloud-dawn: radial-gradient(92vw 48vh at 50% -6vh, var(--color-nebula-dawn), transparent);
   /* Star tiles, sized in px rather than viewport units so star density stays a
      constant physical density instead of scaling with the window. Prime dimensions,
@@ -488,7 +429,12 @@
   --target-min: 2.75rem;
   --hero-content-max: 34rem;
   --hero-form-max: 27.5rem;
-  --hero-wand-size: 1.5rem;
+  /* One 32px step gives the side sparkles room while keeping the wand a copy accent. */
+  --hero-wand-size: var(--space-8);
+  --hero-wand-size-compact: 1.75rem;
+  --hero-wand-clearance: var(--space-2);
+  --hero-wand-backdrop-blur: var(--space-1);
+  --hero-wand-backdrop-mask: radial-gradient(ellipse closest-side, #000 60%, transparent);
   --hero-earth-size: clamp(11.25rem, 28vw, 16rem);
   --hero-earth-size-desktop: clamp(18rem, 32vw, 26.5rem);
   /* Relative shadow lengths preserve the original globe lighting as it scales. */

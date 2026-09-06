@@ -10,7 +10,7 @@ The same standard applies to work you do directly.
 
 - UX objective before creative concept; art, brand, copy and motion inform code. Nothing ships un-reviewed.
 - `creative-director` has the final creative say on anything a visitor will see.
-- `performance-accessibility-qa-engineer` can veto anything that busts the budget:
+- `quality-engineer` can veto anything that busts the budget:
   ≤ 100 KB initial payload, ≤ 15 KB JS, LCP ≤ 1.2s, CLS 0.
 - Least technology that works. Every dependency is a liability you own forever.
 - Semantic HTML, tokens in `src/styles/tokens.css`, no hard-coded values in components,
