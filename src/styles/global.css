@@ -20,6 +20,14 @@ html {
 }
 
 body {
+  position: relative; /* containing block for the atmosphere layer below */
+  /* Column layout so the footer is pushed to the bottom on short pages. Without it,
+     a page with little content leaves body's min-height unfilled below the footer,
+     which used to be invisible (flat fill on flat fill) and now reads as a stray
+     bright band of sky under the footer's veil. The atmosphere layer is absolutely
+     positioned, so it is not a flex item and is unaffected. */
+  display: flex;
+  flex-direction: column;
   min-height: 100svh;
   background: var(--color-bg-primary);
   color: var(--color-text-body);
@@ -28,6 +36,63 @@ body {
   line-height: var(--leading-normal);
   font-feature-settings: 'ss01' 1;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Takes up the slack so the footer sits at the bottom of short pages. */
+body > main {
+  flex: 1 0 auto;
+}
+
+/*
+  The atmosphere — the night sky the whole site stands in.
+
+  One layer, defined once, inherited by every route through BaseLayout. It used to live
+  in index.astro, which meant the homepage had a sky and the other eight pages had a
+  flat fill; that split was most of why the site read as dark rather than alive.
+
+  It is sized to the document, not the viewport, so scrolling carries you *through* the
+  field rather than past a static image: clouds arrive, peak and pass. That is the
+  darkness -> signal -> connection idea made literal, and it costs nothing — no JS, no
+  images, no animation, and no compositor layer.
+
+  It is a positioned element rather than `background-attachment: fixed` on body, which
+  is what it replaced. Fixed attachment repaints against a viewport whose height changes
+  as mobile browsers collapse their address bar, so the top strip of the page painted
+  flat until a scroll forced a repaint — the sky appeared only after you scrolled. An
+  in-flow absolutely positioned layer has no viewport-relative paint origin and cannot
+  reproduce that, on any browser.
+
+  Layer order is front-to-back, as CSS paints background images: the three star depths
+  sit over the clouds, and the non-repeating dawn bloom sits behind them all.
+*/
+body::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle at 63% 27%, var(--color-stardust-near) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 22% 71%, var(--color-stardust-mid) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 81% 44%, var(--color-stardust-far) 0 1px, transparent 1.6px),
+    radial-gradient(52vw 34vh at 66% 50%, var(--color-nebula-gold), transparent 72%),
+    radial-gradient(78vw 56vh at 34% 50%, var(--color-nebula-rose), transparent 72%),
+    radial-gradient(88vw 62vh at 88% 50%, var(--color-nebula-orchid), transparent 72%),
+    radial-gradient(105vw 80vh at 14% 50%, var(--color-nebula-violet), transparent 72%),
+    radial-gradient(118vw 80vh at 84% 50%, var(--color-nebula-indigo), transparent 72%),
+    radial-gradient(92vw 52vh at 50% -4vh, var(--color-nebula-dawn), transparent 72%);
+  background-size:
+    var(--atmosphere-star-tile-near),
+    var(--atmosphere-star-tile-mid),
+    var(--atmosphere-star-tile-far),
+    100% var(--atmosphere-cycle-gold),
+    100% var(--atmosphere-cycle-rose),
+    100% var(--atmosphere-cycle-orchid),
+    100% var(--atmosphere-cycle-violet),
+    100% var(--atmosphere-cycle-indigo),
+    100% 100vh;
+  background-repeat: repeat, repeat, repeat, repeat-y, repeat-y, repeat-y, repeat-y,
+    repeat-y, no-repeat;
 }
 
 img,

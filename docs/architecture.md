@@ -85,7 +85,6 @@ that calls `getCollection()` keeps working unchanged.
 | `CTASection` | Reusable centered call-to-action block |
 | `Navigation` / `MobileNavigation` | Header + full-screen mobile menu (see a11y note below) |
 | `Footer` | Sitewide footer |
-| `AmbientField` | The nighttime backdrop — a soft directional glow plus a deterministic, build-time-generated starfield. Pure CSS, no canvas, no images, no JS |
 
 **Homepage sections** (`src/components/home/`) — composed once, on `index.astro`, not
 reused elsewhere, so they aren't in the shared primitives folder: `Hero`, `Manifesto`,

@@ -9,16 +9,65 @@
   --color-bg-deep: #09050f; /* recessed panels, the space between stars */
   --color-bg-elevated: #24142d; /* cards, raised panels */
 
-  /* ---- Color: atmosphere ---- */
+  /* ---- Color: atmosphere ----
+     The nebula field the whole site sits inside; composed in `body::before`
+     (src/styles/global.css), which is the only place these are assembled.
+
+     The family deliberately contains no cyan. The atmosphere is the environment and
+     the cyan is the message — keeping cyan out of the sky is precisely what lets a
+     single cyan CTA still read as a signal rather than as more scenery.
+
+     Peak alphas are capped by contrast, not by taste. --color-text-muted (#b6afcc) is
+     the tightest text pairing on the site; at these values the brightest point the
+     layered field can reach anywhere (#512d69, where the violet and rose clouds cross)
+     holds 5.19:1 against it, over the 4.5:1 AA floor. Raising violet or orchid further
+     pushes that pairing under, so added vibrancy was bought with coverage and hue
+     count instead: the field now tints 87.6% of the page area rather than 35.3%. */
   --color-nebula-violet: rgba(151, 91, 255, 0.3);
   --color-nebula-orchid: rgba(221, 78, 185, 0.24);
-  --color-nebula-rose: rgba(255, 104, 145, 0.15);
-  --color-nebula-gold: rgba(255, 183, 102, 0.1);
-  --color-nebula-violet-soft: rgba(184, 116, 255, 0.2);
+  --color-nebula-rose: rgba(255, 104, 145, 0.18);
+  --color-nebula-gold: rgba(255, 183, 102, 0.11);
+  /* The cool counterweight. Violet/orchid/rose/gold is an unbroken warm run, and
+     without a cold hue the field flattens into one purple wash instead of reading as
+     depth. Blue-violet rather than cyan, for the reason in the note above. */
+  --color-nebula-indigo: rgba(74, 99, 255, 0.2);
+  /* The one non-repeating cloud, anchored to the top of every document so that no page
+     opens on flat background — this is what the sky looked like it was missing. Softer
+     than --color-nebula-violet because it sits directly behind the masthead and must
+     support the logo's own aura, not compete with it. */
+  --color-nebula-dawn: rgba(151, 91, 255, 0.22);
   --color-nebula-orchid-soft: rgba(232, 88, 192, 0.14);
-  --color-nebula-cyan-soft: rgba(122, 243, 255, 0.055);
+  /* Distant starfield tiled across the atmosphere layer, in three depths so the field
+     has distance in it. Warm white (--color-text-primary's hue) rather than pure white,
+     so the far stars read as the same light as the type and the logo, not a second
+     unrelated light source. */
+  --color-stardust-far: rgba(247, 244, 255, 0.22);
+  --color-stardust-mid: rgba(247, 244, 255, 0.34);
+  --color-stardust-near: rgba(247, 244, 255, 0.5);
   --color-nav-glass: rgba(9, 5, 15, 0.54);
+  /* Transparent endpoint for --gradient-nav-glass, named for the same reason as
+     --color-bg-veil-clear rather than relying on the `transparent` keyword. */
+  --color-nav-glass-clear: rgba(9, 5, 15, 0);
   --color-overlay-surface: rgba(9, 5, 15, 0.84);
+  /* --color-bg-deep at 38%. Full-bleed "deep" bands (sections, the CTA, the footer)
+     were opaque, which sealed the atmosphere off wherever one landed; the homepage
+     worked around that by punching holes in their backgrounds with a :has() specificity
+     hack, and every other page simply had no atmosphere to reveal. A veil keeps a band
+     reading as recessed while letting the nebula through, so that background hack is
+     gone and the treatment survives being applied sitewide. Reserved for full-bleed
+     page bands — cards, media wells and the mobile nav overlay stay opaque, because an
+     object floating on the field should occlude it.
+
+     Tuned down from an initial 0.62, which was dark enough to read as near-black and
+     cancelled the sky it was meant to sit in — 87.6% coverage means nothing if the
+     bands covering it are opaque. Contrast is monotonic in this alpha (the veil only
+     darkens), so the binding worst case is not this value but the fully transparent
+     fade edge below, which is identical to open sky. */
+  --color-bg-veil: rgba(9, 5, 15, 0.38);
+  /* Explicit fully-transparent veil rather than the `transparent` keyword: gradient
+     interpolation to a bare `transparent` is only reliably hue-preserving because
+     engines premultiply, and naming the endpoint removes the question entirely. */
+  --color-bg-veil-clear: rgba(9, 5, 15, 0);
 
   /* ---- Color: accent (use sparingly — CTAs, active states, small celestial detail) ---- */
   --color-electric-blue: #5b8cff;
@@ -138,7 +187,6 @@
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.32);
   --shadow-float: 0 24px 48px -16px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.28);
   --shadow-float-hover: 0 32px 64px -16px rgba(0, 0, 0, 0.6), 0 0 32px var(--color-accent-glow);
-  --shadow-nav: 0 16px 32px -16px rgba(0, 0, 0, 0.55);
   --shadow-glow-sm: 0 0 24px var(--color-accent-glow);
   --shadow-glow-md: 0 0 48px var(--color-accent-glow);
 
@@ -152,6 +200,78 @@
      Kept as its own pair rather than changed sitewide. */
   --ease-nav-activate: cubic-bezier(0.23, 1, 0.32, 1);
   --duration-nav-activate: 600ms;
+
+  /* ---- Atmosphere geometry ----
+     Vertical repeat period of each nebula cloud. Every cloud is a single tiled
+     gradient, and the periods are prime and mutually non-harmonic on purpose: the
+     layers only return to the same relative phase after tens of thousands of vh, so
+     scrolling never exposes a repeat even though each layer on its own is perfectly
+     regular. They are also all longer than a viewport, so a cloud is something you
+     travel through rather than a pattern that tiles inside one screen.
+
+     Each period MUST be comfortably greater than 1.44x its cloud's vertical radius
+     (2 x the 72% transparent stop). A background tile clips its gradient — it does
+     not bleed into the neighbouring tile — so a cloud wider than its own tile gets
+     sliced, and the leftover alpha at the cut becomes a hard horizontal line across
+     the page at every repeat. Keep the cloud centred at 50% of its tile and fading to
+     zero before the edge, and the joins are invisible. */
+  --atmosphere-cycle-violet: 137vh;
+  --atmosphere-cycle-orchid: 173vh;
+  --atmosphere-cycle-indigo: 191vh;
+  --atmosphere-cycle-rose: 229vh;
+  --atmosphere-cycle-gold: 311vh; /* the rare warm ember — seen least often */
+  /* Star tiles, sized in px rather than viewport units so star density stays a
+     constant physical density instead of scaling with the window. Prime dimensions,
+     for the same non-repeating reason as the cycles above. */
+  --atmosphere-star-tile-far: 191px 283px;
+  --atmosphere-star-tile-mid: 251px 197px;
+  --atmosphere-star-tile-near: 293px 347px;
+
+  /* ---- Veil bands ----
+     A flat veil gave every "deep" band a hard luminance step at its top and bottom
+     edge — a full-width straight line slicing the sky into rectangles, which is the
+     opposite of the one-continuous-field premise. The band now fades in and out over
+     this distance instead, so it reads as the sky deepening rather than as a panel
+     laid on top of it. 96px is long enough to be imperceptible as a gradient at 1440px
+     and still short enough to leave a settled middle on a short band. */
+  --veil-fade: 96px;
+  --gradient-veil: linear-gradient(
+    to bottom,
+    var(--color-bg-veil-clear) 0,
+    var(--color-bg-veil) var(--veil-fade),
+    var(--color-bg-veil) calc(100% - var(--veil-fade)),
+    var(--color-bg-veil-clear) 100%
+  );
+  /* Top-only variant for the footer: the page ends there, so it settles into the dark
+     rather than fading back out to open sky at the very bottom of the document. */
+  --gradient-veil-top: linear-gradient(
+    to bottom,
+    var(--color-bg-veil-clear) 0,
+    var(--color-bg-veil) var(--veil-fade)
+  );
+  /* The masthead's glass fades out over its last few pixels instead of ending on a
+     crisp horizontal cut, so the nav sits *in* the sky rather than on it as a bar.
+
+     Only the TINT fades. The blur behind it stays at full strength across the whole
+     masthead, and that distinction is load-bearing: this was first built as a mask over
+     the whole glass layer, which faded the blur to zero as well, so page content
+     scrolling up into the last 24px surfaced sharp and untinted right against the nav's
+     own links and read as doubled text. Every page has a heading near the top and the
+     nav is sticky on all of them, so that was not an edge case. Blur is the thing that
+     makes bled-through content illegible, so it is exactly the thing that must never
+     fade — the tint is only there to make the masthead sit down into the sky.
+
+     The blur therefore still ends on a hard boundary at the nav's bottom edge, but a
+     blur boundary over this particular backdrop is nearly invisible: the nebula is
+     smooth, so blurring it changes almost nothing, and the only high-frequency detail
+     is the 1px stardust, which the nav is better off suppressing anyway since it
+     carries its own star streaks. Two starfields overlapping was never the intent. */
+  --nav-glass-fade: 24px;
+  --gradient-nav-glass: linear-gradient(
+    to bottom,
+    var(--color-nav-glass) calc(100% - var(--nav-glass-fade)),
+    var(--color-nav-glass-clear) 100%
+  );
 
   /* ---- Layout ---- */
   --container-max: 1200px;

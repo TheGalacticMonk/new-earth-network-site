@@ -74,9 +74,11 @@ const currentPath = Astro.url.pathname;
 </header>
 
 <!--
-  Rendered outside <header> deliberately: the header's backdrop-filter creates a new
-  containing block for position:fixed descendants, which would trap this panel inside
-  the header's own (short) box instead of covering the viewport.
+  Rendered outside <header> deliberately: the header clips its own children
+  (overflow: hidden, for the nav starfield), which would trap this panel inside the
+  header's own (short) box instead of covering the viewport. The backdrop-filter that
+  used to be the reason for this has moved to .nav::before, but the clipping reason
+  stands on its own, so the panel stays out here.
 -->
 <MobileNavigation links={links} primaryLabel="Subscribe" primaryHref="/#subscribe" />
 
@@ -134,11 +136,34 @@ const currentPath = Astro.url.pathname;
     position: sticky;
     top: 0;
     z-index: var(--z-nav);
-    background: var(--color-nav-glass);
-    backdrop-filter: blur(10px);
-    box-shadow: var(--shadow-nav);
-    isolation: isolate;
     overflow: hidden;
+  }
+
+  /*
+    The glass lives on its own layer, not on .nav, so the tint can fade out without
+    taking the masthead's content with it — fading .nav itself would fade the logo and
+    the links too.
+
+    The tint fades; the blur does not. See --gradient-nav-glass in tokens.css for why
+    that split is load-bearing rather than incidental.
+
+    The drop shadow that used to sit here is deliberately gone: a shadow cast by the
+    nav's bottom edge is the strongest possible statement that the nav is a bar sitting
+    on top of the page, which is precisely what the fade is undoing.
+
+    `isolation: isolate` is gone from .nav for a load-bearing reason, not tidiness:
+    isolation forms a backdrop root, so a backdrop-filter on a child of an isolated
+    element has nothing behind it to sample and the blur silently does nothing. The
+    stacking context .nav-stars relies on is still there — position:sticky plus a
+    non-auto z-index creates one on its own.
+  */
+  .nav::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background: var(--gradient-nav-glass);
+    backdrop-filter: blur(10px);
   }
 
   .nav-stars {
