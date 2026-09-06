@@ -486,8 +486,15 @@
      outside the content rail instead of aligning to transparent image padding. */
   --nav-logo-optical-inset: calc(var(--nav-logo-height) * 100 / 925);
   --target-min: 2.75rem;
-  --hero-content-max: 34rem;
-  --hero-form-max: 27.5rem;
+  /* Widening --container-max to 1440px (see above) gave the hero's two grid
+     columns more room, but these caps didn't move with it — at wide desktop
+     the content column sat capped well short of its own track, opening a gap
+     to the globe on top of the grid gap and the globe's own centering margin
+     in its column. Raised together, same ~0.8 form:content ratio as before,
+     so the column now reads as sized for the wider page instead of an island
+     floating in the middle of it. */
+  --hero-content-max: 40rem;
+  --hero-form-max: 32rem;
   /* One 32px step gives the side sparkles room while keeping the wand a copy accent. */
   --hero-wand-size: var(--space-8);
   --hero-wand-size-compact: 1.75rem;
