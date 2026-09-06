@@ -113,14 +113,14 @@ const stars = [
 
   .star {
     position: absolute;
-    fill: var(--color-star-light);
+    fill: var(--color-electric-blue);
     opacity: 0.28;
     translate: -50% -50%;
-    /* A compact two-layer cyan bloom gives the field a more magical, luminous
-       presence while retaining the brighter three-layer treatment for halo stars. */
+    /* White cores with the logo's electric cyan/blue aura. */
     filter:
-      drop-shadow(0 0 5px var(--color-star-glow))
-      drop-shadow(0 0 12px var(--color-star-glow-soft));
+      drop-shadow(0 0 5px var(--color-electric-cyan))
+      drop-shadow(0 0 13px var(--color-star-glow-soft))
+      drop-shadow(0 0 24px var(--color-star-glow-wide));
     animation-name: star-twinkle;
     animation-duration: 2s;
     animation-iteration-count: infinite;
