@@ -69,7 +69,16 @@ import Container from '../Container.astro';
 
   .hero-grid {
     display: grid;
-    gap: var(--space-12);
+    /* Split rather than a single `gap`: below the 900px breakpoint this is a
+       single column, so `gap` is entirely row-gap — the space between the
+       form and the globe. --space-12 read fine as a column gutter (desktop)
+       but as a stacking gap it pushed the globe past the fold on common
+       phone viewport heights, with nothing below it to balance the space
+       above it. Row-gap only ever applies in the single-column case, and
+       column-gap only once the 900px breakpoint below switches to two
+       columns, so this is the whole fix — no media query needed. */
+    row-gap: var(--space-6);
+    column-gap: var(--space-12);
     /* Grid items default to min-width: auto, which lets an unbreakable line of
        text (the headline, at 320px) force the whole track — and the page —
        wider than the viewport instead of wrapping. Same fix on .hero-content
