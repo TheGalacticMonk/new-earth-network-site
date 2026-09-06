@@ -342,9 +342,9 @@
   --star-streak-nav-4: 61px;
   --star-streak-far: 137px; /* 40 x 1.5^3 — the steeper, more distant streaks */
   --star-streak-near: 205px; /* 40 x 1.5^4 — the shallow, fast, near ones */
-  --star-streak-weight-nav: 1px; /* 61 / 57.7 = 1.06 */
-  --star-streak-weight-far: 2px; /* 137 / 57.7 = 2.4 */
-  --star-streak-weight-near: 3px; /* 205 / 57.7 = 3.6 */
+  --star-streak-weight-nav: 1px; /* 61 / 57.7 = 1.06, rounds to 1 */
+  --star-streak-weight-far: 2px; /* 137 / 57.7 = 2.4, rounds to 2 */
+  --star-streak-weight-near: 4px; /* 205 / 57.7 = 3.6, rounds to 4 */
 
   /* ---- Atmosphere geometry ----
      Five clouds, each one tiled radial gradient, assembled in `body::before`
@@ -380,7 +380,10 @@
   --atmosphere-cycle-rose: 127vh; /* 2 x 58vh */
   --atmosphere-cycle-orchid: 137vh; /* 2 x 66vh */
   --atmosphere-cycle-violet: 149vh; /* 2 x 74vh */
-  --atmosphere-cycle-indigo: 151vh; /* 2 x 70vh */
+  /* 2 x 70vh = 140, whose nearest prime (149) is already violet's period — using it here
+     would lock the two layers into permanent lock-step, exactly what "mutually
+     non-harmonic" above rules out. 151 is the next prime up. */
+  --atmosphere-cycle-indigo: 151vh;
   /* Phase offset for each cloud's tile, applied as `background-position`.
      Every tiled cloud is centred at 50% of its own tile, so with no offset every layer
      sits at its tile SEAM — its darkest point — at y=0. That is why the top of every
@@ -511,6 +514,9 @@
    The breakpoint matches the star-field's existing one in index.astro. */
 @media (max-width: 640px) {
   :root {
+    --star-dust-far: 1px;
+    --star-dust-mid: 1.6px;
+    --star-dust-near: 2.4px;
     --star-size-far: 8px;
     --star-size-mid: 12px;
     --star-size-near: 18px;
