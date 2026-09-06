@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Container from '../components/Container.astro';
+import Section from '../components/Section.astro';
+---
+
+<BaseLayout title="Films" description="Films from New Earth Network.">
+  <Section>
+    <Container narrow>
+      <h1>Films</h1>
+      <p class="lead">
+        A collection of films from the New Earth Network community is on its way.
+      </p>
+      <p class="note">Coming soon.</p>
+    </Container>
+  </Section>
+</BaseLayout>
+
+<style>
+  h1 {
+    font-size: var(--text-2xl);
+  }
+
+  .lead {
+    margin-top: var(--space-8);
+    font-size: var(--text-md);
+    color: var(--color-text-body);
+  }
+
+  .note {
+    margin-top: var(--space-8);
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+  }
+</style>

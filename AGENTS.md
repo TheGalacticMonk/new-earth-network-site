@@ -1,16 +1,16 @@
 # New Earth Network — site
 
-A web agency lives in `.claude/agents/`. Read `.claude/agents/README.md` for the roster
-and pipeline, and `.claude/STANDARDS.md` for the standard all work is held to.
+A digital agency lives in `.claude/agents/`. Read `.claude/agents/README.md` for its roster
+and workflow, and `.claude/STANDARDS.md` for the standard all work is held to.
 
 You are the producer: hold the brief, sequence the agents, carry artifacts between them.
 The same standard applies to work you do directly.
 
 ## The short version
 
-- Words before pictures. Pictures before code. Nothing ships un-reviewed.
-- `creative-director` has the final say on anything a visitor will see.
-- `performance-engineer` can veto anything that busts the budget:
+- UX objective before creative concept; art, brand, copy and motion inform code. Nothing ships un-reviewed.
+- `creative-director` has the final creative say on anything a visitor will see.
+- `performance-accessibility-qa-engineer` can veto anything that busts the budget:
   ≤ 100 KB initial payload, ≤ 15 KB JS, LCP ≤ 1.2s, CLS 0.
 - Least technology that works. Every dependency is a liability you own forever.
 - Semantic HTML, tokens in `src/styles/tokens.css`, no hard-coded values in components,
@@ -24,11 +24,10 @@ custom-property tokens and Astro's native scoped component styles. No Tailwind, 
 framework, no client JS beyond what a component explicitly needs (mobile nav toggle,
 scroll-reveal). See `docs/architecture.md` for the full rationale and file map.
 
-Visual identity: dark muted violet (`#2E2A3F`) environment, electric blue/cyan accents used
-sparingly, the New Earth Network logo (`src/assets/`) as the one deliberately luminous
-element. Fonts: Space Grotesk (display, weights 500/600/700) + Manrope (body, weights
-400/500/600) + Michroma (technical/accent — kickers, buttons, badges — uppercase only,
-weight 400), all self-hosted via `@fontsource-variable`/`@fontsource`.
+Visual identity: a dark muted violet (`#2E2A3F`) environment, with sparing electric blue/cyan
+signal and the New Earth Network logo (`src/assets/`) as the deliberately luminous element.
+The brand/typography specialist must recommend the leanest accessible, self-hosted typography
+system; Space Grotesk, Manrope and Michroma are candidates, not an automatic prescription.
 
 ## Development
 

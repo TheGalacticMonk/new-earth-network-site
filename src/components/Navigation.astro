@@ -1,20 +1,40 @@
 ---
 import Container from './Container.astro';
 import Logo from './Logo.astro';
-import Button from './Button.astro';
+import HeartSignalButton from './HeartSignalButton.astro';
 import MobileNavigation from './MobileNavigation.astro';
 
 const links = [
-  { label: 'About', href: '/about' },
   { label: 'Events', href: '/events' },
-  { label: 'Cities', href: '/cities' },
-  { label: 'Start a Gathering', href: '/start-a-gathering' },
+  { label: 'Docs', href: '/docs' },
+  { label: 'Films', href: '/films' },
+  { label: 'Courses', href: '/courses' },
 ];
 
 const currentPath = Astro.url.pathname;
 ---
 
 <header class="nav">
+  <div class="nav-stars" aria-hidden="true">
+    <span class="nav-star star-1"></span>
+    <span class="nav-star star-2"></span>
+    <span class="nav-star star-3"></span>
+    <span class="nav-star star-4"></span>
+    <span class="nav-star star-5"></span>
+    <span class="nav-star star-6"></span>
+    <span class="nav-star star-7"></span>
+    <span class="nav-star star-8"></span>
+    <span class="nav-star star-9"></span>
+    <span class="nav-star star-10"></span>
+    <span class="nav-star star-11"></span>
+    <span class="nav-star star-12"></span>
+    <span class="nav-star star-13"></span>
+    <span class="nav-star star-14"></span>
+    <span class="nav-star star-15"></span>
+    <span class="nav-star star-16"></span>
+    <span class="nav-star star-17"></span>
+    <span class="nav-star star-18"></span>
+  </div>
   <Container>
     <div class="nav-row">
       <a href="/" class="brand" aria-label="New Earth Network — home">
@@ -35,7 +55,7 @@ const currentPath = Astro.url.pathname;
 
       <div class="nav-actions">
         <div class="desktop-cta">
-          <Button href="/events" variant="primary">Find a Gathering</Button>
+          <HeartSignalButton href="/#subscribe">Subscribe</HeartSignalButton>
         </div>
         <button
           id="nav-toggle"
@@ -62,7 +82,7 @@ const currentPath = Astro.url.pathname;
   containing block for position:fixed descendants, which would trap this panel inside
   the header's own (short) box instead of covering the viewport.
 -->
-<MobileNavigation links={links} primaryLabel="Find a Gathering" primaryHref="/events" />
+<MobileNavigation links={links} primaryLabel="Subscribe" primaryHref="/#subscribe" />
 
 <script>
   const toggle = document.getElementById('nav-toggle');
@@ -121,6 +141,60 @@ const currentPath = Astro.url.pathname;
     background: var(--color-nav-glass);
     backdrop-filter: blur(10px);
     box-shadow: var(--shadow-nav);
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .nav-stars {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .nav-star {
+    position: absolute;
+    left: -10rem;
+    top: var(--star-top);
+    width: var(--star-length);
+    height: 1px;
+    pointer-events: none;
+    opacity: var(--star-opacity);
+    background: linear-gradient(90deg, transparent, var(--color-star-light));
+    filter: drop-shadow(0 0 3px var(--color-star-glow-soft));
+    transform: rotate(var(--star-angle));
+    transform-origin: left center;
+    will-change: transform;
+    animation: nav-star-flight var(--star-duration) linear var(--star-delay) infinite;
+  }
+
+  .star-1 { --star-top: 14%; --star-length: 22px; --star-angle: -4deg; --star-opacity: 0.56; --star-duration: 6.8s; --star-delay: -1.2s; }
+  .star-2 { --star-top: 31%; --star-length: 11px; --star-angle: 3deg; --star-opacity: 0.34; --star-duration: 10.4s; --star-delay: -7.8s; }
+  .star-3 { --star-top: 49%; --star-length: 30px; --star-angle: -2deg; --star-opacity: 0.46; --star-duration: 8.1s; --star-delay: -4.1s; }
+  .star-4 { --star-top: 71%; --star-length: 15px; --star-angle: 5deg; --star-opacity: 0.28; --star-duration: 12.6s; --star-delay: -2.5s; }
+  .star-5 { --star-top: 86%; --star-length: 25px; --star-angle: -5deg; --star-opacity: 0.42; --star-duration: 7.4s; --star-delay: -5.6s; }
+  .star-6 { --star-top: 23%; --star-length: 9px; --star-angle: 2deg; --star-opacity: 0.24; --star-duration: 14.2s; --star-delay: -9.4s; }
+  .star-7 { --star-top: 60%; --star-length: 19px; --star-angle: -3deg; --star-opacity: 0.38; --star-duration: 9.3s; --star-delay: -6.2s; }
+  .star-8 { --star-top: 40%; --star-length: 34px; --star-angle: 4deg; --star-opacity: 0.48; --star-duration: 6.3s; --star-delay: -3.6s; }
+  .star-9 { --star-top: 78%; --star-length: 12px; --star-angle: -1deg; --star-opacity: 0.3; --star-duration: 11.7s; --star-delay: -8.7s; }
+  .star-10 { --star-top: 7%; --star-length: 17px; --star-angle: 3deg; --star-opacity: 0.36; --star-duration: 8.8s; --star-delay: -0.8s; }
+  .star-11 { --star-top: 18%; --star-length: 14px; --star-angle: 1deg; --star-opacity: 0.32; --star-duration: 13.1s; --star-delay: -10.2s; }
+  .star-12 { --star-top: 36%; --star-length: 27px; --star-angle: -6deg; --star-opacity: 0.44; --star-duration: 7.1s; --star-delay: -5.1s; }
+  .star-13 { --star-top: 55%; --star-length: 8px; --star-angle: 4deg; --star-opacity: 0.22; --star-duration: 15.4s; --star-delay: -12.6s; }
+  .star-14 { --star-top: 67%; --star-length: 21px; --star-angle: -2deg; --star-opacity: 0.4; --star-duration: 9.8s; --star-delay: -1.9s; }
+  .star-15 { --star-top: 93%; --star-length: 16px; --star-angle: 6deg; --star-opacity: 0.3; --star-duration: 11.1s; --star-delay: -7.3s; }
+  .star-16 { --star-top: 3%; --star-length: 24px; --star-angle: -3deg; --star-opacity: 0.42; --star-duration: 8.4s; --star-delay: -4.8s; }
+  .star-17 { --star-top: 44%; --star-length: 10px; --star-angle: 2deg; --star-opacity: 0.26; --star-duration: 14.6s; --star-delay: -11.4s; }
+  .star-18 { --star-top: 82%; --star-length: 32px; --star-angle: -4deg; --star-opacity: 0.46; --star-duration: 6.6s; --star-delay: -3.1s; }
+
+  @keyframes nav-star-flight {
+    from { transform: translateX(0) rotate(var(--star-angle)); }
+    to { transform: translateX(120vw) rotate(var(--star-angle)); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav-star { animation: none; }
   }
 
   .nav-row {
@@ -134,13 +208,6 @@ const currentPath = Astro.url.pathname;
     position: relative;
     display: flex;
     align-items: center;
-    /* Single source of truth for the logo's rendered size, so the pulse rings below
-       stay centered on the circular icon even if this height changes later. 0.4975
-       is the icon's true alpha-weighted centroid as a fraction of the rendered
-       height — measured directly on the rendered image with a sweep of sample
-       windows to find the plateau before the wordmark starts contaminating it, not
-       assumed from the crop boundary (the sparkle accents make the icon visually
-       off-center within its own crop). */
     --nav-logo-height: 106px;
     --nav-icon-center-x: calc(var(--nav-logo-height) * 0.4975);
   }
@@ -150,18 +217,12 @@ const currentPath = Astro.url.pathname;
     width: auto;
   }
 
-  /* A signal pulse behind the icon mark — two rings expanding and thinning outward,
-     offset half a cycle apart, like the logo is broadcasting. z-index: -1 sinks them
-     below .brand's own content but keeps them above .nav's background fill, so they
-     read as coming from behind the icon rather than sitting on top of it. */
   .brand::before,
   .brand::after {
     content: '';
     position: absolute;
     top: calc(var(--nav-logo-height) / 2);
     left: var(--nav-icon-center-x);
-    /* Sized off the logo height (not fixed px) so the ring keeps the same
-       proportion to the icon — always a bit larger than it — as the logo grows. */
     width: calc(var(--nav-logo-height) * 1.09);
     height: calc(var(--nav-logo-height) * 1.09);
     translate: -50% -50%;
@@ -208,15 +269,67 @@ const currentPath = Astro.url.pathname;
   }
 
   .desktop-nav a {
+    position: relative;
+    z-index: 0;
+    display: block;
+    padding: var(--space-3) var(--space-4);
     font-family: var(--font-display);
     font-size: var(--text-sm);
     color: var(--color-text-body);
-    transition: color var(--duration-fast) var(--ease-out);
+    cursor: pointer;
+    transition: color var(--duration-nav-activate) var(--ease-nav-activate);
+  }
+
+  /* Two hairlines that converge onto the link — scaled to double height and
+     invisible at rest, sweeping in from outside the link's edges as the plum fill
+     grows from the center to meet them. Plum reads fine as the settled fill, but
+     is nearly invisible as a thin line against the nav's own dark glass — so the
+     lines use the solid, full-opacity violet instead, to actually read during
+     the sweep. */
+  .desktop-nav a::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    transform: scaleY(2);
+    border-style: solid;
+    border-color: var(--color-electric-violet-soft);
+    border-width: 2px 0 2px 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: all var(--duration-nav-activate) var(--ease-nav-activate);
+  }
+
+  /* A solid plum fill, swept in behind the link on hover/active. */
+  .desktop-nav a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--color-bg-elevated);
+    transform: scale(0);
+    pointer-events: none;
+    transition: all var(--duration-nav-activate) var(--ease-nav-activate);
   }
 
   .desktop-nav a:hover,
   .desktop-nav a[aria-current='page'] {
-    color: var(--color-electric-cyan);
+    color: var(--color-text-primary);
+  }
+
+  .desktop-nav a:hover::before,
+  .desktop-nav a[aria-current='page']::before {
+    transform: scaleY(0);
+    opacity: 1;
+  }
+
+  .desktop-nav a:hover::after,
+  .desktop-nav a[aria-current='page']::after {
+    transform: scaleY(1);
+  }
+
+  .desktop-nav a:active {
+    scale: 0.9;
   }
 
   .nav-actions {

@@ -42,11 +42,11 @@ Violate one and the work is rejected without discussion. No exceptions, no "just
 - Honors `prefers-reduced-motion` and `prefers-color-scheme`.
 
 **Design**
-- One typeface family (two only if the second earns its keep). A defined type scale — no arbitrary sizes.
+- Use the leanest type system that earns its keep: normally one or two functional families, with a technical accent face only for short, accessible metadata when it materially strengthens the signal identity. Define a type scale — no arbitrary sizes.
 - A spatial system on a 4px grid. Everything lands on it. Optical alignment beats mathematical alignment when they disagree.
-- One accent color. Neutrals carry the design. Color is used for meaning, never decoration.
+- One coherent electric blue/cyan signal range. Neutrals and the dark violet environment carry the design; color is used for meaning, never decoration.
 - Whitespace is the primary design material. When in doubt, remove something and add space.
-- Motion: 150–250ms, purposeful, easing that decelerates (`cubic-bezier(0.2, 0, 0, 1)`). Motion explains a spatial relationship or it doesn't exist.
+- Motion: typically 150–250ms and purposeful, with a decelerating ease (`cubic-bezier(0.2, 0, 0, 1)`). Rare ambient signal treatments may be slower only with a measured cost and a complete reduced-motion alternative. Motion explains state or a spatial relationship or it doesn't exist.
 - Everything defined as design tokens. No hard-coded hex values in components, ever.
 
 ## 3. The review ritual

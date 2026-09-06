@@ -27,13 +27,38 @@
   /* Solid version of --color-nebula-rose — a crisp UI color (the nav logo's pulse
      ring) needs full opacity, not the atmospheric wash the nebula token is tuned for. */
   --color-electric-rose: #ff6891;
-
+  /* Solid version of --color-nebula-violet — same reasoning: the nav menu-item
+     activation lines need a purple that reads against the dark nav, not the
+     atmospheric wash. */
+  --color-electric-violet: #975bff;
+  /* --color-electric-violet at reduced opacity — full-strength read as too solid/
+     heavy for the nav menu-item activation lines, which are meant to be a light
+     sweep, not a bold bar. */
+  --color-electric-violet-soft: rgba(151, 91, 255, 0.75);
+  /* Semi-transparent hot pink reserved for the nav Subscribe heart burst. */
+  --color-heart-pink: rgba(255, 79, 163, 0.72);
+  /* Neutral warm-grey field fill — the hero email input first used
+     --color-bg-deep (near-black) to look "recessed," but against the dark page
+     that read as barely visible rather than distinct; this is genuinely grey
+     (not another shade of the site's violet-black) so the field is easy to
+     spot at a glance. Pulled darker from an initial, too-light pass that
+     clashed against the rest of the site's deep palette. */
+  --color-field-grey: #302d34;
+  /* Solid version of --color-nebula-gold — the nav CTA's border and pulse glow
+     need a crisp, fully-opaque gold to read as a border/glow, not the atmospheric
+     wash the nebula token is tuned for. */
+  --color-electric-gold: #ffb766;
+  --color-electric-gold-glow: rgba(255, 183, 102, 0.6);
   /* Starlight — a white point radiating the logo's electric blue/cyan, so the stars
      read as pieces of the same signal rather than a second, unrelated light source. */
   --color-star-light: var(--color-text-primary);
   --color-star-glow: rgba(122, 243, 255, 0.95);
   --color-star-glow-soft: rgba(91, 140, 255, 0.6);
   --color-star-glow-wide: rgba(91, 140, 255, 0.3);
+  /* Reserved for the rare travelling star streaks: a vivid cosmic counterpoint,
+     not a general-purpose interface accent. */
+  --color-star-shooting: #ff4fa3;
+  --color-star-shooting-glow: rgba(255, 79, 163, 0.7);
 
   /* ---- Color: text ---- */
   --color-text-primary: #f7f4ff;
@@ -53,6 +78,11 @@
   --font-display: 'Space Grotesk Variable', 'Space Grotesk', system-ui, sans-serif;
   --font-body: 'Manrope Variable', 'Manrope', system-ui, sans-serif;
   --font-accent: 'Michroma', 'Space Grotesk Variable', system-ui, sans-serif;
+  /* Scoped to the homepage hero headline only, not a sitewide swap of
+     --font-display — Space Grotesk read as too "commercial tech" for that one
+     specific line ("Stop asking...Start commanding!"); a warm serif reads more
+     distinctive without changing every other heading on the site. */
+  --font-hero: 'Fraunces Variable', 'Fraunces', serif;
 
   /* ---- Type scale (fluid, clamped) ---- */
   --text-xs: 0.8125rem; /* 13px */
@@ -63,6 +93,11 @@
   --text-xl: clamp(2rem, 1.6rem + 2vw, 3rem);
   --text-2xl: clamp(2.75rem, 2rem + 3.5vw, 4.5rem);
   --text-3xl: clamp(3.5rem, 2.5rem + 5vw, 6.5rem);
+  /* The homepage hero headline lives in a ~50%-width column (a two-column split,
+     empty column reserved for future content) rather than a full-width centered
+     block, so it needs to stay legible and break in two deliberate lines at
+     roughly half the viewport's worth of vw scaling that text-2xl/3xl assume. */
+  --text-hero: clamp(2.25rem, 1.75rem + 1.7vw, 3.25rem);
 
   --leading-tight: 1.08;
   --leading-snug: 1.25;
@@ -111,6 +146,11 @@
   --duration-fast: 150ms;
   --duration-base: 220ms;
   --duration-slow: 400ms;
+  /* One-off, borrowed exactly from the nav menu-item activation template the site
+     owner supplied — slower and springier than --ease-out/--duration-slow above.
+     Kept as its own pair rather than changed sitewide. */
+  --ease-nav-activate: cubic-bezier(0.23, 1, 0.32, 1);
+  --duration-nav-activate: 600ms;
 
   /* ---- Layout ---- */
   --container-max: 1200px;

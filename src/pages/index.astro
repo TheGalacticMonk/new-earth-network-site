@@ -116,11 +116,11 @@ const stars = [
     fill: var(--color-star-light);
     opacity: 0.28;
     translate: -50% -50%;
-    /* One drop-shadow, not three — this runs on 27 permanently-animating elements,
-       so its cost is constant and multiplies fast. The fuller 3-layer bloom is
-       reserved for the two halo "hero" stars below, which are the only ones meant
-       to read as genuinely bright. */
-    filter: drop-shadow(0 0 6px var(--color-star-glow-soft));
+    /* A compact two-layer cyan bloom gives the field a more magical, luminous
+       presence while retaining the brighter three-layer treatment for halo stars. */
+    filter:
+      drop-shadow(0 0 5px var(--color-star-glow))
+      drop-shadow(0 0 12px var(--color-star-glow-soft));
     animation-name: star-twinkle;
     animation-duration: 2s;
     animation-iteration-count: infinite;
@@ -208,15 +208,15 @@ const stars = [
     width: 110px;
     height: 1.5px;
     border-radius: var(--radius-full);
-    background: linear-gradient(90deg, var(--color-star-light), transparent);
-    filter: drop-shadow(0 0 6px var(--color-star-glow-soft));
+    background: linear-gradient(90deg, var(--color-star-shooting), transparent);
+    filter: drop-shadow(0 0 6px var(--color-star-shooting-glow));
     opacity: 0;
   }
 
-  .shooting-star-1 { top: -4%; left: 78%; animation: shoot-1 22s 2s ease-in infinite; }
-  .shooting-star-2 { top: 8%; left: 54%; width: 90px; animation: shoot-2 28s 11s ease-in infinite; }
-  .shooting-star-3 { top: -6%; left: 34%; width: 130px; animation: shoot-3 34s 19s ease-in infinite; }
-  .shooting-star-4 { top: 14%; left: 94%; width: 90px; animation: shoot-4 26s 6s ease-in infinite; }
+  .shooting-star-1 { top: -4%; left: 78%; animation: shoot-1 8s 2s ease-in infinite; }
+  .shooting-star-2 { top: 8%; left: 54%; width: 90px; animation: shoot-2 10s 5s ease-in infinite; }
+  .shooting-star-3 { top: -6%; left: 34%; width: 130px; animation: shoot-3 12s 8s ease-in infinite; }
+  .shooting-star-4 { top: 14%; left: 94%; width: 90px; animation: shoot-4 9s 3s ease-in infinite; }
 
   @keyframes shoot-1 {
     0%, 100% { opacity: 0; transform: rotate(-25deg) translateX(0); }

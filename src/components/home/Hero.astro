@@ -1,74 +1,267 @@
 ---
 import Container from '../Container.astro';
-import Button from '../Button.astro';
-import Logo from '../Logo.astro';
 ---
 
 <section class="hero">
   <Container>
-    <div class="hero-content">
-      <div class="hero-logo">
-        <Logo variant="full" priority width={900} />
+    <div class="hero-grid">
+      <div class="hero-content">
+        <h1 class="headline">Stop asking&hellip;and&hellip;<br />Start commanding!</h1>
+        <div class="tagline">
+          <span class="wand" aria-hidden="true">
+            <svg viewBox="0 -960 960 960" fill="currentColor">
+              <path
+                d="m176-120-56-56 301-302-181-45 198-123-17-234 179 151 216-88-87 217 151 178-234-16-124 198-45-181-301 301Zm24-520-80-80 80-80 80 80-80 80Zm355 197 48-79 93 7-60-71 35-86-86 35-71-59 7 92-79 49 90 22 23 90Zm165 323-80-80 80-80 80 80-80 80ZM569-570Z"
+              ></path>
+            </svg>
+          </span>
+          <p class="subhead">Enter your email to get started.</p>
+        </div>
+
+        <!--
+          No email service is wired up yet (phase 2) — same placeholder pattern as
+          EmailSignup.astro. The form is real and accessible now; swap the script's
+          fetch target for the chosen provider without touching markup. IDs are
+          prefixed hero- since EmailSignup's own form renders further down this
+          same page.
+        -->
+        <form id="hero-signup-form" class="form" novalidate>
+          <label class="visually-hidden" for="hero-signup-email">Email address</label>
+          <div class="field-group">
+            <input
+              id="hero-signup-email"
+              name="email"
+              type="email"
+              placeholder="you@example.com"
+              required
+              autocomplete="email"
+            />
+            <button type="submit">Get Started</button>
+          </div>
+        </form>
+        <p id="hero-signup-status" class="status" role="status" aria-live="polite"></p>
       </div>
-      <h1 class="headline">The internet found us.<br />Now it's time to meet.</h1>
-      <p class="subhead">
-        New Earth Network is a real-world community of conscious, awakened people —
-        gathering in person, in your city, to build the connections a screen can't.
-      </p>
-      <div class="actions">
-        <Button href="/events" variant="primary" size="lg">Find a Gathering</Button>
-        <Button href="/start-a-gathering" variant="secondary" size="lg">Start a Gathering</Button>
+
+      <div class="hero-visual">
+        <div class="earth" aria-hidden="true"></div>
       </div>
     </div>
   </Container>
 </section>
 
+<script>
+  const form = document.getElementById('hero-signup-form') as HTMLFormElement | null;
+  const status = document.getElementById('hero-signup-status');
+
+  form?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const email = (form.elements.namedItem('email') as HTMLInputElement)?.value;
+    if (!email) return;
+
+    // Placeholder acknowledgment until a real signup endpoint is connected.
+    if (status) status.textContent = "You're on the list. We'll be in touch.";
+    form.reset();
+  });
+</script>
+
 <style>
   .hero {
     position: relative;
     overflow: hidden;
-    padding-block: var(--space-24) var(--space-24);
+    padding-block: var(--space-section);
     display: flex;
     align-items: center;
-    min-height: 88vh;
+  }
+
+  .hero-grid {
+    display: grid;
+    gap: var(--space-12);
   }
 
   .hero-content {
     position: relative;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: var(--space-8);
-    text-align: center;
-    max-width: 760px;
-    margin-inline: auto;
-  }
-
-  .hero-logo :global(img) {
-    width: clamp(200px, 32vw, 420px);
+    align-items: flex-start;
+    gap: var(--space-6);
+    text-align: left;
+    max-width: 34rem;
   }
 
   .headline {
-    font-size: var(--text-3xl);
+    font-family: var(--font-hero);
+    font-size: var(--text-hero);
+    font-weight: 600;
+    /* Softer than the sitewide heading white (--color-text-primary) — at hero
+       scale, full white read as too stark against the rest of the muted
+       palette. */
+    color: var(--color-text-body);
+  }
+
+  /* Wand sits beside the subhead instead of under the headline, filling the
+     line the subhead used to sit alone on. */
+  .tagline {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  /* Decorative flourish only — the headline text already carries the meaning,
+     so this is aria-hidden and purely visual. Gold ties it to the same accent
+     already used for the nav's Subscribe button. */
+  .wand {
+    display: inline-flex;
+    flex-shrink: 0;
+    /* Pinned to the headline's own size so the wand's scale stays tied to it
+       regardless of what it's sitting next to in the layout (the subhead is
+       much smaller than the headline, so inheriting font-size here would
+       otherwise shrink the wand along with it). */
+    font-size: var(--text-hero);
+    color: var(--color-electric-gold);
+    filter: drop-shadow(0 0 8px var(--color-electric-gold-glow));
+  }
+
+  .wand svg {
+    width: 1.5em;
+    height: 1.5em;
   }
 
   .subhead {
+    /* Same family as the headline, italic — already loaded, so this doesn't
+       add a new font, just a companion style to the one already in use. */
+    font-family: var(--font-hero);
+    font-style: italic;
     font-size: var(--text-md);
     color: var(--color-text-muted);
-    max-width: 52ch;
   }
 
-  .actions {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--space-4);
+  .form {
+    width: 100%;
+    max-width: 27.5rem;
     margin-top: var(--space-2);
   }
 
-  @media (min-width: 640px) {
-    .hero {
-      min-height: 92vh;
+  .field-group {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    width: 100%;
+    background: transparent;
+    border-radius: var(--radius-full);
+    padding: var(--space-1);
+  }
+
+  input {
+    flex: 1;
+    min-width: 0;
+    padding-inline: var(--space-4);
+    padding-block: var(--space-3);
+    /* Reset the browser's own default text-field chrome (a rectangular inset
+       border/appearance) — without this, that native border shows at rest and
+       only gets masked once focus-visible's outline takes over, making the
+       resting field look like a mistake rather than part of the pill. */
+    appearance: none;
+    border: none;
+    border-radius: var(--radius-full);
+    /* A genuinely grey fill (not another shade of the site's near-black) so the
+       field reads as its own distinct, easy-to-spot control rather than one
+       undifferentiated dark bar running straight into the button. */
+    background: var(--color-field-grey);
+    color: var(--color-text-primary);
+    font-size: var(--text-sm);
+    /* At narrow widths the fixed-size button leaves little room for the input;
+       ellipsize rather than hard-clip so a partially visible placeholder reads
+       as intentional truncation, not a layout bug. */
+    text-overflow: ellipsis;
+  }
+
+  input:focus-visible {
+    border-radius: var(--radius-full);
+    outline-offset: -2px;
+  }
+
+  input::placeholder {
+    color: var(--color-text-muted);
+  }
+
+  button {
+    flex-shrink: 0;
+    padding: var(--space-3) var(--space-6);
+    /* Mixed case, same family as the headline — not the site's uppercase
+       Michroma accent treatment, matching the same call made on the nav's
+       Subscribe button. */
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    color: var(--color-bg-deep);
+    background: var(--color-electric-cyan);
+    border-radius: var(--radius-full);
+    transition:
+      box-shadow var(--duration-base) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
+  }
+
+  button:hover {
+    box-shadow: var(--shadow-glow-md);
+    transform: translateY(-1px);
+  }
+
+  button:active {
+    transform: translateY(0);
+  }
+
+  .status {
+    min-height: 1.5em;
+    color: var(--color-electric-cyan);
+    font-size: var(--text-sm);
+  }
+
+  .hero-visual {
+    display: none;
+  }
+
+  /* Rotating Earth — the site owner's own template, with the accompanying
+     twinkling-star sparkles left out (not needed here; the page already has
+     its own starfield). Values below (box-shadow shading, animation timing)
+     are kept as given rather than rebuilt from tokens, same treatment as the
+     other borrowed-template effects on this site (see the nav menu-item
+     activation animation). Expects the actual image at
+     /public/images/earth.jpg — add that file the same way the wand SVG was
+     added to src/assets/. */
+  .earth {
+    width: 250px;
+    height: 250px;
+    margin-inline: auto;
+    border-radius: 50%;
+    background: url('/images/earth.jpg');
+    background-size: cover;
+    background-position: left;
+    box-shadow:
+      0px 0 20px rgba(255, 255, 255, 0.2),
+      -5px 0px 8px #c3f4ff inset,
+      15px 2px 25px #000 inset,
+      -24px -2px 34px #c3f4ff99 inset,
+      250px 0px 44px #00000066 inset,
+      150px 0px 38px #000000aa inset;
+    animation: earth-rotate 30s linear infinite;
+  }
+
+  @keyframes earth-rotate {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 400px 0;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .hero-grid {
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+    }
+
+    .hero-visual {
+      display: block;
     }
   }
 </style>

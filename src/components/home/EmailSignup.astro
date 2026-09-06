@@ -2,7 +2,7 @@
 import Container from '../Container.astro';
 ---
 
-<section class="signup" data-tone="deep">
+<section id="subscribe" class="signup" data-tone="deep">
   <Container narrow>
     <h2 class="heading">Stay connected</h2>
     <p class="body">
@@ -43,6 +43,9 @@ import Container from '../Container.astro';
     padding-block: var(--space-section);
     background: var(--color-bg-deep);
     text-align: center;
+    /* The nav is sticky and tall — without this, jumping here via #subscribe (the
+       nav's Subscribe button) would land the heading half-hidden underneath it. */
+    scroll-margin-top: var(--nav-height);
   }
 
   .heading {
