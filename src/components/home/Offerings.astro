@@ -3,18 +3,27 @@ import Container from '../Container.astro';
 import OfferingCard from '../OfferingCard.astro';
 
 /*
-  Six identical placeholder cards for now — copy and per-card differentiation are
-  the next pass (see OfferingCard.astro's header comment), same as the card's
-  neon palette. This just proves out the 6-card grid and spacing.
+  Same left-to-right order as the nav (Navigation.astro's `links`) — Events,
+  Series, Docs & Films, Music, Courses, Shop. Card copy is just each name for
+  now (see OfferingCard.astro's header comment on why label/labelBottom hold
+  the name rather than an invented tagline); the neon palette is still the
+  next pass.
 */
-const cards = Array.from({ length: 6 });
+const cards = [
+  { icon: '/events.svg', iconAlt: 'Events', label: 'EVENTS' },
+  { icon: '/series.svg', iconAlt: 'Series', label: 'SERIES' },
+  { icon: '/docsfilms.svg', iconAlt: 'Docs & Films', label: 'DOCS &', labelBottom: 'FILMS' },
+  { icon: '/music.svg', iconAlt: 'Music', label: 'MUSIC' },
+  { icon: '/courses.svg', iconAlt: 'Courses', label: 'COURSES' },
+  { icon: '/shop.svg', iconAlt: 'Shop', label: 'SHOP' },
+];
 ---
 
 <section class="offerings">
   <Container>
     <div class="grid">
-      {cards.map(() => (
-        <OfferingCard titleTop="CYBER" titleBottom="CARD" subtitle="INTERACTIVE" highlight="3D EFFECT" />
+      {cards.map((card) => (
+        <OfferingCard icon={card.icon} iconAlt={card.iconAlt} label={card.label} labelBottom={card.labelBottom} />
       ))}
     </div>
   </Container>
