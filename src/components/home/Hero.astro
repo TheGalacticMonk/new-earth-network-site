@@ -7,7 +7,7 @@ import Container from '../Container.astro';
     <div class="hero-grid">
       <div class="hero-content">
         <h1 class="headline">Become the New Earth.<br />Connect your frequency.</h1>
-        <p class="promise">The complete human experience, online and offline.</p>
+        <p class="promise">The multidimensional human experience, online and offline.</p>
         <div class="tagline">
           <p class="subhead">Enter your email to get started.</p>
           <span class="wand" aria-hidden="true"></span>
@@ -105,7 +105,14 @@ import Container from '../Container.astro';
        arranged inside it). Was align-items: flex-start / text-align: left,
        "one content rail at every viewport, shared with the navigation logo." */
     align-items: center;
-    gap: var(--space-6);
+    /* Rhythm redesigned around what the five children actually ARE, not one
+       uniform number: .headline + .promise are one unit (the pitch),
+       .tagline + .form + .status are another (the action) — they shouldn't
+       read as five equally-spaced items in a list. --space-2 is the floor
+       gap every adjacent pair gets by default; .promise and .tagline below
+       each add their own margin-top on top of it to open up exactly where
+       the composition needs air, not everywhere equally. */
+    gap: var(--space-2);
     text-align: center;
     width: 100%;
     max-width: var(--hero-content-max);
@@ -209,6 +216,10 @@ import Container from '../Container.astro';
     line-height: var(--leading-snug);
     color: var(--color-text-body);
     text-wrap: balance;
+    /* On top of .hero-content's --space-2 floor: 16px total under the
+       headline — close enough to read as the same "pitch" unit, not the
+       bare 8px minimum every other gap not otherwise adjusted would get. */
+    margin-top: var(--space-2);
   }
 
   /* The smaller email prompt keeps its wand alongside it, both now centered
@@ -218,6 +229,13 @@ import Container from '../Container.astro';
     align-items: center;
     justify-content: center;
     gap: var(--space-2);
+    /* The one deliberately large gap in the card: on top of the --space-2
+       floor, 32px total above .tagline — the seam between the pitch
+       (headline + promise) and the action (prompt + form), and not a
+       coincidence that it lands on the same number as --space-8, this
+       card's own outer padding: a gap that echoes the card's own margin
+       reads as a considered break, not an arbitrary bigger number. */
+    margin-top: var(--space-6);
   }
 
   /* Preserve the supplied silhouette, with a quiet patch of sky behind it so
@@ -256,6 +274,10 @@ import Container from '../Container.astro';
   .form {
     width: 100%;
     max-width: var(--hero-form-max);
+    /* On top of the --space-2 floor: 16px total under .tagline, the same
+       "tight" total .promise gets under the headline — the prompt sits
+       close to its own field, like a label, not spaced as generously as the
+       seam above it. */
     margin-top: var(--space-2);
   }
 
@@ -365,6 +387,24 @@ import Container from '../Container.astro';
   }
 
   @media (max-width: 479px) {
+    /* --text-lg's own floor (1.5rem/24px) doesn't shrink any further below
+       this breakpoint, but the headline's two <br>-separated lines each need
+       real room: at this width, with .headline's 800-weight/3px-tracking
+       styling, "Connect your frequency." alone measures ~365px and only has
+       ~228-298px of card to fit in, so each intended line was wrapping into
+       a second line of its own — 4 lines total instead of 2. Measured the
+       actual fit at 360-480px (the range this query covers) rather than
+       guessing: --text-sm (15px) is the largest size with headroom to spare
+       at every width tested in that range, so it's used here as a deliberate
+       override, not because --text-sm's own usual purpose (small body/UI
+       text) applies to a headline. Below ~360px (true 320px-wide phones,
+       rare today) this still isn't guaranteed to hold at exactly two lines —
+       chose legibility at the sizes people actually use over chasing a
+       vanishingly small one down to an illegibly tiny headline. */
+    .headline {
+      font-size: var(--text-sm);
+    }
+
     /* Keep the supporting sentence and its flourish together on narrow screens. */
     .tagline {
       gap: var(--space-1);
