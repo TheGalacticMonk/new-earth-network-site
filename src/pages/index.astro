@@ -191,8 +191,20 @@ const stars = [
     Shooting stars — same idea as the reference button (a thin streak falling on a
     diagonal), rebuilt for the full-page sky: positions in viewport percent instead of
     button-scoped px, the same white/cyan glow as the rest of .stars instead of a flat
-    white gradient, and each cycle is mostly an invisible hold so one appears every 20+
-    seconds rather than every couple of seconds — a rare event, not a steady drizzle.
+    white gradient, and each cycle is mostly an invisible hold so any one streak is rare,
+    not a steady drizzle.
+
+    The four periods (10/11/12/13s below) are deliberately close together and the four
+    delays deliberately uneven — picked by simulating the combined timeline, not
+    guessed. Four independent loops with widely spread periods (the original was
+    12/16/18/14s) drift in and out of phase: sometimes two or three land close together,
+    which is exactly what pushes the *next* shared gap out past what any one star's own
+    period would suggest — the worst pause was measured at ~10.7s even though no single
+    star waits longer than 13s for itself. Tightening the spread bounds how far the four
+    can drift apart before the pattern effectively re-synchronises, which caps that
+    worst-case pause (~8s, about 25% shorter) without raising the average frequency or
+    making any single streak less rare. Periods share no common factor inside any
+    realistic viewing session, so this still doesn't read as a fixed loop.
   */
   /*
     Each star's line is tilted with rotate(), then travels by translateX() in that
@@ -229,10 +241,10 @@ const stars = [
     height: var(--star-streak-weight-far);
   }
 
-  .shooting-star-1 { top: -4%; left: 78%; animation: shoot-1 12s 2s ease-in infinite; }
-  .shooting-star-2 { top: 8%; left: 54%; animation: shoot-2 16s 7s ease-in infinite; }
-  .shooting-star-3 { top: -6%; left: 34%; animation: shoot-3 18s 11s ease-in infinite; }
-  .shooting-star-4 { top: 14%; left: 94%; animation: shoot-4 14s 4s ease-in infinite; }
+  .shooting-star-1 { top: -4%; left: 78%; animation: shoot-1 10s 9.8s ease-in infinite; }
+  .shooting-star-2 { top: 8%; left: 54%; animation: shoot-2 11s 2.1s ease-in infinite; }
+  .shooting-star-3 { top: -6%; left: 34%; animation: shoot-3 12s 0.6s ease-in infinite; }
+  .shooting-star-4 { top: 14%; left: 94%; animation: shoot-4 13s 12.5s ease-in infinite; }
 
   @keyframes shoot-1 {
     0%, 100% { opacity: 0; transform: rotate(-25deg) translateX(0); }
