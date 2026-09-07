@@ -216,6 +216,16 @@ import Container from '../Container.astro';
     line-height: var(--leading-snug);
     color: var(--color-text-body);
     text-wrap: balance;
+    /* Same glow as .headline, values unchanged — not the gradient text-fill
+       alongside it, since that's a bigger ask ("same styling") than what was
+       actually requested here ("the same glow effect"). filter and
+       text-shadow both work independent of a solid vs. gradient fill, so
+       this layers the identical glow over .promise's own existing colour
+       rather than requiring the gradient to come with it. */
+    filter: drop-shadow(0 0 15px var(--color-card-title-glow));
+    text-shadow:
+      0 0 10px var(--color-card-title-shadow),
+      0 0 20px var(--color-card-title-shadow-wide);
     /* On top of .hero-content's --space-2 floor: 16px total under the
        headline — close enough to read as the same "pitch" unit, not the
        bare 8px minimum every other gap not otherwise adjusted would get. */
@@ -269,6 +279,13 @@ import Container from '../Container.astro';
     font-family: var(--font-hero);
     font-size: var(--text-hero-subhead);
     color: var(--color-text-muted);
+    /* Same glow as .headline/.promise — see .promise's own comment for why
+       this is the glow alone, not the gradient fill it rides on for the
+       headline. */
+    filter: drop-shadow(0 0 15px var(--color-card-title-glow));
+    text-shadow:
+      0 0 10px var(--color-card-title-shadow),
+      0 0 20px var(--color-card-title-shadow-wide);
   }
 
   .form {
