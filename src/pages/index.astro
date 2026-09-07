@@ -194,17 +194,28 @@ const stars = [
     white gradient, and each cycle is mostly an invisible hold so any one streak is rare,
     not a steady drizzle.
 
-    The four periods (10/11/12/13s below) are deliberately close together and the four
-    delays deliberately uneven — picked by simulating the combined timeline, not
-    guessed. Four independent loops with widely spread periods (the original was
-    12/16/18/14s) drift in and out of phase: sometimes two or three land close together,
-    which is exactly what pushes the *next* shared gap out past what any one star's own
-    period would suggest — the worst pause was measured at ~10.7s even though no single
-    star waits longer than 13s for itself. Tightening the spread bounds how far the four
-    can drift apart before the pattern effectively re-synchronises, which caps that
-    worst-case pause (~8s, about 25% shorter) without raising the average frequency or
-    making any single streak less rare. Periods share no common factor inside any
-    realistic viewing session, so this still doesn't read as a fixed loop.
+    First pass: close-but-distinct periods (10/11/12/13s), picked by simulating the
+    combined timeline. That got the worst pause down from ~10.7s to ~8s but couldn't go
+    much further — distinct periods always drift back into phase eventually, and
+    fighting that drift with closer and closer periods has diminishing returns.
+
+    Second pass, to get the worst pause under 4s: all four periods are the SAME (19s)
+    with delays spaced an exact quarter-period apart (0 / 4.75 / 9.5 / 14.25). Equal
+    periods can't drift relative to each other, so the combined pattern is an exact,
+    permanent repeat every 19s instead of a slowly-shifting one — the trade being made
+    for a genuine ceiling on the pause instead of a statistically-unlikely-but-not-
+    impossible long one. Measured worst gap 3.75s, simulated 1200s out. 19s (not
+    something shorter) is what keeps each individual star still reappearing only every
+    19s — as rare on its own as before — while the even quarter-period stagger is what
+    keeps the four from ever bunching up the way the old spread-period version did.
+
+    A same-period design would normally also make each streak's own on-screen crossing
+    time balloon (that duration comes from the same number the keyframe percentages
+    below are fractions of) — so the four @keyframes percentages were recalculated from
+    each star's ORIGINAL absolute crossing time (e.g. shoot-1 took 2%-11% of its old 12s
+    = 1.08s to cross and fade; at 19s that's now 5.7%-6.9%, not 2%-11%) rather than
+    reused as-is. The four streaks still move at their original per-star speeds; only
+    the hold between them changed.
   */
   /*
     Each star's line is tilted with rotate(), then travels by translateX() in that
@@ -241,37 +252,37 @@ const stars = [
     height: var(--star-streak-weight-far);
   }
 
-  .shooting-star-1 { top: -4%; left: 78%; animation: shoot-1 10s 9.8s ease-in infinite; }
-  .shooting-star-2 { top: 8%; left: 54%; animation: shoot-2 11s 2.1s ease-in infinite; }
-  .shooting-star-3 { top: -6%; left: 34%; animation: shoot-3 12s 0.6s ease-in infinite; }
-  .shooting-star-4 { top: 14%; left: 94%; animation: shoot-4 13s 12.5s ease-in infinite; }
+  .shooting-star-1 { top: -4%; left: 78%; animation: shoot-1 19s 0s ease-in infinite; }
+  .shooting-star-2 { top: 8%; left: 54%; animation: shoot-2 19s 4.75s ease-in infinite; }
+  .shooting-star-3 { top: -6%; left: 34%; animation: shoot-3 19s 9.5s ease-in infinite; }
+  .shooting-star-4 { top: 14%; left: 94%; animation: shoot-4 19s 14.25s ease-in infinite; }
 
   @keyframes shoot-1 {
     0%, 100% { opacity: 0; transform: rotate(-25deg) translateX(0); }
-    2% { opacity: 1; }
-    9% { opacity: 1; transform: rotate(-25deg) translateX(-4200px); }
-    11% { opacity: 0; }
+    1.3% { opacity: 1; }
+    5.7% { opacity: 1; transform: rotate(-25deg) translateX(-4200px); }
+    6.9% { opacity: 0; }
   }
 
   @keyframes shoot-2 {
     0%, 100% { opacity: 0; transform: rotate(-52deg) translateX(0); }
-    2% { opacity: 1; }
-    8% { opacity: 1; transform: rotate(-52deg) translateX(-3200px); }
-    10% { opacity: 0; }
+    1.7% { opacity: 1; }
+    6.7% { opacity: 1; transform: rotate(-52deg) translateX(-3200px); }
+    8.4% { opacity: 0; }
   }
 
   @keyframes shoot-3 {
     0%, 100% { opacity: 0; transform: rotate(-18deg) translateX(0); }
-    2% { opacity: 1; }
-    10% { opacity: 1; transform: rotate(-18deg) translateX(-2600px); }
-    12% { opacity: 0; }
+    1.9% { opacity: 1; }
+    9.5% { opacity: 1; transform: rotate(-18deg) translateX(-2600px); }
+    11.4% { opacity: 0; }
   }
 
   @keyframes shoot-4 {
     0%, 100% { opacity: 0; transform: rotate(-48deg) translateX(0); }
-    2% { opacity: 1; }
-    9% { opacity: 1; transform: rotate(-48deg) translateX(-3200px); }
-    11% { opacity: 0; }
+    1.5% { opacity: 1; }
+    6.6% { opacity: 1; transform: rotate(-48deg) translateX(-3200px); }
+    8.1% { opacity: 0; }
   }
 
   @media (prefers-reduced-motion: reduce) {

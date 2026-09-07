@@ -21,13 +21,75 @@ site is memorable because it has a coherent idea, not because it moves a lot.
 
 ## The concept every agent is building toward
 
-**Darkness → Signal → Connection.** People are scattered. A signal appears. They find
-one another. They meet in physical reality. The site's dark environment, its one
-precious electric-blue/cyan signal accent, and its restraint everywhere else all exist in
-service of that idea — not as a mood, as the brief.
+**Darkness → Signal → Connection. The content is the signal. The room is the point.**
+(Evolved by `creative-director`, 2026-09-06 — see the memo trail below for why.) People
+are scattered. A signal appears — now concretely: the films, series, music, courses. They
+find one another, in a specific dated room the content points them to. They meet in
+physical reality. The site's dark environment, its one precious electric-blue/cyan signal
+accent, and its restraint everywhere else all exist in service of that idea — not as a
+mood, as the brief.
 
-The website is not the destination. The real-world gathering is. Every discipline is
-ultimately optimizing for getting someone off the site and into a room with other people.
+The website is not the destination. Neither is the media library. The real-world gathering
+is. Every discipline is ultimately optimizing for getting someone off the site and into a
+room with other people — the media layer's job is to be the transmitter that gets them
+there, not a destination competing with it for the same attention.
+
+**The name already said this:** *Network* means a broadcast network and a network of
+people at once. That's not a coincidence to lean on lightly — it's the whole idea.
+
+**The binding rule, not a suggestion:** every piece of content resolves to a room — a
+dated, located gathering or theme it points to. If a media entry can't say what room it
+leads to, it doesn't ship. This is what stops New Earth Network from being a media library
+with a meetup tab bolted on, and it's the one thing Gaia structurally cannot copy. Enforce
+it at the schema level (`src/content.config.ts`), not as a copy guideline.
+
+**Never compete with Gaia on catalog size.** They have 20 years and thousands of titles;
+"like Gaia but hipper" loses that fight on volume alone. Few pieces of content, each with a
+door attached, is the actual advantage — not a bigger library.
+
+**The gathering outranks the subscription everywhere** — nav, homepage, content page,
+footer. If that puts pressure on subscription revenue, the fix is one membership that
+includes both halves, not promoting the library in the IA.
+
+**Current homepage status: not yet aligned — this is known, not an oversight to fix
+quietly.** `creative-director`'s review (2026-09-06) found the live site already drifted
+toward "media library with an events tab" ahead of this direction being decided: primary
+nav dropped About/Cities/Start a Gathering/Principles/FAQ in favour of
+Events/Series/Docs & Films/Music/Courses/Shop; `Offerings.astro` renders Events as one
+identical card in a six-card grid next to Shop, with no hierarchy; the masthead's only
+persistent CTA is "Subscribe" (Gaia's CTA, not this brief's); and `Manifesto.astro`
+currently states the internet already solved people finding each other ("That job is
+done"), which this direction contradicts. None of that should be built on top of or
+extended until `ux-designer` and `copywriter` have restructured against the evolved
+concept above — see `docs/` for whatever brief comes out of that pass.
+
+## Business direction: also competing with Gaia.com
+
+Memo from the site owner (2026-09-06), for every agent to build toward: **in addition to**
+in-person events, New Earth Network will also compete directly with
+[Gaia.com](https://www.gaia.com) — the subscription conscious-media/documentary/yoga
+streaming platform. The intended positioning, in the owner's own words: New Earth Network
+as the **funner, more "hip" version of Gaia**. Same territory (consciousness, spirituality,
+alternative media), different energy — livelier, less earnest, less new-age-catalog.
+
+**Owner's follow-up (2026-09-06), narrowing the above:** New Earth Network should be
+**the complete human experience for awakened souls — online and offline.** Not two
+audiences on one site, and not an events funnel with a media arm bolted on: the streaming
+and video content *and* the in-person gatherings are both expressions of one thing, and
+the thing that makes New Earth Network different from Gaia specifically is that Gaia stops
+at the screen — it's a media library, full stop. New Earth Network's content is meant to
+send people toward *actually meeting other humans*, which Gaia has no equivalent of. That
+reframes rather than discards "the website is not the destination": the site (including
+its media/content layer) is still in service of real human connection, but "real human
+connection" turns out to be a bigger, two-sided idea than "get them to an event" alone —
+it now also has to justify itself as somewhere people would go instead of Gaia.
+
+**Still a `creative-director` job, not the producer's:** turning "complete human experience
+for awakened souls, online and offline" into the site's actual one-line concept (the
+"Darkness → Signal → Connection"-equivalent successor, if it needs one) and deciding what
+that implies for IA, homepage structure, and how a content/streaming section coexists with
+the events funnel. This should happen before `ux-designer`, `copywriter`, or `art-director`
+build against it.
 
 ## The pipeline
 
