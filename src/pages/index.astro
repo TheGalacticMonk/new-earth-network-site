@@ -281,9 +281,50 @@ const stars = [
     height: var(--star-streak-weight-far);
   }
 
-  .shooting-star-1 { top: -4%; left: 78%; animation: shoot-1 19s 0s ease-in infinite; }
-  .shooting-star-2 { top: 8%; left: 54%; animation: shoot-2 19s 4.75s ease-in infinite; }
-  .shooting-star-3 { top: -6%; left: 34%; animation: shoot-3 19s 9.5s ease-in infinite; }
+  /* Every streak's `left` start is well to the right for the same reason: all
+     four move toward the lower-left (negative rotate + negative translateX,
+     see the @keyframes below), so `left` isn't just "where it appears" —
+     it's the entire on-screen travel budget before the streak exits, since
+     it can only travel however far it is from the edge it's heading toward.
+
+     star-3 used to start at left: 34%, which is barely more than the
+     translateX(-2600px) travel needs to clear a real phone's own width — on
+     a 375px-wide screen it exited after only 128px (34% of the viewport),
+     over before most visitors would consciously register it, exactly the
+     "hard to notice, especially on mobile" complaint this was retuned for.
+     star-2's old 54% had the same problem, less severely.
+
+     Computed exactly (screen-space exit point given each streak's own angle,
+     translateX budget, and a viewport), not eyeballed: at these values every
+     streak now crosses at least ~60% of the viewport width before exiting on
+     a 375px-wide phone, scaling the same way on wider phones and desktop.
+     The two steep streaks (-48deg/-52deg) exit via the BOTTOM edge on
+     desktop's shorter aspect ratio regardless of `left` — that's the
+     falling-away-into-the-distance angle doing exactly what it's for, not a
+     bug, and the fix here is about the two shallow streaks' left-edge exit,
+     which `left` controls directly and proportionally at any width.
+
+     `top` for the two shallow streaks (shoot-1, shoot-3) had a second,
+     separate problem the `left` fix above doesn't touch: they used to start
+     off the TOP of the frame (top: -4%/-6%) and, because a shallow angle
+     means very little vertical drop per px of horizontal travel, they barely
+     descend at all before exiting — on a 390px-tall-navbar mobile viewport,
+     the math says shoot-1 never gets below y=122px (Navigation.astro's
+     .nav, position: sticky, always on top of the star layer) before it's
+     already exited left, and shoot-3 the same but worse. They were
+     invisible their ENTIRE flight on phones, not just briefly clipped —
+     likely the actual dominant cause of "hard to notice on mobile," more
+     than the horizontal-travel problem above. Fixed by starting them below
+     var(--nav-height) instead of above the frame: they now enter already
+     clear of the one thing on every page guaranteed to paint over them,
+     regardless of viewport height (a percentage `top` couldn't guarantee
+     that — the same -4% is a different pixel clearance on a short phone
+     than a tall desktop, which is exactly why this was worse on mobile).
+     Two different offsets (8px/32px) past the nav rather than the same one,
+     so the pair doesn't start in an identical row. */
+  .shooting-star-1 { top: calc(var(--nav-height) + 8px); left: 78%; animation: shoot-1 19s 0s ease-in infinite; }
+  .shooting-star-2 { top: 8%; left: 88%; animation: shoot-2 19s 4.75s ease-in infinite; }
+  .shooting-star-3 { top: calc(var(--nav-height) + 32px); left: 74%; animation: shoot-3 19s 9.5s ease-in infinite; }
   .shooting-star-4 { top: 14%; left: 94%; animation: shoot-4 19s 14.25s ease-in infinite; }
 
   @keyframes shoot-1 {

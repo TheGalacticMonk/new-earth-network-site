@@ -3,10 +3,9 @@ import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 // Resolved, hashed URLs for the above-the-fold fonts' Latin subset — see the
-// preload <link>s below for why these three, and why the Latin subset
+// preload <link>s below for why these two, and why the Latin subset
 // specifically.
 import spaceGroteskLatinUrl from '@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2?url';
-import frauncesLatinUrl from '@fontsource-variable/fraunces/files/fraunces-latin-wght-normal.woff2?url';
 import manropeLatinUrl from '@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2?url';
 
 interface Props {
@@ -24,35 +23,9 @@ const pageTitle = title === siteName ? title : `${title} — ${siteName}`;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!--
-      Every font on the site loads with font-display: swap (fontsource's
-      default), which is the right call — it paints text immediately in a
-      fallback font rather than blocking on the network, which is why this is
-      a preload and not a page loader. The tradeoff swap makes is a visible
-      reflow at the moment the real font arrives, since fallback and custom
-      fonts have different letter-widths; preloading these two shrinks the
-      window that reflow can happen in by starting the font requests as soon
-      as the HTML is parsed, instead of only once the browser works through
-      global.css's own @imports to discover them.
-
-      Three fonts, not the sitewide four — not Michroma, which nothing in the
-      first viewport is set in; preloading a font nothing needs yet just
-      competes for bandwidth with what does. Manrope belongs on this list
-      even though nothing in the hero declares it directly: global.css resets
-      form controls with `input, button, textarea, select { font: inherit }`,
-      and the hero email input's own CSS never sets its own font-family, so
-      it inherits --font-body (Manrope) from body — meaning the placeholder
-      text ("you@example.com") was still swapping and shifting the input's
-      own width after Space Grotesk and Fraunces were preloaded. Checking
-      what's visible above the fold means checking computed style, not just
-      grepping for font-family in the component that seems responsible.
-
-      Only the Latin subset of each (fontsource splits every family into
-      latin/latin-ext/vietnamese by unicode-range) — the other subsets exist
-      for characters this site's copy doesn't use.
-    -->
+    <!-- Preload the Latin subsets used above the fold: Manrope for the hero
+         and form, Space Grotesk for navigation. Other fonts load when needed. -->
     <link rel="preload" as="font" type="font/woff2" href={spaceGroteskLatinUrl} crossorigin />
-    <link rel="preload" as="font" type="font/woff2" href={frauncesLatinUrl} crossorigin />
     <link rel="preload" as="font" type="font/woff2" href={manropeLatinUrl} crossorigin />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />

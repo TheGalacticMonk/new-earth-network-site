@@ -6,7 +6,8 @@ import Container from '../Container.astro';
   <Container>
     <div class="hero-grid">
       <div class="hero-content">
-        <h1 class="headline">Stop asking&hellip;and&hellip;<br />Start commanding!</h1>
+        <h1 class="headline">Become the New Earth.<br />Connect your frequency.</h1>
+        <p class="promise">The complete human experience, online and offline.</p>
         <div class="tagline">
           <p class="subhead">Enter your email to get started.</p>
           <span class="wand" aria-hidden="true"></span>
@@ -105,6 +106,8 @@ import Container from '../Container.astro';
     max-width: var(--hero-content-max);
     min-width: 0;
     container-type: inline-size;
+    font-family: var(--font-hero);
+    font-weight: var(--font-weight-regular);
     padding: var(--space-8) var(--space-6);
     border-radius: var(--radius-md);
     background: var(--color-signal-btn-fill);
@@ -155,9 +158,28 @@ import Container from '../Container.astro';
   .headline {
     width: 100%;
     text-wrap: wrap;
-    font-family: var(--font-hero);
-    font-size: var(--text-hero);
-    font-weight: 600;
+    /* Deliberately NOT --font-hero (the rest of the card is still on that) —
+       the site owner's call was specifically for the headline to match
+       "Upcoming gatherings" (UpcomingGatherings.astro, via SectionHeader.astro),
+       which never sets its own font: it's a plain <h2>, inheriting
+       --font-display + weight 600 from global.css's shared h1-h4 rule. Same
+       family and weight here, matched directly rather than piggybacked on
+       that inheritance, since .headline is an actual <h1> and global.css
+       bumps bare h1s to weight 700 with tighter tracking — this reproduces
+       how the h2 specifically looks, not how a default h1 would. */
+    font-family: var(--font-display);
+    /* Down from --text-hero (clamp(2rem, 1.25rem + 3.5cqi, 3.25rem)), first
+       to --text-xl (matching "Upcoming gatherings" exactly) and now one more
+       step down to --text-lg (clamp(1.5rem, 1.3rem + 1vw, 2rem)) — even
+       --text-xl, though numerically the same size as that section heading,
+       read as more demanding here: the hero card is a much narrower, more
+       enclosed box than a full-width page section, so the identical pixel
+       size fills far more of its own container and reads as louder. This is
+       no longer a literal match to "Upcoming gatherings" — it's calmer than
+       that reference on purpose, sized for the smaller room it's actually in. */
+    font-size: var(--text-lg);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--tracking-normal);
     /* Softer than the sitewide heading white (--color-text-primary) — at hero
        scale, full white read as too stark against the rest of the muted
        palette. */
@@ -167,7 +189,15 @@ import Container from '../Container.astro';
     overflow-wrap: break-word;
   }
 
-  /* Supporting copy keeps the rail; its small flourish follows the text. */
+  .promise {
+    font-family: var(--font-hero);
+    font-size: var(--text-hero-promise);
+    line-height: var(--leading-snug);
+    color: var(--color-text-body);
+    text-wrap: balance;
+  }
+
+  /* The smaller email prompt keeps its wand and the shared content rail. */
   .tagline {
     display: flex;
     align-items: center;
@@ -203,10 +233,7 @@ import Container from '../Container.astro';
   }
 
   .subhead {
-    /* Same family as the headline, italic — already loaded, so this doesn't
-       add a new font, just a companion style to the one already in use. */
     font-family: var(--font-hero);
-    font-style: italic;
     font-size: var(--text-hero-subhead);
     color: var(--color-text-muted);
   }
@@ -264,10 +291,10 @@ import Container from '../Container.astro';
     min-height: var(--target-min);
     flex-shrink: 0;
     padding: var(--space-3) var(--space-6);
-    /* Mixed case, same family as the headline — not the site's uppercase
-       Michroma accent treatment, matching the same call made on the nav's
-       Subscribe button. */
-    font-family: var(--font-display);
+    font-family: var(--font-hero);
+    /* Bold (700), matching the form template's .card__form button exactly —
+       see --font-weight-bold in tokens.css. */
+    font-weight: var(--font-weight-bold);
     font-size: var(--text-sm);
     /* Solid cyan fill with dark text first, now a cyan-glass fill with a
        cyan ring instead — same border weight as the nav Subscribe button
