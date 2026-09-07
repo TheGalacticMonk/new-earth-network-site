@@ -18,22 +18,31 @@
   animations) is a deliberate follow-up pass, not done here.
 
   Content pass: the template's own placeholder copy ("HOVER ME", "CYBER CARD",
-  "INTERACTIVE 3D EFFECT") is gone. `label`/`labelBottom` feed both the
-  always-visible .prompt and the hover-revealed .title with the card's actual
-  name, deliberately the same text in both rather than inventing a second,
-  different line of copy for the reveal to say — the reveal is a flourish on
-  the name, not a place for a tagline nobody's written yet. The old .subtitle
-  ("INTERACTIVE" / "3D EFFECT") described the template itself, not a card's
-  content, so it's removed rather than repurposed.
+  "INTERACTIVE 3D EFFECT") is gone. The old .subtitle ("INTERACTIVE" /
+  "3D EFFECT") described the template itself, not a card's content, so it's
+  removed rather than repurposed.
+
+  Title is no longer a hover reveal. It first held the same text as a
+  separate always-visible .prompt element, faded in above it on hover — with
+  real names in both, that read as the card's own name overlapping itself
+  every time you hovered, not a flourish. .prompt is gone; .title is now the
+  one always-visible name, moved up under the icon (font-size dropped
+  28px -> 18px to fit there without wrapping badly) so the icon and the name
+  are the first and only things read together at rest, per the site owner's
+  call that visitors should see both immediately rather than one arriving on
+  hover. An optional `description` prop reserves room for 2-3 sentences below
+  the name — not filled in here, that copy is still pending — which is why
+  the card grew (254px -> 320px tall): the fixed template height had no room
+  left for it once the name stopped needing a hover to earn its place.
 */
 interface Props {
   icon: string;
-  iconAlt: string;
   label: string;
   labelBottom?: string;
+  description?: string;
 }
 
-const { icon, iconAlt, label, labelBottom } = Astro.props;
+const { icon, label, labelBottom, description } = Astro.props;
 const trackers = Array.from({ length: 25 }, (_, i) => i + 1);
 ---
 
@@ -48,9 +57,16 @@ const trackers = Array.from({ length: 25 }, (_, i) => i + 1);
         <div class="cyber-lines">
           <span></span><span></span><span></span><span></span>
         </div>
-        <img class="icon" src={icon} alt={iconAlt} width="40" height="40" />
-        <p class="prompt">{label}{labelBottom && <> {labelBottom}</>}</p>
+        {/* aria-hidden: decorative once .title says the same name in text —
+            an image with alt text here would just make a screen reader
+            announce "Events" twice. Color is the creative director's call
+            (--color-text-primary, over cyan/pink — see tokens.css), applied
+            the same mask + background-color way Hero.astro's wand icon is,
+            so a per-card <img>'s own baked-in fill isn't a second source of
+            truth for a color a one-line CSS change should be able to move. */}
+        <span class="icon" aria-hidden="true" style={`--icon-src: url(${icon})`}></span>
         <div class="title">{label}{labelBottom && <><br />{labelBottom}</>}</div>
+        {description && <p class="description">{description}</p>}
         <div class="glowing-elements">
           <div class="glow-1"></div>
           <div class="glow-2"></div>
@@ -76,16 +92,22 @@ const trackers = Array.from({ length: 25 }, (_, i) => i + 1);
      class name is a needless collision for anything (scripts, devtools,
      future components) that queries by class rather than through Astro's
      scoping. */
+  /* 254px (the template's original height) fit a card whose only permanent
+     content was an icon and a hover-only reveal. Once the name became
+     always-visible and a 2-3 sentence description got its own reserved area
+     below it (see .description), that height had nowhere to put either
+     without cramming — grown to 320px to actually hold what the card now
+     holds at rest, not just on hover. */
   .offering-card {
     position: relative;
     width: 190px;
-    height: 254px;
+    height: 320px;
     transition: 200ms;
   }
 
   .offering-card:active {
     width: 180px;
-    height: 245px;
+    height: 310px;
   }
 
   .card {
@@ -111,17 +133,14 @@ const trackers = Array.from({ length: 25 }, (_, i) => i + 1);
     height: 100%;
   }
 
-  /* Content pass only — not yet themed (see file header). Plain top-center
-     placement, always visible (unlike .title, which is a hover reveal): this
-     identifies the card at rest, it doesn't need a hover to earn it. 56px
-     (more than double a standard 24px UI icon) made it the first thing the
-     eye landed on, but left it competing with the card's own name for space;
-     40px is the middle ground — still clearly the dominant element, not so
-     large it crowds the label below it. Sitting a little higher than the
-     56px version did (28px vs. 34px) for the same reason: a smaller icon
-     needs less clearance from the .corner-elements bracket (10px inset, 15px
-     tall, bottom edge at 25px), so there's no reason to leave it lower than
-     that and eat into the room the label needs. */
+  /* Plain top-center placement, always visible: this identifies the card at
+     rest, it doesn't need a hover to earn it. 56px (more than double a
+     standard 24px UI icon) made it the first thing the eye landed on, but
+     left it competing with the card's own name for space; 40px is the
+     middle ground — still clearly the dominant element, not so large it
+     crowds the name below it. top: 28px clears the .corner-elements bracket
+     (10px inset, 15px tall, bottom edge at 25px) the same as before.
+     Color/mask technique: see the icon's markup comment above. */
   .icon {
     position: absolute;
     top: 28px;
@@ -130,33 +149,27 @@ const trackers = Array.from({ length: 25 }, (_, i) => i + 1);
     z-index: 20;
     width: 40px;
     height: 40px;
+    background: var(--color-text-primary);
+    mask: var(--icon-src) center / contain no-repeat;
   }
 
-  .prompt {
-    bottom: 100px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 20;
-    font-size: 16px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    transition: 300ms ease-in-out;
-    position: absolute;
-    text-align: center;
-    color: rgba(255, 255, 255, 0.7);
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-  }
-
+  /* No longer a hover reveal (see file header) — always visible, moved up to
+     sit right under the icon so both are the first and only things read
+     together at rest. font-size dropped 28px -> 18px: 28px was sized for a
+     one-word flourish that only had to look good for the moment it took to
+     fade in; permanently under a 40px icon in a 190px-wide card, it wrapped
+     "DOCS & FILMS" badly and pushed past the icon into its own space. */
   .title {
-    opacity: 0;
-    transition: 300ms ease-in-out;
     position: absolute;
-    font-size: 28px;
-    font-weight: 800;
-    letter-spacing: 4px;
-    text-align: center;
+    top: 76px;
+    left: 0;
     width: 100%;
-    padding-top: 20px;
+    padding-inline: 12px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    line-height: 1.3;
     background: linear-gradient(45deg, #00ffaa, #00a2ff);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -164,6 +177,23 @@ const trackers = Array.from({ length: 25 }, (_, i) => i + 1);
     text-shadow:
       0 0 10px rgba(92, 103, 255, 0.5),
       0 0 20px rgba(92, 103, 255, 0.3);
+  }
+
+  /* Reserved space for the 2-3 sentence description that isn't written yet
+     (see file header) — 130px clears even a two-line .title (76px + ~47px
+     for two lines at this size + a small gap), and .offering-card's 320px
+     height was sized with this block's room in mind, not just the icon and
+     name above it. */
+  .description {
+    position: absolute;
+    top: 130px;
+    left: 0;
+    width: 100%;
+    padding-inline: 16px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.6);
   }
 
   .glowing-elements {
@@ -214,11 +244,6 @@ const trackers = Array.from({ length: 25 }, (_, i) => i + 1);
   }
 
   /* Hover effects */
-  .tracker:hover ~ .card .title {
-    opacity: 1;
-    transform: translateY(-10px);
-  }
-
   .tracker:hover ~ .card .glowing-elements div {
     opacity: 1;
   }
@@ -311,10 +336,6 @@ const trackers = Array.from({ length: 25 }, (_, i) => i + 1);
 
   .tracker:hover {
     cursor: pointer;
-  }
-
-  .tracker:hover ~ .card .prompt {
-    opacity: 0;
   }
 
   .tracker:hover ~ .card {
