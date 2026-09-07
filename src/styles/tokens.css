@@ -93,6 +93,33 @@
     var(--color-electric-pink),
     var(--color-electric-blue)
   );
+  /* The hero card's ring (Hero.astro's .hero-content) — same three hues as
+     --gradient-signal-ring, but this is the specific thing the site owner's
+     "form card" template was actually for: a `transparent 35%` lead-in before
+     the colour starts, so the ring never closes into a full loop the way
+     --gradient-signal-ring does on the buttons. Part of the border reads as
+     genuinely absent, not just dim — a broken ring, not a fully connected one.
+     Kept as its own token rather than added as a --gradient-signal-ring
+     variant because "does the ring close" is a different design decision than
+     "how wide/what hue," and the buttons' fully-closed ring is deliberate for
+     them (a button is a whole, discrete control; this is a larger field of
+     content, where a seam reads as more organic). */
+  --gradient-hero-ring: linear-gradient(
+    135deg,
+    transparent 35%,
+    var(--color-electric-cyan),
+    var(--color-electric-pink),
+    var(--color-electric-blue)
+  );
+  /* The hero card's inner top edge, once its fill became genuine frosted glass
+     (backdrop-filter, not just a tinted panel) — real glass catches light
+     along the edge nearest the source, so a hairline of it just inside the
+     top of the card is what sells the fill as glass with depth rather than a
+     flat blur. Deliberately not the --color-star-white-glow family: those are
+     named for a light source (stars) radiating outward: this is the inverse,
+     a surface catching ambient light, which is a different enough purpose to
+     want its own name even at a similar alpha. */
+  --color-glass-highlight: rgba(255, 255, 255, 0.08);
   /* Shared so any CTA's ring/border reads as the same weight as the nav
      Subscribe button's — currently also the Hero "Get Started" button. */
   --cta-border-width: 2px;
