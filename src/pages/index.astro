@@ -118,6 +118,31 @@ const stars = [
        constant and multiplies fast. The fuller 3-layer bloom is reserved for the
        halo "hero" stars below, the only ones meant to read as genuinely bright. */
     filter: drop-shadow(0 0 calc(var(--star-size) * 0.25) var(--color-star-glow-soft));
+    /* Twinkle: restored after being accidentally dropped in an earlier pass (the
+       per-star `animation-delay` staggering below in the markup, and this file's
+       own "27 permanently-animating elements" comment above, were both left
+       behind the whole time with no animation-name left to apply them to).
+       `transform: scale()` in the keyframes, not `translate` — this element
+       already uses the standalone `translate` property for centering (above),
+       and `translate`/`transform` compose independently, so the twinkle's scale
+       doesn't fight the centering the way stuffing both into one `transform`
+       shorthand would. animation-delay is intentionally NOT set here — each
+       star's own inline `style` (see index.astro's markup) carries a distinct
+       delay so the 27 stars don't all pulse in lockstep. */
+    animation-name: star-twinkle;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes star-twinkle {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.2); }
+    80% { transform: scale(0.8); }
+    100% { transform: scale(1); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .star { animation: none; }
   }
 
   .center { top: 50%; left: 50%; }
