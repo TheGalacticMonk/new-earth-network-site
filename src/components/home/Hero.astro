@@ -389,20 +389,38 @@ import Container from '../Container.astro';
   @media (max-width: 479px) {
     /* --text-lg's own floor (1.5rem/24px) doesn't shrink any further below
        this breakpoint, but the headline's two <br>-separated lines each need
-       real room: at this width, with .headline's 800-weight/3px-tracking
-       styling, "Connect your frequency." alone measures ~365px and only has
-       ~228-298px of card to fit in, so each intended line was wrapping into
-       a second line of its own — 4 lines total instead of 2. Measured the
-       actual fit at 360-480px (the range this query covers) rather than
-       guessing: --text-sm (15px) is the largest size with headroom to spare
-       at every width tested in that range, so it's used here as a deliberate
-       override, not because --text-sm's own usual purpose (small body/UI
-       text) applies to a headline. Below ~360px (true 320px-wide phones,
-       rare today) this still isn't guaranteed to hold at exactly two lines —
-       chose legibility at the sizes people actually use over chasing a
-       vanishingly small one down to an illegibly tiny headline. */
+       real room to stay at two lines (see the git history on this rule for
+       the original measurement of why). The first fix (--text-sm, 15px) hit
+       that target but created a new problem, found afterward: nothing else
+       in the card shrinks on mobile, so the headline — meant to be the most
+       prominent thing in the card — ended up SMALLER than .promise (20px)
+       and .subhead/input (17px). An <h1> reading smaller than its own
+       supporting text is exactly the "uncohesive" feeling that's being fixed
+       here, not just a too-small number in isolation.
+
+       19px is the fix: the largest size that still holds two lines at every
+       width from 360-479px, but ONLY once letter-spacing also comes down
+       from the desktop 3px to 1.5px alongside it — tracking that wide was
+       costing real width (roughly (character count - 1) x 3px per line,
+       ~63-69px on this copy) that a mobile line can't spare. Reducing both
+       together, rather than only shrinking font-size further, is what gets
+       the headline back above the rest of the card's text instead of still
+       being boxed in by the same tracking that caused the wrap in the first
+       place. Verified at 320/340/360/390/414/430/460/479px — holds two
+       lines 360px up, same graceful-degradation floor as before below that
+       (see the same git history). */
     .headline {
-      font-size: var(--text-sm);
+      font-size: 19px;
+      letter-spacing: 1.5px;
+    }
+
+    /* .promise's 20px is a fixed value, not a fluid clamp, so it never came
+       down on its own — matched to .subhead/input's own --text-base (17px)
+       here so the "pitch" and "action" halves of the card share one
+       secondary size instead of introducing a third, while the headline
+       above stays clearly the largest at 19px. */
+    .promise {
+      font-size: var(--text-base);
     }
 
     /* Keep the supporting sentence and its flourish together on narrow screens. */

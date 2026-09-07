@@ -215,9 +215,11 @@
 
   /* ---- Color: structure ----
      No general-purpose hairline border token: surfaces are separated by shadow and
-     background tone, not outline. --color-border-accent exists only for the one
-     legitimate exception — the keyboard-only skip-link. */
-  --color-border-accent: rgba(122, 243, 255, 0.44);
+     background tone, not outline. (A prior version of this file reserved
+     --color-border-accent here for a keyboard-only skip-link that was never
+     built — removed rather than left as a token with nothing using it; if a
+     skip-link gets built, it can pick whatever this section's own convention
+     calls for at the time, not inherit a colour chosen before it existed.) */
 
   /* ---- Type families ----
      Display: headlines and card/heading text. Body: everything read at length.
