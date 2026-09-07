@@ -241,6 +241,24 @@
      see .headline in Hero.astro, now back on --font-weight-semibold to
      match "Upcoming gatherings".) */
   --font-weight-bold: 700;
+  /* Matches OfferingCard.astro's .title exactly (font-weight: 800) — the
+     hero headline was pointed at the same "font and styling" by the site
+     owner. */
+  --font-weight-extrabold: 800;
+
+  /* The offering cards' cyber-card template shipped with this gradient-text
+     treatment as raw hex, never retokenized (see OfferingCard.astro's own
+     header comment: "the neon green/blue palette... a deliberate follow-up
+     pass, not done here"). Promoted here, unchanged in value, now that a
+     second element (Hero.astro's .headline) also uses it and two copies of
+     the same magic hex would be worse than one un-tokenized copy. Still not
+     this site's own electric-cyan/pink/blue palette — that reconciliation is
+     the same still-pending follow-up, just no longer a reason to duplicate
+     the values rather than name them. */
+  --gradient-card-title: linear-gradient(45deg, #00ffaa, #00a2ff);
+  --color-card-title-glow: rgba(0, 255, 170, 0.3);
+  --color-card-title-shadow: rgba(92, 103, 255, 0.5);
+  --color-card-title-shadow-wide: rgba(92, 103, 255, 0.3);
 
   /* ---- Type scale (fluid, clamped) ---- */
   --text-xs: 0.8125rem; /* 13px */

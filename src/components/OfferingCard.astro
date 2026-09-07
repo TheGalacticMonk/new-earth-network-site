@@ -179,16 +179,19 @@ const trackers = Array.from({ length: 25 }, (_, i) => i + 1);
     padding-inline: 12px;
     text-align: center;
     font-size: 18px;
-    font-weight: 800;
+    font-weight: var(--font-weight-extrabold);
     letter-spacing: 3px;
     line-height: 1.3;
-    background: linear-gradient(45deg, #00ffaa, #00a2ff);
+    /* Same values as before, now tokenized — see --gradient-card-title and
+       its neighbors in tokens.css for why (Hero.astro's .headline uses this
+       treatment too now, at the site owner's request). */
+    background: var(--gradient-card-title);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 0 15px rgba(0, 255, 170, 0.3));
+    filter: drop-shadow(0 0 15px var(--color-card-title-glow));
     text-shadow:
-      0 0 10px rgba(92, 103, 255, 0.5),
-      0 0 20px rgba(92, 103, 255, 0.3);
+      0 0 10px var(--color-card-title-shadow),
+      0 0 20px var(--color-card-title-shadow-wide);
   }
 
   /* 130px clears even a two-line .title (76px + ~47px for two lines at this

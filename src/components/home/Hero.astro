@@ -98,10 +98,15 @@ import Container from '../Container.astro';
     position: relative;
     display: flex;
     flex-direction: column;
-    /* One content rail at every viewport, shared with the navigation logo. */
-    align-items: flex-start;
+    /* Trying centered as an experiment (site owner's call, exploring whether
+       it reads better now that the card's own left edge is deliberately
+       aligned with the nav logo/ring seam — that alignment is about the
+       CARD's outer position, unaffected by how its own contents are
+       arranged inside it). Was align-items: flex-start / text-align: left,
+       "one content rail at every viewport, shared with the navigation logo." */
+    align-items: center;
     gap: var(--space-6);
-    text-align: left;
+    text-align: center;
     width: 100%;
     max-width: var(--hero-content-max);
     min-width: 0;
@@ -158,50 +163,60 @@ import Container from '../Container.astro';
   .headline {
     width: 100%;
     text-wrap: wrap;
-    /* Deliberately NOT --font-hero (the rest of the card is still on that) —
-       the site owner's call was specifically for the headline to match
-       "Upcoming gatherings" (UpcomingGatherings.astro, via SectionHeader.astro),
-       which never sets its own font: it's a plain <h2>, inheriting
-       --font-display + weight 600 from global.css's shared h1-h4 rule. Same
-       family and weight here, matched directly rather than piggybacked on
-       that inheritance, since .headline is an actual <h1> and global.css
-       bumps bare h1s to weight 700 with tighter tracking — this reproduces
-       how the h2 specifically looks, not how a default h1 would. */
-    font-family: var(--font-display);
-    /* Down from --text-hero (clamp(2rem, 1.25rem + 3.5cqi, 3.25rem)), first
-       to --text-xl (matching "Upcoming gatherings" exactly) and now one more
-       step down to --text-lg (clamp(1.5rem, 1.3rem + 1vw, 2rem)) — even
-       --text-xl, though numerically the same size as that section heading,
-       read as more demanding here: the hero card is a much narrower, more
-       enclosed box than a full-width page section, so the identical pixel
-       size fills far more of its own container and reads as louder. This is
-       no longer a literal match to "Upcoming gatherings" — it's calmer than
-       that reference on purpose, sized for the smaller room it's actually in. */
+    /* Now matched to OfferingCard.astro's .title instead — its own third
+       reference in as many passes (first --font-hero, then "Upcoming
+       gatherings"'s --font-display/600, now the offering cards' gradient-
+       text treatment), at the site owner's explicit request this time.
+       .title's font-family is just inherited body text (Manrope, no
+       override in that file) — --font-body here is the same thing named
+       directly rather than left implicit. */
+    font-family: var(--font-body);
+    /* Kept at --text-lg rather than .title's literal 18px: this is still an
+       <h1>, and this site's own sizing work over several passes (--text-hero
+       down to --text-xl down to --text-lg, each step justified against how
+       loud the headline read) isn't undone by a styling match — "same font
+       and styling" was about the treatment, not shrinking the hero's one
+       headline to a small card label's point size. */
     font-size: var(--text-lg);
-    font-weight: var(--font-weight-semibold);
-    letter-spacing: var(--tracking-normal);
-    /* Softer than the sitewide heading white (--color-text-primary) — at hero
-       scale, full white read as too stark against the rest of the muted
-       palette. */
-    color: var(--color-text-body);
+    font-weight: var(--font-weight-extrabold);
+    letter-spacing: 3px;
+    line-height: 1.3;
+    /* Gradient-text fill + glow, identical values to .title (now shared via
+       --gradient-card-title and its neighbors in tokens.css) — replaces the
+       flat --color-text-body this had before. */
+    background: var(--gradient-card-title);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 15px var(--color-card-title-glow));
+    text-shadow:
+      0 0 10px var(--color-card-title-shadow),
+      0 0 20px var(--color-card-title-shadow-wide);
     /* Belt-and-suspenders alongside the min-width: 0 fixes above — if a single
        word ever doesn't fit even after those, wrap it rather than overflow. */
     overflow-wrap: break-word;
   }
 
   .promise {
-    font-family: var(--font-hero);
+    /* Matched to OfferingCard.astro's .description font specifically (the
+       site owner's ask) — that element never sets its own font-family
+       either, it's the same inherited Manrope every unstyled element on the
+       page gets, named directly here as --font-body rather than through
+       --font-hero (still system-ui, still used by .subhead/input/button —
+       this was scoped to just the line under the headline). Size, weight,
+       line-height and color untouched: only the font itself was asked for. */
+    font-family: var(--font-body);
     font-size: var(--text-hero-promise);
     line-height: var(--leading-snug);
     color: var(--color-text-body);
     text-wrap: balance;
   }
 
-  /* The smaller email prompt keeps its wand and the shared content rail. */
+  /* The smaller email prompt keeps its wand alongside it, both now centered
+     as a unit to match .hero-content's experimental center alignment. */
   .tagline {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     gap: var(--space-2);
   }
 
