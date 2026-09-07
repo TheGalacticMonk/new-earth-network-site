@@ -374,19 +374,19 @@
      (one every 20+ seconds, by design).
 
      THICKNESS is not a free variable. A streak's thickness is its length ten rungs
-     down the same ladder (1.5^10 = 57.7), so every streak on the site — nav or body —
-     has the same 1:58 aspect and reads as the same kind of object at a different
-     distance. Rounded to whole device pixels, because a fractional-height 1-3px line
-     antialiases dimmer rather than thicker.
+     down the same ladder (1.5^10 = 57.7), so every streak on the site has the same
+     1:58 aspect and reads as the same kind of object at a different distance. Rounded
+     to whole device pixels, because a fractional-height 1-3px line antialiases dimmer
+     rather than thicker.
 
-     NAV STREAKS get their own length range, not a slot in the depth model, because
-     they are bounded by a container rather than by distance: the masthead is 122px tall
-     and past about half that a horizontal line stops reading as a streak and starts
-     reading as a rule competing with the nav's own structure. So the ceiling is 61px
-     (the rung nearest 122/2) and the floor is 18px (below that, a 1px hairline is a
-     dash). The ten-rungs-down rule puts all four nav lengths at or under 1.06px, which
-     is WHY nav streaks are hairlines and body streaks are not — they are shorter, not
-     arbitrarily thinner. */
+     The nav used to carry its own hairline-thin streak tier (bounded by the 122px
+     masthead rather than by distance) — removed per the site owner's direct call: it
+     read as sloppy rather than ambient (a 1px line, however deliberately thin, wants to
+     misfire behind moving text and the logo's own glow), and the fix that actually
+     serves the brief is fewer, bigger, more confident signals rather than a constant
+     background hum. The two pink body streaks below carry the whole effect now, sized
+     up one rung each to be the site's one unmistakable "signal" moment instead of
+     splitting attention with a second, lesser one. */
   --star-dust-far: 1.6px;
   --star-dust-mid: 2.4px;
   --star-dust-near: 3.6px;
@@ -394,15 +394,13 @@
   --star-size-mid: 18px; /* inner ring */
   --star-size-near: 27px; /* outer ring + edge fill */
   --star-size-fore: 40px; /* halo ring — the frame edge, the bright hero tier */
-  --star-streak-nav-1: 18px;
-  --star-streak-nav-2: 27px;
-  --star-streak-nav-3: 40px;
-  --star-streak-nav-4: 61px;
-  --star-streak-far: 137px; /* 40 x 1.5^3 — the steeper, more distant streaks */
-  --star-streak-near: 205px; /* 40 x 1.5^4 — the shallow, fast, near ones */
-  --star-streak-weight-nav: 1px; /* 61 / 57.7 = 1.06, rounds to 1 */
-  --star-streak-weight-far: 2px; /* 137 / 57.7 = 2.4, rounds to 2 */
-  --star-streak-weight-near: 4px; /* 205 / 57.7 = 3.6, rounds to 4 */
+  --star-streak-far: 205px; /* 40 x 1.5^4 — the steeper, more distant streaks. Was
+    137px (rung 3); bumped a rung to make the pink streaks read as unmistakably eye-
+    catching now that they're the site's only shooting-star effect. */
+  --star-streak-near: 305px; /* 40 x 1.5^5 — the shallow, fast, near ones. Was 205px
+    (rung 4), for the same reason as --star-streak-far above. */
+  --star-streak-weight-far: 4px; /* 205 / 57.7 = 3.6, rounds to 4 */
+  --star-streak-weight-near: 5px; /* 305 / 57.7 = 5.3, rounds to 5 */
 
   /* ---- Atmosphere geometry ----
      Five clouds on a horizontal ladder that alternates cool and warm as it crosses
@@ -572,17 +570,14 @@
     --star-size-mid: 12px;
     --star-size-near: 18px;
     --star-size-fore: 27px;
-    --star-streak-nav-1: 12px;
-    --star-streak-nav-2: 18px;
-    --star-streak-nav-3: 27px;
-    --star-streak-nav-4: 40px;
     /* Shooting stars stay visible at this width (only `prefers-reduced-motion` hides
        them — see index.astro); what IS display:none here is the edge-fill still stars.
-       These two rungs are simply the streaks' mobile step, two down, keeping the
-       1:58 aspect, same as every other tier in this block. */
-    --star-streak-far: 61px;
-    --star-streak-near: 91px;
-    --star-streak-weight-far: 1px;
+       These two rungs are simply the streaks' mobile step, two down from the (now
+       bumped) desktop values above, keeping the 1:58 aspect, same as every other tier
+       in this block. */
+    --star-streak-far: 91px;
+    --star-streak-near: 136px;
+    --star-streak-weight-far: 2px;
     --star-streak-weight-near: 2px;
   }
 }

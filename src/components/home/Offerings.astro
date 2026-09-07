@@ -9,12 +9,37 @@ import OfferingCard from '../OfferingCard.astro';
   OfferingCard.astro's header comment. The neon palette is still the next pass.
 */
 const cards = [
-  { icon: '/events.svg', label: 'EVENTS' },
-  { icon: '/series.svg', label: 'SERIES' },
-  { icon: '/docsfilms.svg', label: 'DOCS &', labelBottom: 'FILMS' },
-  { icon: '/music.svg', label: 'MUSIC' },
-  { icon: '/courses.svg', label: 'COURSES' },
-  { icon: '/shop.svg', label: 'SHOP' },
+  {
+    icon: '/events.svg',
+    label: 'EVENTS',
+    description: 'High vibrational in-person events and parties to connect with other awakened souls',
+  },
+  {
+    icon: '/series.svg',
+    label: 'SERIES',
+    description: 'An ongoing collection of the most revolutionary content from your favorite New Earth celebrities',
+  },
+  {
+    icon: '/docsfilms.svg',
+    label: 'DOCS &',
+    labelBottom: 'FILMS',
+    description: 'Cinematic non-fiction and fiction titles produced exclusively by New Earth Network',
+  },
+  {
+    icon: '/music.svg',
+    label: 'MUSIC',
+    description: 'Songs and sound healing frequencies that will elevate your consciousness and vibe',
+  },
+  {
+    icon: '/courses.svg',
+    label: 'COURSES',
+    description: 'Gain access to our exclusive courses that teach what traditional schools hide and censor',
+  },
+  {
+    icon: '/shop.svg',
+    label: 'SHOP',
+    description: 'Clothing and outfits that allow you to dress like you are indeed a citizen of the New Earth',
+  },
 ];
 ---
 
@@ -22,7 +47,12 @@ const cards = [
   <Container>
     <div class="grid">
       {cards.map((card) => (
-        <OfferingCard icon={card.icon} label={card.label} labelBottom={card.labelBottom} />
+        <OfferingCard
+          icon={card.icon}
+          label={card.label}
+          labelBottom={card.labelBottom}
+          description={card.description}
+        />
       ))}
     </div>
   </Container>

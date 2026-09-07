@@ -233,7 +233,11 @@ const stars = [
     position: absolute;
     border-radius: var(--radius-full);
     background: linear-gradient(90deg, var(--color-star-shooting), transparent);
-    filter: drop-shadow(0 0 6px var(--color-star-shooting-glow));
+    /* 8px, up from 6px — kept at the same ~1.5x-of-near-weight ratio as before
+       (6px was 1.5x the old 4px near weight; --star-streak-weight-near is now
+       5px, see tokens.css) now that the streaks themselves are a rung bigger,
+       so the glow keeps scaling with the streak instead of falling behind it. */
+    filter: drop-shadow(0 0 8px var(--color-star-shooting-glow));
     opacity: 0;
   }
 

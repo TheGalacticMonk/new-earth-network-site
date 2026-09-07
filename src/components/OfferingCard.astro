@@ -93,21 +93,33 @@ const trackers = Array.from({ length: 25 }, (_, i) => i + 1);
      future components) that queries by class rather than through Astro's
      scoping. */
   /* 254px (the template's original height) fit a card whose only permanent
-     content was an icon and a hover-only reveal. Once the name became
-     always-visible and a 2-3 sentence description got its own reserved area
-     below it (see .description), that height had nowhere to put either
-     without cramming — grown to 320px to actually hold what the card now
-     holds at rest, not just on hover. */
+     content was an icon and a hover-only reveal. Grown to 320px once the name
+     became always-visible and a description got its own reserved area below
+     it — a placeholder-sized guess at the time, made before any real copy
+     existed to measure against (see .description's own header comment).
+
+     Now that all six cards carry final, short copy, every one of them wraps
+     to exactly 4 lines and the description block bottoms out at 204px from
+     the card's top edge (measured directly, not estimated) — identical
+     across all six despite different wording, since line-height × 4 is a
+     fixed quantity regardless of what the lines say. 320px was leaving 116px
+     of dead space below the text. 244px is sized to the actual content
+     instead of a guess: 204px of text, then 15px of clear air, then the
+     .corner-elements bracket's own 25px footprint (10px inset + 15px tall) —
+     measured to the bracket, not just to the card's bottom edge, since an
+     early pass at this number (232px) cleared the edge but left the text
+     almost touching the bracket. If a card's copy is ever revised long
+     enough to wrap a 5th line, this needs revisiting alongside it. */
   .offering-card {
     position: relative;
     width: 190px;
-    height: 320px;
+    height: 244px;
     transition: 200ms;
   }
 
   .offering-card:active {
     width: 180px;
-    height: 310px;
+    height: 234px;
   }
 
   .card {
@@ -179,11 +191,11 @@ const trackers = Array.from({ length: 25 }, (_, i) => i + 1);
       0 0 20px rgba(92, 103, 255, 0.3);
   }
 
-  /* Reserved space for the 2-3 sentence description that isn't written yet
-     (see file header) — 130px clears even a two-line .title (76px + ~47px
-     for two lines at this size + a small gap), and .offering-card's 320px
-     height was sized with this block's room in mind, not just the icon and
-     name above it. */
+  /* 130px clears even a two-line .title (76px + ~47px for two lines at this
+     size + a small gap). Now that real copy exists (see the cards array in
+     Offerings.astro) every description wraps to 4 lines, bottoming out at
+     ~204px — see .offering-card's own height comment for how that sized the
+     card down from its original placeholder height. */
   .description {
     position: absolute;
     top: 130px;
