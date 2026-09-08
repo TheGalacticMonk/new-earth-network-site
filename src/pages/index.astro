@@ -2,13 +2,23 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/home/Hero.astro';
 import Offerings from '../components/home/Offerings.astro';
-import Manifesto from '../components/home/Manifesto.astro';
-import UpcomingGatherings from '../components/home/UpcomingGatherings.astro';
-import FindYourCity from '../components/home/FindYourCity.astro';
-import WhatHappens from '../components/home/WhatHappens.astro';
-import StartGathering from '../components/home/StartGathering.astro';
-import CommunityProof from '../components/home/CommunityProof.astro';
-import EmailSignup from '../components/home/EmailSignup.astro';
+// Everything past Offerings is unbuilt wireframe, not finished sections —
+// only Navigation, Hero and Offerings have had real design/build passes.
+// Commented out (not deleted) rather than left rendering: each one was
+// contributing real DOM/CSS weight to every homepage load (~700 elements
+// total across all nine sections) that the browser had to style and lay
+// out before it could paint anything, which was the dominant cost behind
+// the mobile LCP budget miss (see the render-blocking-CSS/content-
+// visibility investigation this replaced). Uncomment case-by-case as each
+// section actually gets designed — may end up not reusing some of these
+// at all.
+// import Manifesto from '../components/home/Manifesto.astro';
+// import UpcomingGatherings from '../components/home/UpcomingGatherings.astro';
+// import FindYourCity from '../components/home/FindYourCity.astro';
+// import WhatHappens from '../components/home/WhatHappens.astro';
+// import StartGathering from '../components/home/StartGathering.astro';
+// import CommunityProof from '../components/home/CommunityProof.astro';
+// import EmailSignup from '../components/home/EmailSignup.astro';
 
 const stars = [
   { id: 'star-1', position: 'center', delay: '0.3s' },
@@ -47,13 +57,15 @@ const stars = [
 >
   <Hero />
   <Offerings />
-  <Manifesto />
-  <UpcomingGatherings />
-  <FindYourCity />
-  <WhatHappens />
-  <StartGathering />
-  <CommunityProof />
-  <EmailSignup />
+  <!--
+    <Manifesto />
+    <UpcomingGatherings />
+    <FindYourCity />
+    <WhatHappens />
+    <StartGathering />
+    <CommunityProof />
+    <EmailSignup />
+  -->
 
   <div class="stars" aria-hidden="true">
     {stars.map((star) => (

@@ -199,6 +199,30 @@
      new field's median luminance, meaning the control had become the same brightness as
      the page behind it. A form field has to be the lighter thing. This is 1.35x. */
   --color-field-grey: #3a373f;
+  /* The hero TV card, swapped in verbatim from a raw HTML/CSS template at the
+     site owner's request (New Earth Network positioning itself like a TV
+     network, Gaia.com-style). These two are the template's literal #333
+     bezel and #000 screen — see --shadow-tv-screen/--shadow-tv-stand below
+     for its other two hardcoded values. Not reconciled with this site's own
+     near-black/grey tokens on purpose. */
+  --color-tv-bezel: #333;
+  --color-tv-screen-bg: #000;
+  /* The template's own static-noise stripes (#000/#111/#fff/#333, same four
+     literal values as the bezel/screen above) — see --gradient-tv-static
+     below for where they're assembled, and --duration-tv-static-flicker for
+     why the template's own 0.1s cycle isn't reused as-is. */
+  --color-tv-static-1: #000;
+  --color-tv-static-2: #111;
+  --color-tv-static-3: #fff;
+  --color-tv-static-4: #333;
+  --gradient-tv-static: repeating-linear-gradient(
+    0deg,
+    var(--color-tv-static-1),
+    var(--color-tv-static-1) 1px,
+    var(--color-tv-static-2) 1px,
+    var(--color-tv-static-3) 1px,
+    var(--color-tv-static-4) 2px
+  );
   /* Warm signal accent for the hero wand. */
   --color-electric-gold: #ffb766;
   --color-electric-gold-glow: rgba(255, 183, 102, 0.6);
@@ -235,7 +259,15 @@
      buttons, badges, footer labels) — never set in mixed case. */
   --font-display: 'Space Grotesk Variable', 'Space Grotesk', system-ui, sans-serif;
   --font-body: 'Manrope Variable', 'Manrope', system-ui, sans-serif;
-  --font-accent: 'Michroma', 'Space Grotesk Variable', system-ui, sans-serif;
+  /* Michroma (the package this named, @fontsource/michroma) has been removed
+     from the project entirely — Navigation/Hero/OfferingCard, the only
+     sections built so far, never use --font-accent, so it was a dependency
+     with nothing rendering it. --font-accent stays as the semantic "accent"
+     slot the type system still names (see the comment above), just pointed
+     at Space Grotesk Variable, already loaded, until a real typeface pick is
+     made for whichever undesigned section (footer, buttons, cards) ends up
+     needing its own distinct accent face. */
+  --font-accent: 'Space Grotesk Variable', system-ui, sans-serif;
   /* Deliberately NOT one of the site's own webfonts — the site owner asked for
      the hero card to match a form template whose CSS specifies no font-family
      at all, i.e. the plain OS default. No new font file to load: this is the
@@ -292,7 +324,7 @@
   --tracking-tight: -0.02em;
   --tracking-normal: 0;
   --tracking-wide: 0.08em;
-  --tracking-widest: 0.14em; /* accent font — Michroma reads best generously spaced */
+  --tracking-widest: 0.14em; /* --font-accent's uppercase labels read best generously spaced */
 
   /* ---- Space (4px base grid) ---- */
   --space-1: 0.25rem; /* 4 */
@@ -341,6 +373,10 @@
   --shadow-float-hover: 0 32px 64px -16px rgba(0, 0, 0, 0.6), 0 0 32px var(--color-accent-glow);
   --shadow-glow-sm: 0 0 24px var(--color-accent-glow);
   --shadow-glow-md: 0 0 48px var(--color-accent-glow);
+  /* The hero TV card's own two shadows, straight from its source template —
+     see --color-tv-bezel above. */
+  --shadow-tv-screen: 0 0 20px rgba(0, 0, 0, 0.8), inset 0 0 50px rgba(255, 255, 255, 0.2);
+  --shadow-tv-stand: 0 5px 10px rgba(0, 0, 0, 0.7);
   /* Three-hue companion to --gradient-signal-ring: one soft, centred glow per
      ring colour, stacked so they overlap into a single blended halo instead of
      three visibly separate coloured blurs — each layer's blur radius is the
@@ -385,6 +421,17 @@
      time and the concentric "signal" read collapses back into a single repeating ping. */
   --duration-nav-signal-cycle: 4s;
   --duration-nav-signal-stagger: 0.5s;
+  /* The hero TV static's flicker. The source template ran this at 0.1s
+     steps(20) infinite — 10 cycles/sec, which trips WCAG 2.3.1's
+     three-flashes-per-second ceiling and was left out of the first pass for
+     exactly that reason (see the .tv-container comment in Hero.astro). This
+     is the same eased opacity/scaleY pulse, just stretched to under 1
+     cycle/sec so it reads as a slow shimmer behind the form rather than a
+     strobe. global.css's prefers-reduced-motion rule already collapses any
+     animation-duration to near-zero and iteration-count to 1, so reduced-
+     motion users get a single static frame with no separate override needed
+     here. */
+  --duration-tv-static-flicker: 2.4s;
 
   /* ---- Celestial scale ----
      One geometric ladder, ratio 1.5, base 8px, carries every star on the site:
@@ -570,10 +617,10 @@
   /* Widening --container-max to 1440px (see above) gave the hero's two grid
      columns more room, but these caps didn't move with it — at wide desktop
      the content column sat capped well short of its own track, opening a gap
-     to the globe on top of the grid gap and the globe's own centering margin
-     in its column. Raised together, same ~0.8 form:content ratio as before,
-     so the column now reads as sized for the wider page instead of an island
-     floating in the middle of it. */
+     to the hero-visual column on top of the grid gap and that column's own
+     centering margin. Raised together, same ~0.8 form:content ratio as
+     before, so the column now reads as sized for the wider page instead of
+     an island floating in the middle of it. */
   --hero-content-max: 40rem;
   --hero-form-max: 32rem;
   /* One 32px step gives the side sparkles room while keeping the wand a copy accent. */

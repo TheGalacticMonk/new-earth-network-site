@@ -1,7 +1,58 @@
-@import '@fontsource-variable/space-grotesk';
-@import '@fontsource-variable/manrope';
-@import '@fontsource/michroma/400.css';
+/* @import must come before any other rule in a stylesheet or the browser
+   silently drops it — tokens.css defines every custom property the rest of
+   this file (and the whole site) relies on, so it has to stay first now
+   that the two @font-face blocks below replace the @import statements that
+   used to sit here. */
 @import './tokens.css';
+
+/* Only the fonts actually used by what's been built so far — Navigation
+   (--font-display, Space Grotesk) and Hero + OfferingCard (--font-body,
+   Manrope; also the page's own default body font, so every route gets it
+   regardless). Michroma was the third family this site started with, but
+   nothing in those three finished sections ever used it — it's been
+   removed as a dependency entirely (@fontsource/michroma uninstalled,
+   --font-accent in tokens.css repointed at Space Grotesk Variable).
+   Everywhere --font-accent still appears (Footer, Button, cards, etc.) is a
+   section that hasn't been designed yet; when that work starts and calls
+   for a distinct accent typeface, that's a fresh typography decision, not
+   a restore of this one.
+
+   The two rules below replace `@import '@fontsource-variable/...'` for the
+   two families that stayed. Importing the package pulls in its CSS for
+   every subset it ships — for these two that's Latin, Latin Extended,
+   Vietnamese, Cyrillic and Greek, six extra @font-face rules this English-
+   only site has no use for. Most of that is only a little dead declaration
+   weight, since a browser only fetches a @font-face's file if a glyph in
+   its unicode-range actually appears on the page — except Manrope's
+   Cyrillic subset happened to be small enough that Vite inlines it as a
+   base64 data: URI directly into the built CSS, which downloads with the
+   critical-path stylesheet on every single page load no matter what,
+   since there's no separate request behind a data: URI to skip.
+
+   Both rules are copied verbatim from each package's own latin-subset
+   @font-face block (font-weight range, format, unicode-range) — only the
+   file path changed, to the same Latin woff2 BaseLayout.astro already
+   preloads, so this doesn't introduce a second fetch of anything. */
+@font-face {
+  font-family: 'Space Grotesk Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300 700;
+  src: url('@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2')
+    format('woff2-variations');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Manrope Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 800;
+  src: url('@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 
 *,
 *::before,

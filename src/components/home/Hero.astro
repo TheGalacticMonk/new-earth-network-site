@@ -5,36 +5,42 @@ import Container from '../Container.astro';
 <section class="hero">
   <Container>
     <div class="hero-grid">
-      <div class="hero-content">
-        <h1 class="headline">Become the New Earth.<br />Connect your frequency.</h1>
-        <p class="promise">The multidimensional human experience, online and offline.</p>
-        <div class="tagline">
-          <p class="subhead">Enter your email to get started.</p>
-          <span class="wand" aria-hidden="true"></span>
-        </div>
+      <div class="tv-container">
+        <div class="tv-screen">
+          <div class="static" aria-hidden="true"></div>
+          <div class="tv-content">
+            <h1 class="headline">The revolution will not be televised.</h1>
+            <p class="promise">The multidimensional human experience, online and offline.</p>
+            <div class="tagline">
+              <p class="subhead">Enter your email to get started.</p>
+              <span class="wand" aria-hidden="true"></span>
+            </div>
 
-        <!--
-          No email service is wired up yet (phase 2) — same placeholder pattern as
-          EmailSignup.astro. The form is real and accessible now; swap the script's
-          fetch target for the chosen provider without touching markup. IDs are
-          prefixed hero- since EmailSignup's own form renders further down this
-          same page.
-        -->
-        <form id="hero-signup-form" class="form" novalidate>
-          <label class="visually-hidden" for="hero-signup-email">Email address</label>
-          <div class="field-group">
-            <input
-              id="hero-signup-email"
-              name="email"
-              type="email"
-              placeholder="you@example.com"
-              required
-              autocomplete="email"
-            />
-            <button type="submit">Get Started</button>
+            <!--
+              No email service is wired up yet (phase 2) — same placeholder pattern as
+              EmailSignup.astro. The form is real and accessible now; swap the script's
+              fetch target for the chosen provider without touching markup. IDs are
+              prefixed hero- since EmailSignup's own form renders further down this
+              same page.
+            -->
+            <form id="hero-signup-form" class="form" novalidate>
+              <label class="visually-hidden" for="hero-signup-email">Email address</label>
+              <div class="field-group">
+                <input
+                  id="hero-signup-email"
+                  name="email"
+                  type="email"
+                  placeholder="you@example.com"
+                  required
+                  autocomplete="email"
+                />
+                <button type="submit">Get Started</button>
+              </div>
+            </form>
+            <p id="hero-signup-status" class="status" role="status" aria-live="polite"></p>
           </div>
-        </form>
-        <p id="hero-signup-status" class="status" role="status" aria-live="polite"></p>
+        </div>
+        <div class="tv-stand" aria-hidden="true"></div>
       </div>
 
       <div class="hero-visual">
@@ -82,90 +88,102 @@ import Container from '../Container.astro';
     column-gap: var(--space-12);
     /* Grid items default to min-width: auto, which lets an unbreakable line of
        text (the headline, at 320px) force the whole track — and the page —
-       wider than the viewport instead of wrapping. Same fix on .hero-content
-       below, one level in. */
+       wider than the viewport instead of wrapping. Same fix on .tv-content
+       below, two levels in. */
     min-width: 0;
   }
 
-  /* Same glass-fill-plus-gradient-ring family as HeartSignalButton's
-     .signal-btn and this form's own "Get Started" button (see
-     HeartSignalButton.astro for the mask-technique reasoning), with one
-     deliberate difference: --gradient-hero-ring has a transparent lead-in,
-     so the ring isn't a fully closed loop — see tokens.css for why that's
-     the specific thing the site owner wanted from their template, not its
-     colors or its fully-opaque ring. */
-  .hero-content {
-    position: relative;
+  /* The email-capture card, tried as a TV screen instead — a raw HTML/CSS
+     template (site owner's pick, New Earth Network positioning itself like a
+     TV network) with its placeholder ERROR/static screen swapped for the
+     card's real content. The bezel, screen background, corner radius and
+     both shadows below are the template's own literal values (see
+     --color-tv-bezel and --shadow-tv-screen/--shadow-tv-stand in
+     tokens.css) — untouched except where the fixed 300x200px screen had to
+     become fluid to actually hold a headline, copy and a form instead of one
+     line of placeholder text.
+
+     The template's static layer is back too (.static below), sitting behind
+     .tv-content exactly the way its .error-text sat over the template's
+     .static — same z-index relationship, form on top instead of the literal
+     ERROR text. What isn't reused verbatim is the timing: the template ran
+     its flicker at 0.1s steps(20) infinite, 10 cycles/sec, which fails WCAG
+     2.3.1's three-flashes ceiling. --duration-tv-static-flicker in
+     tokens.css stretches the same opacity/scaleY pulse to 2.4s so it reads
+     as a slow shimmer rather than a strobe; the site's global
+     prefers-reduced-motion rule (global.css) then collapses it to a single
+     static frame for anyone who's asked for less motion. No separate glitch
+     skew on the form — that would visibly jitter the email input, which is
+     a usability problem the template's placeholder text never had to
+     worry about. */
+  .tv-container {
     display: flex;
     flex-direction: column;
-    /* Trying centered as an experiment (site owner's call, exploring whether
-       it reads better now that the card's own left edge is deliberately
-       aligned with the nav logo/ring seam — that alignment is about the
-       CARD's outer position, unaffected by how its own contents are
-       arranged inside it). Was align-items: flex-start / text-align: left,
-       "one content rail at every viewport, shared with the navigation logo." */
     align-items: center;
-    /* Rhythm redesigned around what the five children actually ARE, not one
-       uniform number: .headline + .promise are one unit (the pitch),
-       .tagline + .form + .status are another (the action) — they shouldn't
-       read as five equally-spaced items in a list. --space-2 is the floor
-       gap every adjacent pair gets by default; .promise and .tagline below
-       each add their own margin-top on top of it to open up exactly where
-       the composition needs air, not everywhere equally. */
-    gap: var(--space-2);
-    text-align: center;
+    width: 100%;
+  }
+
+  .tv-screen {
+    position: relative;
     width: 100%;
     max-width: var(--hero-content-max);
+    background: var(--color-tv-screen-bg);
+    border: 10px solid var(--color-tv-bezel);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-tv-screen);
+    overflow: hidden;
+  }
+
+  /* The template's noise texture, slowed — see the .tv-container comment
+     above for why this doesn't reuse the template's 0.1s cycle. Also dimmed:
+     the template only ever showed this at full strength behind one line of
+     bold placeholder text with a heavy shadow. Behind this card's real
+     headline, body copy and form, full-contrast stripes sitting right behind
+     unshadowed running text would undercut the exact text contrast the
+     site's WCAG 2.2 AA floor requires — 0.14 keeps the texture readable as
+     "this is a TV screen" without competing with the content sitting on it. */
+  .static {
+    position: absolute;
+    inset: 0;
+    background: var(--gradient-tv-static);
+    opacity: 0.14;
+    animation: tv-static-flicker var(--duration-tv-static-flicker) ease-in-out infinite;
+    z-index: 1;
+  }
+
+  .tv-content {
+    position: relative;
+    /* Above .static, same relationship as the template's .error-text over
+       its .static. */
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    text-align: center;
     min-width: 0;
     container-type: inline-size;
     font-family: var(--font-hero);
     font-weight: var(--font-weight-regular);
     padding: var(--space-8) var(--space-6);
-    border-radius: var(--radius-xl);
-    background: var(--color-hero-card-glass-fill);
-    /* The glass here is a verbatim swap-in from a UIverse card template (the
-       one labeled "Card, text, 2025") at the site owner's explicit request —
-       its exact bg-gray-50/10 fill, rounded-xl radius (--radius-xl above),
-       and a bare backdrop-blur-lg (16px, no saturate) directly below. None of
-       those three values are tuned to this site's own palette or its
-       previous "Apple glass" recipe (blur(20px) saturate(160%) with
-       --color-signal-btn-fill) — this replaces that recipe outright rather
-       than blending with it, per "exactly as is, without modifications." */
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    /* Two more glass cues on top of the frost itself: an inset top highlight
-       (light catching the inside of the glass' upper edge — see
-       --color-glass-highlight in tokens.css) and --shadow-float, the same
-       outer lift token HeartSignalButton uses, so the card reads as a pane
-       sitting above the nebula rather than painted onto it. No colour-glow
-       layer alongside it the way the button pairs --shadow-float with
-       --shadow-signal-glow: that combination is tuned for a small, discrete
-       control, and at this card's size a matching glow would wash out into
-       ambient light competing with the ring and the earth's own glow instead
-       of reading as a deliberate accent. */
-    box-shadow:
-      inset 0 1px 0 var(--color-glass-highlight),
-      var(--shadow-float);
   }
 
-  .hero-content::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: var(--cta-border-width);
-    background: var(--gradient-hero-ring);
-    -webkit-mask:
-      linear-gradient(#fff 0 0) content-box,
-      linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
+  .tv-stand {
+    width: 150px;
+    height: 10px;
+    background: var(--color-tv-bezel);
+    margin-top: 10px;
+    border-radius: 5px;
+    box-shadow: var(--shadow-tv-stand);
   }
 
   .headline {
     width: 100%;
-    text-wrap: wrap;
+    /* No manual <br> in this copy (unlike the old two-clause version) — let
+       the browser pick the break itself. balance (not the plain "wrap" this
+       used before) is what keeps a single sentence like this from stranding
+       one short word alone on its own line. */
+    text-wrap: balance;
     /* Now matched to OfferingCard.astro's .title instead — its own third
        reference in as many passes (first --font-hero, then "Upcoming
        gatherings"'s --font-display/600, now the offering cards' gradient-
@@ -222,14 +240,14 @@ import Container from '../Container.astro';
     text-shadow:
       0 0 10px var(--color-card-title-shadow),
       0 0 20px var(--color-card-title-shadow-wide);
-    /* On top of .hero-content's --space-2 floor: 16px total under the
+    /* On top of .tv-content's --space-2 floor: 16px total under the
        headline — close enough to read as the same "pitch" unit, not the
        bare 8px minimum every other gap not otherwise adjusted would get. */
     margin-top: var(--space-2);
   }
 
   /* The smaller email prompt keeps its wand alongside it, both now centered
-     as a unit to match .hero-content's experimental center alignment. */
+     as a unit to match .tv-content's centered alignment. */
   .tagline {
     display: flex;
     align-items: center;
@@ -375,8 +393,37 @@ import Container from '../Container.astro';
     font-size: var(--text-sm);
   }
 
+  /* Same three keyframe stops as the template's own @keyframes flicker,
+     just riding --duration-tv-static-flicker instead of its 0.1s. */
+  @keyframes tv-static-flicker {
+    0% {
+      opacity: 0.8;
+      transform: scaleY(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scaleY(1.01);
+    }
+    100% {
+      opacity: 0.7;
+      transform: scaleY(0.99);
+    }
+  }
+
   /* Size the layout box and its lighting together so the globe stays in its
-     column, including immediately after the two-column breakpoint. */
+     column, including immediately after the two-column breakpoint.
+
+     This is the plain, single-element version — background-position pan +
+     inset box-shadow lighting on one div — not the later three-layer
+     compositor-only rebuild (image on its own transform-animated layer,
+     lighting moved to a ::after so it paints on top instead of underneath).
+     That rebuild fixed a real defect (background-position forces a main-
+     thread repaint every frame, on every device, for the entire 30s loop —
+     confirmed via Lighthouse's non-composited-animations audit), but it read
+     as lower quality on screen, so this is back at the site owner's request
+     while the font-loading problem (the audit's other, larger finding —
+     mobile LCP 2.03s against a 1.2s budget, from render-blocking CSS + 3
+     web-font families) gets tackled first. */
   .earth {
     font-size: var(--hero-earth-size);
     width: 1em;
@@ -401,27 +448,30 @@ import Container from '../Container.astro';
 
   @media (max-width: 479px) {
     /* --text-lg's own floor (1.5rem/24px) doesn't shrink any further below
-       this breakpoint, but the headline's two <br>-separated lines each need
-       real room to stay at two lines (see the git history on this rule for
-       the original measurement of why). The first fix (--text-sm, 15px) hit
-       that target but created a new problem, found afterward: nothing else
-       in the card shrinks on mobile, so the headline — meant to be the most
-       prominent thing in the card — ended up SMALLER than .promise (20px)
-       and .subhead/input (17px). An <h1> reading smaller than its own
-       supporting text is exactly the "uncohesive" feeling that's being fixed
-       here, not just a too-small number in isolation.
+       this breakpoint, but at that size + the desktop 3px letter-spacing the
+       headline was crowding three lines out of its available width. The
+       first fix (--text-sm, 15px) solved that but created a new problem,
+       found afterward: nothing else in the card shrinks on mobile, so the
+       headline — meant to be the most prominent thing in the card — ended up
+       SMALLER than .promise (20px) and .subhead/input (17px). An <h1>
+       reading smaller than its own supporting text is exactly the
+       "uncohesive" feeling that's being fixed here, not just a too-small
+       number in isolation.
 
        19px is the fix: the largest size that still holds two lines at every
-       width from 360-479px, but ONLY once letter-spacing also comes down
-       from the desktop 3px to 1.5px alongside it — tracking that wide was
-       costing real width (roughly (character count - 1) x 3px per line,
-       ~63-69px on this copy) that a mobile line can't spare. Reducing both
-       together, rather than only shrinking font-size further, is what gets
-       the headline back above the rest of the card's text instead of still
+       width down to 320px, but ONLY once letter-spacing also comes down from
+       the desktop 3px to 1.5px alongside it — tracking that wide was costing
+       real width that a mobile line can't spare. Reducing both together,
+       rather than only shrinking font-size further, is what gets the
+       headline back above the rest of the card's text instead of still
        being boxed in by the same tracking that caused the wrap in the first
-       place. Verified at 320/340/360/390/414/430/460/479px — holds two
-       lines 360px up, same graceful-degradation floor as before below that
-       (see the same git history). */
+       place.
+
+       This still holds for "The revolution will not be televised." — a
+       single sentence now (no manual <br>), left to text-wrap: balance to
+       break on its own. Re-verified at 320/380/479/480/500/899/1920px: holds
+       a clean two-line balanced break the whole way, same floor as before
+       below 320px. */
     .headline {
       font-size: 19px;
       letter-spacing: 1.5px;

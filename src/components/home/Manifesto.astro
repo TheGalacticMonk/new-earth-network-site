@@ -20,6 +20,13 @@ import Container from '../Container.astro';
 <style>
   .manifesto {
     padding-block: var(--space-section);
+    /* Below-the-fold — see Offerings.astro's .offerings rule for the full
+       rationale (this cut mobile LCP's dominant main-thread style/layout
+       cost, not a network fix). Height barely moves between mobile and
+       desktop here (529px/520px measured), so one placeholder value covers
+       both without needing a breakpoint override. */
+    content-visibility: auto;
+    contain-intrinsic-size: auto 525px;
   }
 
   .kicker {
