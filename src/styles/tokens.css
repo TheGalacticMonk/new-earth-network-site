@@ -613,6 +613,9 @@
   /* Solid artwork begins ~100px into the 925px-high source; let glow hang
      outside the content rail instead of aligning to transparent image padding. */
   --nav-logo-optical-inset: calc(var(--nav-logo-height) * 100 / 925);
+  /* The footer's own, much smaller brand mark — was a bare 30px in Footer.astro
+     with no token, hard to read as a wordmark at that size. Raised to 44px. */
+  --footer-logo-height: 44px;
   --target-min: 2.75rem;
   /* Widening --container-max to 1440px (see above) gave the hero's two grid
      columns more room, but these caps didn't move with it — at wide desktop

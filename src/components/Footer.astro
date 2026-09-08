@@ -2,11 +2,16 @@
 import Container from './Container.astro';
 import Logo from './Logo.astro';
 
+// Kept identical to Navigation.astro's own `links` array on purpose — the
+// site owner asked for the footer's Explore column to match the top nav
+// exactly, so this isn't independently maintained IA, it's a mirror of it.
 const explore = [
-  { label: 'About', href: '/about' },
   { label: 'Events', href: '/events' },
-  { label: 'Cities', href: '/cities' },
-  { label: 'Start a Gathering', href: '/start-a-gathering' },
+  { label: 'Series', href: '/series' },
+  { label: 'Docs & Films', href: '/docs-films' },
+  { label: 'Music', href: '/music' },
+  { label: 'Courses', href: '/courses' },
+  { label: 'Shop', href: '/shop' },
 ];
 
 const more = [
@@ -30,7 +35,7 @@ const year = new Date().getFullYear();
         <a href="/" aria-label="New Earth Network — home">
           <Logo variant="full" />
         </a>
-        <p class="tagline">Real gatherings, in real cities, for real people.</p>
+        <p class="tagline">The complete multidimensional experience, online and offline.</p>
       </div>
 
       <nav aria-label="Explore">
@@ -87,7 +92,7 @@ const year = new Date().getFullYear();
   }
 
   .brand-col :global(img) {
-    height: 30px;
+    height: var(--footer-logo-height);
     width: auto;
   }
 
