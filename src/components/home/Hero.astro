@@ -121,22 +121,18 @@ import Container from '../Container.astro';
     font-family: var(--font-hero);
     font-weight: var(--font-weight-regular);
     padding: var(--space-8) var(--space-6);
-    border-radius: var(--radius-md);
-    background: var(--color-signal-btn-fill);
-    /* Apple-style frosted glass: unlike the Subscribe button, which borrows its
-       blur from sitting under the nav's own backdrop-filter layer (see
-       --color-signal-btn-fill in tokens.css), this card is out in the open page
-       body with nothing blurring the nebula/stars behind it — so it needs its
-       own backdrop-filter to read as glass rather than a flat tinted panel.
-       Saturate alongside the blur, not just blur alone, since that boosted
-       vibrancy of whatever shows through is what actually reads as "Apple
-       glass" rather than generic frosted CSS — a plain blur under the same fill
-       looks closer to smoked plastic. Values hardcoded to match the nav's own
-       unwrapped blur(10px) precedent (Navigation.astro) rather than tokenized,
-       since STANDARDS.md's no-hard-coded-values rule is about colour, not
-       filter magnitudes. */
-    backdrop-filter: blur(20px) saturate(160%);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border-radius: var(--radius-xl);
+    background: var(--color-hero-card-glass-fill);
+    /* The glass here is a verbatim swap-in from a UIverse card template (the
+       one labeled "Card, text, 2025") at the site owner's explicit request —
+       its exact bg-gray-50/10 fill, rounded-xl radius (--radius-xl above),
+       and a bare backdrop-blur-lg (16px, no saturate) directly below. None of
+       those three values are tuned to this site's own palette or its
+       previous "Apple glass" recipe (blur(20px) saturate(160%) with
+       --color-signal-btn-fill) — this replaces that recipe outright rather
+       than blending with it, per "exactly as is, without modifications." */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     /* Two more glass cues on top of the frost itself: an inset top highlight
        (light catching the inside of the glass' upper edge — see
        --color-glass-highlight in tokens.css) and --shadow-float, the same

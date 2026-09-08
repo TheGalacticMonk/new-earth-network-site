@@ -120,6 +120,14 @@
      a surface catching ambient light, which is a different enough purpose to
      want its own name even at a similar alpha. */
   --color-glass-highlight: rgba(255, 255, 255, 0.08);
+  /* The hero card's glass fill, swapped in verbatim from a UIverse template
+     at the site owner's explicit request — this is Tailwind's bg-gray-50/10
+     (#f9fafb at 10% alpha), not a value chosen for this site's own palette.
+     Paired with --radius-xl above (that same template's rounded-xl) and a
+     bare blur(16px) — its backdrop-blur-lg — directly on .hero-content in
+     Hero.astro. Deliberately not reconciled with --color-signal-btn-fill or
+     any other glass token here: "exactly as is, without modifications." */
+  --color-hero-card-glass-fill: rgba(249, 250, 251, 0.1);
   /* Shared so any CTA's ring/border reads as the same weight as the nav
      Subscribe button's — currently also the Hero "Get Started" button. */
   --cta-border-width: 2px;
@@ -316,6 +324,11 @@
   /* ---- Radius ---- */
   --radius-sm: 6px;
   --radius-md: 10px;
+  /* Matches the UIverse "Card, text, 2025" glass template's own rounded-xl
+     (0.75rem) exactly — see --color-hero-card-glass-fill below, the other
+     half of that same template swap. Not derived from --radius-md; the site
+     owner asked for the template's glass verbatim, radius included. */
+  --radius-xl: 12px;
   --radius-full: 999px;
 
   /* ---- Elevation (one light source, used to lift, not to decorate) ----
