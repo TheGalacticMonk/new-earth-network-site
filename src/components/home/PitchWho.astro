@@ -383,9 +383,10 @@ const roster: RosterEntry[] = [
      the two real avatars beside it in the row instead of leaving a gap where
      a photo would go. The icon is a mask, not an <img>, so it takes a token
      fill instead of the baked-in one the source SVG ships with (see
-     public/anon.svg — swapped in from question-mark.svg, 2026-09-10, owner
-     request: a generic "anonymous person" glyph reads more like an avatar
-     placeholder than a bare "?" does).
+     public/star.svg — swapped in from anon.svg, 2026-09-12, owner request;
+     anon.svg itself was swapped in from question-mark.svg, 2026-09-10, same
+     pattern: each pass picked a glyph that reads more like an avatar
+     placeholder than the last).
 
      Background is OfferingCard.astro's card gradient
      (`linear-gradient(45deg, #1a1a1a, #262626)`), copied verbatim rather than
@@ -414,7 +415,7 @@ const roster: RosterEntry[] = [
     width: 40%;
     height: 40%;
     background: var(--color-text-primary);
-    mask: url(/anon.svg) center / contain no-repeat;
+    mask: url(/star.svg) center / contain no-repeat;
   }
 
   .card-name {
