@@ -7,6 +7,14 @@ import '../styles/global.css';
 // specifically.
 import spaceGroteskLatinUrl from '@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2?url';
 import manropeLatinUrl from '@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2?url';
+// Favicons live here (not public/) so their URL is content-hashed on every
+// build — a plain public/ URL keeps its filename across content changes, and
+// browsers cache favicons far more stubbornly than ordinary page resources
+// (a hard refresh doesn't reliably bust it). A changed hash forces a fresh
+// fetch automatically, so a future favicon swap can't hit this same problem.
+import favicon32Url from '../assets/favicon-32.png?url';
+import favicon16Url from '../assets/favicon-16.png?url';
+import appleTouchIconUrl from '../assets/apple-touch-icon.png?url';
 
 interface Props {
   title: string;
@@ -27,9 +35,9 @@ const pageTitle = title === siteName ? title : `${title} — ${siteName}`;
          and form, Space Grotesk for navigation. Other fonts load when needed. -->
     <link rel="preload" as="font" type="font/woff2" href={spaceGroteskLatinUrl} crossorigin />
     <link rel="preload" as="font" type="font/woff2" href={manropeLatinUrl} crossorigin />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href={favicon32Url} />
+    <link rel="icon" type="image/png" sizes="16x16" href={favicon16Url} />
+    <link rel="apple-touch-icon" href={appleTouchIconUrl} />
     <meta name="generator" content={Astro.generator} />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
