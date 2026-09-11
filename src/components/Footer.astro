@@ -18,23 +18,12 @@ const explore = [
   { label: 'Roster', href: '/#roster' },
 ];
 
-const more = [
-  { label: 'Principles', href: '/principles' },
-  { label: 'FAQ', href: '/faq' },
-  { label: 'Contact', href: '/contact' },
-];
-
-const social = [
-  { label: 'Instagram', href: 'https://instagram.com' },
-  { label: 'TikTok', href: 'https://tiktok.com' },
-];
-
 const year = new Date().getFullYear();
 ---
 
 <footer class="footer">
   <Container>
-    <div class="grid">
+    <div class="row">
       <div class="brand-col">
         <a href="/" aria-label="New Earth Network — home">
           <Logo variant="full" />
@@ -47,24 +36,6 @@ const year = new Date().getFullYear();
         <ul role="list">
           {explore.map((link) => (
             <li><a href={link.href}>{link.label}</a></li>
-          ))}
-        </ul>
-      </nav>
-
-      <nav aria-label="More">
-        <p class="col-heading">More</p>
-        <ul role="list">
-          {more.map((link) => (
-            <li><a href={link.href}>{link.label}</a></li>
-          ))}
-        </ul>
-      </nav>
-
-      <nav aria-label="Social">
-        <p class="col-heading">Follow</p>
-        <ul role="list">
-          {social.map((link) => (
-            <li><a href={link.href} rel="me noreferrer" target="_blank">{link.label}</a></li>
           ))}
         </ul>
       </nav>
@@ -83,10 +54,10 @@ const year = new Date().getFullYear();
     padding-block: var(--space-16) var(--space-8);
   }
 
-  .grid {
-    display: grid;
+  .row {
+    display: flex;
+    flex-direction: column;
     gap: var(--space-8);
-    grid-template-columns: 1fr;
   }
 
   .brand-col {
@@ -147,8 +118,10 @@ const year = new Date().getFullYear();
   }
 
   @media (min-width: 640px) {
-    .grid {
-      grid-template-columns: 1.5fr repeat(3, 1fr);
+    .row {
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: space-between;
     }
 
     .bottom {
