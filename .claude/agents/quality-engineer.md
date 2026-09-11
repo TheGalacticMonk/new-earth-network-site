@@ -69,6 +69,16 @@ hit back, deep-link into a page. For this site specifically: every RSVP and
 start-a-gathering flow gets tested end to end, since that flow is the entire point of
 the site existing — a broken RSVP button is not a "polish" bug, it's a blocker.
 
+**The password gate.** This build is a password-protected demonstration of the plan, but
+the gate is deployed last, after everything it protects — don't flag its absence as a
+defect while the rest of the build is still in progress. Once `creative-developer` ships
+it, at the end, test it like any other flow: correct password admits, wrong password
+fails clearly and accessibly, no protected page or asset is reachable by direct URL or
+from cached/dev-tool network responses before auth, and the gate itself meets every
+budget and accessibility bar above. From that point on, a leaking gate is a blocker, not
+a polish item — it's the one thing standing between this plan and being public before the
+owner is ready to pitch it.
+
 **Code hygiene, in the same pass.** No hard-coded hex/magic numbers outside
 `src/styles/tokens.css`. No dead code, no commented-out code, no `TODO` in shipped work,
 no dependency that isn't earning its weight. This is where documentation drift gets

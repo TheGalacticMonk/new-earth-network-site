@@ -1,0 +1,76 @@
+---
+import Section from '../Section.astro';
+import Container from '../Container.astro';
+import SectionHeader from '../SectionHeader.astro';
+
+/*
+  Pitch page section 5 — the model (docs/pitch-demo-sitemap.md §4.5, owner-required).
+
+  NO NUMBERS, NO CHARTS, NO UNIT ECONOMICS — the sitemap's integrity flag for
+  this section and `creative-director`'s review both land in the same place: a
+  revenue projection, a cohort curve or a unit-economics table rendered on a page
+  reads as reported results. This section carries the mechanic only.
+
+  DATA GAP (owner): the membership price, and whether the gathering layer is
+  included, ticketed, or both. The mechanic can be shown without it; the section
+  cannot be called finished until it is answered.
+
+  REMOVED (2026-09-10, site owner): the four-node loop diagram (content → room →
+  relationship → retention) and its lorem ipsum caption. The section now runs
+  straight from the two prose paragraphs into The Vibe, with nothing placeholder
+  in between.
+
+  COPY STATUS: the two prose paragraphs are real, owner-supplied copy (2026-09-09) —
+  the Gaia-demand argument and the "reserved vs. bold" positioning.
+
+  STRUCTURE NOTE: the header sits outside `.prose` deliberately, matching every
+  other pitch section (Problem, Vibe, Plan, Who). This section originally nested
+  SectionHeader inside `.prose`'s own flex column, so SectionHeader's own 64px
+  margin-bottom stacked with `.prose`'s 24px gap into an 88px gap under the
+  heading — visibly too much space, reported and fixed 2026-09-10. Every other
+  section keeps the header out of any gapped flex/grid container for exactly
+  this reason; keep it that way here too, or the double-count comes back.
+*/
+---
+
+<Section tone="deep" id="model">
+  <Container>
+    <SectionHeader kicker="The model" heading="Every dimension, one membership." />
+
+    <div class="prose">
+      <p>
+        <a class="gaia-link" href="https://www.gaia.com" target="_blank" rel="noopener">Gaia</a> has already proven that there is enough demand for conscious media within
+        the spiritually awakened community to build a global company. And while it
+        may seem that Gaia has a stronghold on the conscious media production and
+        distribution space, there is an entire demographic that Gaia is missing, perhaps
+        intentionally.
+      </p>
+      <p>
+        Gaia’s communications and programming have traditionally been reserved,
+        restrained, and passive. This leaves room for another platform built on a similar
+        model, but with a voice and identity that are more fun, creative, bold, and daring.
+      </p>
+    </div>
+  </Container>
+</Section>
+
+<style>
+  .prose {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    color: var(--color-text-body);
+    max-width: 60ch;
+  }
+
+  /* Inline links inherit color and lose their underline globally (global.css) —
+     fine for nav/button links that are already visually distinct chrome, not
+     for a link sitting inside a paragraph of body text, where color alone
+     would be the only signal. Underlined + the site's one accent color, so it
+     reads as a link without spending a second visual language on it. */
+  .gaia-link {
+    color: var(--color-electric-cyan);
+    text-decoration: underline;
+    text-decoration-color: currentColor;
+  }
+</style>

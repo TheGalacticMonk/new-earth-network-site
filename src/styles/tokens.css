@@ -245,13 +245,36 @@
   --color-text-body: #ded9ef;
   --color-text-muted: #b6afcc;
 
+  /* ---- Color: status ----
+     Green has no other place in this palette (CLAUDE.md's plum/electric-blue-
+     cyan environment) — scoped deliberately to "a form submission succeeded,"
+     the one meaning cyan can't carry here since it's already the site's
+     general signal accent (links, focus, the nav CTA). Owner-requested
+     (2026-09-11) for the application form's success status message. */
+  --color-success: #4ade80;
+
   /* ---- Color: structure ----
-     No general-purpose hairline border token: surfaces are separated by shadow and
-     background tone, not outline. (A prior version of this file reserved
+     One deliberate exception to the no-outline rule below: --border-placeholder.
+     The pitch build ships structural sections ahead of the real copy, roster,
+     figures and CTA destination they will carry, and an unfilled card that looks
+     like a finished card is exactly the fabrication the Integrity rule forbids. A
+     dashed hairline is the cheapest honest signal that a surface is scaffolding —
+     it costs nothing, needs no JS, and reads as unfinished at a glance rather than
+     asking a reader to notice that the words are Latin. It is a placeholder
+     treatment, not a border style: nothing finished may use it, and when the real
+     content lands the rule goes with it.
+
+     The line colour is --color-text-muted's rgb at 0.32, low enough to sit under
+     the muted text it frames rather than competing with it.
+
+     Otherwise: no general-purpose hairline border token — surfaces are separated by
+     shadow and background tone, not outline. (A prior version of this file reserved
      --color-border-accent here for a keyboard-only skip-link that was never
      built — removed rather than left as a token with nothing using it; if a
      skip-link gets built, it can pick whatever this section's own convention
      calls for at the time, not inherit a colour chosen before it existed.) */
+  --color-placeholder-line: rgba(182, 175, 204, 0.32);
+  --border-placeholder: 1px dashed var(--color-placeholder-line);
 
   /* ---- Type families ----
      Display: headlines and card/heading text. Body: everything read at length.
@@ -617,6 +640,16 @@
      with no token, hard to read as a wordmark at that size. Raised to 44px. */
   --footer-logo-height: 44px;
   --target-min: 2.75rem;
+  /* The connector line in the pitch page's model diagram — the only rule-weight
+     on the site that has to read as a drawn line rather than as an edge, so it
+     gets its own name instead of borrowing --cta-border-width (which is a
+     button's ring, and would silently change this if a button ever changed).
+     2px so it survives a non-retina screen at the low alpha it is drawn in. */
+  --diagram-line-weight: 2px;
+  /* Consistent node geometry connects the plan's current and upcoming steps. */
+  --plan-node-size: var(--space-12);
+  --plan-node-size-wide: var(--space-16);
+  --plan-line-color: var(--color-text-muted);
   /* Widening --container-max to 1440px (see above) gave the hero's two grid
      columns more room, but these caps didn't move with it — at wide desktop
      the content column sat capped well short of its own track, opening a gap

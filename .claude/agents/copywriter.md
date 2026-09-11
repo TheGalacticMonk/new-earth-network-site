@@ -57,6 +57,18 @@ actual rooms*, not a feeling. Ground every abstraction in something concrete: a 
 bench in LA, a Tuesday at 6pm, a person who showed up once and now organizes the whole
 Austin circle.
 
+## This is a demonstration, not evidence
+
+This build is a password-protected pitch demo, not the live site — the reader is a
+funder deciding whether to back New Earth Network. That raises the stakes on one specific
+rule: **never write mocked or illustrative content so it reads as real proof of
+traction.** No fabricated testimonials, attendance or RSVP counts, revenue figures,
+press mentions, or "as seen in" claims. An example gathering, an example attendee quote,
+an example city's numbers — all fine, and all have to read as examples, not as evidence
+being slipped past the person deciding whether to fund this. This is a hard line from
+`.claude/STANDARDS.md`, not a tone note; flag it to `creative-director` if you're ever
+unsure whether a line crosses it.
+
 ## Banned, permanently
 
 "Innovative," "cutting-edge," "seamless(ly)," "empowering," "leverage," "solutions,"

@@ -1,0 +1,128 @@
+---
+import Section from '../Section.astro';
+import Container from '../Container.astro';
+import SectionHeader from '../SectionHeader.astro';
+import Button from '../Button.astro';
+
+/*
+  Pitch page section 9 — the ask (docs/pitch-demo-sitemap.md §4.10).
+
+  The only true CTA on the site. Every other section is deliberately actionless,
+  which is what makes this one land; the demo hand-off is lateral and returns.
+
+  NO INVENTED FIGURE. The amount and the use-of-funds split are bracketed
+  placeholders, rendered as visibly unfilled fields. A plausible-looking number
+  here would be the exact failure the Integrity rule names — an illustrative
+  figure read as a fact — and a funder who spots one invented number stops
+  trusting the other four sections. Nothing about round status, who else is in,
+  or what percentage is committed appears anywhere in this file, by the same rule.
+
+  DATA GAP (owner) — BLOCKING: the amount, the structure, the use-of-funds split,
+  which step the round carries the company through, and the CTA destination.
+
+  CTA DESTINATION IS A PLACEHOLDER. `mailto:hello@newearthnetwork.example` — the
+  .example TLD is reserved by RFC 2606 and cannot resolve, so this cannot quietly
+  send a funder's email into a void that looks real. It must be swapped for the
+  owner's real, monitored address before this page goes live behind the gate: a
+  dead link at the ask is the one bug on this site that costs money. Deliberately
+  a mailto and not a contact form — a form adds fields, a submit state, an error
+  state and a delay between intent and a human, for a person who already has the
+  address.
+
+  COPY STATUS: everything except the bracketed fields and the button label is
+  lorem ipsum, pending `copywriter`.
+*/
+
+const buckets = ['[Use of funds — one]', '[Use of funds — two]', '[Use of funds — three]'];
+---
+
+{/*
+  Left on the default tone, unlike the plan section directly above it. Two
+  veil-toned bands in a row would meet fade-out against fade-in and leave a
+  lighter seam between them (--gradient-veil is transparent at both ends), and
+  the footer already lays a veil under this section — so the ask closes in open
+  sky, with the page's one bright CTA against the nebula and the dark arriving
+  underneath it in the footer.
+*/}
+<Section>
+  <Container>
+    <SectionHeader kicker="The ask" heading="What we're raising, and what it buys." />
+
+    <p class="amount">[Amount]</p>
+    <p class="structure">[Structure]</p>
+
+    <ul class="buckets" role="list">
+      {buckets.map((bucket) => (
+        <li>
+          <span class="bucket-label">{bucket}</span>
+          <span class="bucket-note">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
+          </span>
+        </li>
+      ))}
+    </ul>
+
+    <p class="unlocks">
+      Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
+      ea commodo consequat. [Which step the round carries]
+    </p>
+
+    <Button href="mailto:hello@newearthnetwork.example" variant="primary" size="lg">
+      Start the conversation
+    </Button>
+  </Container>
+</Section>
+
+<style>
+  .amount {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-text-primary);
+  }
+
+  .structure {
+    margin-top: var(--space-2);
+    color: var(--color-text-muted);
+    font-size: var(--text-md);
+  }
+
+  .buckets {
+    display: grid;
+    gap: var(--space-4);
+    margin-block: var(--space-12);
+    /* Same measure as the prose sections above, so the ask lands in the same
+       column the argument has been running in rather than opening out to the
+       full rail at the moment it asks for something. */
+    max-width: 60ch;
+  }
+
+  .buckets li {
+    /* Unfilled fields, framed as unfilled — see --border-placeholder in tokens.css. */
+    border: var(--border-placeholder);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .bucket-label {
+    font-family: var(--font-accent);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-widest);
+    text-transform: uppercase;
+    color: var(--color-electric-cyan);
+  }
+
+  .bucket-note {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .unlocks {
+    color: var(--color-text-body);
+    margin-bottom: var(--space-12);
+    max-width: 60ch;
+  }
+</style>

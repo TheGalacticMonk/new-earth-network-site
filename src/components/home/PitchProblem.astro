@@ -1,0 +1,68 @@
+---
+import Section from '../Section.astro';
+import Container from '../Container.astro';
+import SectionHeader from '../SectionHeader.astro';
+
+/*
+  Pitch page section 2 — the problem, and why now (docs/pitch-demo-sitemap.md §4.2).
+
+  ZERO NUMBERS, DELIBERATELY. The sitemap allows exactly one place on the site
+  where a figure may appear — this section — and only if it is an externally
+  verifiable, publicly-sourced, dated third-party number, cited visibly. No such
+  source has been supplied yet, and the same brief states what to do in that
+  case: ship the argument qualitatively rather than with a placeholder number. A
+  bracketed "[X million subscribers]" here would be a fabricated traction claim
+  wearing a placeholder's clothes, so there is nothing numeric in this file.
+
+  DATA GAP (owner): a sourced, dated third-party category figure — or an explicit
+  decision to run permanently without one.
+
+  COPY STATUS: the three body beats below are lorem ipsum standing in for the
+  three-part argument the brief specifies (the human problem / what the category
+  already is / what that spend is not buying). `copywriter` writes the real
+  version. The headings name the structure so the shape can be reviewed now.
+*/
+---
+
+<Section>
+  <Container>
+    <SectionHeader kicker="Why now" heading="The problem is not a shortage of things to watch." />
+
+    <div class="beats">
+      <p class="lead">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+        exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+      </p>
+      <p>
+        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa
+        qui officia deserunt mollit anim id est laborum.
+      </p>
+      <p>
+        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
+        laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi
+        architecto beatae vitae dicta sunt explicabo.
+      </p>
+    </div>
+  </Container>
+</Section>
+
+<style>
+  .beats {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    color: var(--color-text-body);
+    /* Measure, not a column: every section on this page hangs off the same left
+       rail (the shared Container), and line length is controlled per text block
+       in ch so the argument reads as one column of thought down the page rather
+       than alternating between a full-width rail and a centred narrow one. */
+    max-width: 60ch;
+  }
+
+  .lead {
+    font-size: var(--text-md);
+    color: var(--color-text-primary);
+  }
+</style>

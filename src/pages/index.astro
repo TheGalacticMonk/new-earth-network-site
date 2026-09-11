@@ -1,9 +1,86 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Hero from '../components/home/Hero.astro';
+// The pitch page, section by section, per docs/pitch-demo-sitemap.md §4. Scroll
+// order IS the argument — each section answers the question the last one raised —
+// so this import list is also the running order and should not be reshuffled
+// without going back to that document.
+//
+// Not built here, and deliberately absent rather than stubbed: the sitemap's
+// section 0 (the password gate, which ships last, after the pages it protects)
+// and the /demo/* subtree the hand-off section points into. See PitchDemoHandoff
+// for the stand-in destination that covers the second one in the meantime.
+import PitchHero from '../components/home/PitchHero.astro';
+// Offerings — the six-card Events/Series/Docs & Films/Music/Courses/Shop grid —
+// is back in, directly under the hero, at the site owner's explicit request
+// (2026-09-09): restore the OG catalog cards as they were before the pitch-demo
+// pivot. Flagged once and executing: docs/pitch-demo-sitemap.md deleted this
+// same grid on the grounds that it's Gaia's own catalog shape, and
+// creative-director's review of that sitemap confirmed the deletion. Re-adding
+// it reopens that exact tension; the owner's call stands. Card copy/component
+// are untouched from the OG build — see Offerings.astro and OfferingCard.astro
+// for pre-existing standards debt (hard-coded hex values, always-on CSS
+// animation with no prefers-reduced-motion fallback) inherited as-is, not
+// introduced here.
 import Offerings from '../components/home/Offerings.astro';
-// Everything past Offerings is unbuilt wireframe, not finished sections —
-// only Navigation, Hero and Offerings have had real design/build passes.
+// The Model now runs right after Offerings, ahead of Problem/Vibe/Moat — moved
+// here at the site owner's explicit request (2026-09-09). This deviates from
+// docs/pitch-demo-sitemap.md §4's reviewed order, where Model comes after "what
+// Gaia can't copy" specifically so the mechanic lands once the funder already
+// knows why it matters; the owner's call stands, but the sitemap itself hasn't
+// been updated to match — treat that document's ordering as superseded here,
+// not as the current source of truth, until it's revised.
+import PitchModel from '../components/home/PitchModel.astro';
+// PitchProblem ("Why now") is out of the page for now, at the site owner's
+// explicit request (2026-09-10): with Model moved up, Model was flowing into
+// Problem's lorem ipsum before reaching Vibe — the owner wants Model to lead
+// straight into Vibe instead. Not one of the four sections the owner actually
+// asked for (model, vibe, five-step plan, roster), so commented out rather than
+// relocated. The component and its copy stay in the repo — see PitchProblem.astro.
+// import PitchProblem from '../components/home/PitchProblem.astro';
+import PitchVibe from '../components/home/PitchVibe.astro';
+// PitchMoat ("The moat") and PitchDemoHandoff ("The proof") are out of the page
+// at the site owner's explicit request (2026-09-10). Commented out rather than
+// deleted, same pattern as the pre-pivot sections below. Note PitchDemoHandoff
+// was the page's only section pointing into the /demo subtree hand-off the
+// sitemap calls for (see the note on that import below, and PitchDemoHandoff
+// itself) — removing it leaves that hand-off unaddressed on the page, not just
+// unstyled, until it returns or something else covers it.
+// import PitchMoat from '../components/home/PitchMoat.astro';
+// import PitchDemoHandoff from '../components/home/PitchDemoHandoff.astro';
+// PitchWho ("Current roster") now runs LAST on the page, after Plan — moved
+// there at the site owner's explicit request (2026-09-11). With PitchAsk
+// still out (see below), Roster's thirteen "Slot pending" cards next to the
+// two filled ones become the page's actual closing beat: the gap they show
+// reads as an implicit ask ("this is what funding fills") in place of the
+// missing explicit one. Deviates from both docs/pitch-demo-sitemap.md §4's
+// reviewed order and the Model-move note above, which both had Who ahead of
+// Plan; treat this file's render order, not the sitemap, as current until
+// the sitemap is revised. If PitchAsk comes back, re-check whether Roster
+// belongs immediately before it (gap → ask, one continuous beat) or the ask
+// still wants the true last slot — don't assume this ordering.
+import PitchPlan from '../components/home/PitchPlan.astro';
+import PitchWho from '../components/home/PitchWho.astro';
+// PitchAsk ("The ask") is out of the page at the site owner's explicit
+// request (2026-09-10). Its own header comment calls it "the only true CTA
+// on the site" — every other section is deliberately actionless specifically
+// so this one would land. Removing it leaves the pitch page with no call to
+// action at all, not just a missing section. Flagged; the owner's call
+// stands.
+// import PitchAsk from '../components/home/PitchAsk.astro';
+// Hero was the email-capture "TV" section. Commented out, not deleted, in the
+// same pattern as the unbuilt sections below: this site is now a private,
+// password-gated demonstration of the plan for one funder, so it captures no
+// visitor emails at all — and the pitch page's hero carries no action by
+// design. Originally because a CTA there would have competed with the ask,
+// the page's one CTA; with the ask itself now out too (see the PitchAsk note
+// above this one), the hero's lack of a CTA just means the page currently
+// has none anywhere, not a deliberate one-CTA-only design.
+// PitchHero replaces it. The component file stays in the repo since parts of it
+// (the TV treatment, the signup form) may return inside the /demo subtree, where
+// an email field is the product being demonstrated rather than a real capture.
+// import Hero from '../components/home/Hero.astro';
+//
+// Everything below is unbuilt wireframe from the pre-pivot consumer site.
 // Commented out (not deleted) rather than left rendering: each one was
 // contributing real DOM/CSS weight to every homepage load (~700 elements
 // total across all nine sections) that the browser had to style and lay
@@ -53,11 +130,21 @@ const stars = [
 
 <BaseLayout
   title="New Earth Network"
-  description="A real-world community of conscious, awakened people gathering in person, in your city."
+  description="The complete human experience for awakened souls, online and offline — the plan, and a working demonstration of it."
 >
-  <Hero />
+  <PitchHero />
   <Offerings />
+  <PitchModel />
+  <PitchVibe />
   <!--
+    <PitchMoat />
+    <PitchDemoHandoff />
+  -->
+  <PitchPlan />
+  <PitchWho />
+  <!-- <PitchAsk /> -->
+  <!--
+    <Hero />
     <Manifesto />
     <UpcomingGatherings />
     <FindYourCity />

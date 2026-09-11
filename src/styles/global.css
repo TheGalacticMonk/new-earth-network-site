@@ -67,6 +67,11 @@
 html {
   color-scheme: dark;
   -webkit-text-size-adjust: 100%;
+  /* Nav links to in-page section anchors now (Navigation.astro), so this is
+     what makes those clicks glide instead of jump. The prefers-reduced-motion
+     block below already forces scroll-behavior: auto !important, so this
+     doesn't need its own reduced-motion guard. */
+  scroll-behavior: smooth;
 }
 
 body {

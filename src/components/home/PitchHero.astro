@@ -1,0 +1,91 @@
+---
+import Container from '../Container.astro';
+
+/*
+  Pitch page section 1 — the hero statement (docs/pitch-demo-sitemap.md §4.1).
+
+  Replaces the old email-capture "TV" hero (home/Hero.astro, commented out of
+  index.astro): this site no longer collects visitor emails, and the sitemap is
+  explicit that the hero carries no action at all — a CTA here competes with the
+  one real CTA on the page, the ask.
+
+  Two lines and nothing else. The environment does the rest: the nebula field and
+  star layer already render behind every page from global.css and index.astro, so
+  this section paints no background of its own.
+
+  COPY STATUS, and the two lines differ:
+
+  - The headline is the proposition as recorded in AGENTS.md ("the complete
+    human experience for awakened souls, online and offline"). Not invented
+    here; `copywriter` owns the final wording.
+  - The subordinate line is REAL, OWNER-APPROVED COPY — "The media is the
+    signal. The event is the destination." — the one line on this page exempt
+    from the lorem-ipsum rule. Do not rewrite it without going back to the
+    owner. It states the mechanic in the brief's own vocabulary —
+    Darkness → Signal → Connection — in one line: media points, the room is
+    where it ends up.
+
+  Nothing on this screen claims anything about how many people are already in
+  the network — the sitemap's named integrity risk for this section.
+*/
+---
+
+<section class="pitch-hero">
+  <Container>
+    <div class="statement">
+      <h1 class="headline">The complete human experience for awakened souls — online and offline.</h1>
+      <p class="mechanic">
+        The media is the <span class="signal">signal</span>. The event is the <span class="signal">destination</span>.
+      </p>
+    </div>
+  </Container>
+</section>
+
+<style>
+  .pitch-hero {
+    /* Full frame minus the masthead, so the first thing a funder sees is one
+       sentence in an otherwise empty sky. svh (not vh) because a mobile
+       browser's collapsing address bar changes vh mid-scroll, which would
+       resize this block after paint. No padding-block here: the statement is
+       already vertically centered inside the full-viewport min-height box, so
+       section padding on top of that would just add dead space beyond the
+       fold — doubled, since it stacks with Offerings' own top padding right
+       below — pushing the first offering card most of a second screen down
+       before a visitor sees it. The section's edge is the viewport's edge;
+       Offerings' own padding-block is what creates the gap after it. */
+    min-height: calc(100svh - var(--nav-height));
+    display: grid;
+    align-content: center;
+  }
+
+  .statement {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .headline {
+    font-size: var(--text-2xl);
+    /* Measure, not a magic width: the headline holds its own line length as the
+       fluid type scale grows, instead of running the full 1440px rail on desktop. */
+    max-width: 18ch;
+  }
+
+  .mechanic {
+    font-family: var(--font-display);
+    font-size: var(--text-md);
+    line-height: var(--leading-snug);
+    color: var(--color-text-muted);
+    /* Balanced, and given enough measure to hold both sentences: at a tighter cap
+       the line broke mid-clause instead of between the two sentences, which reads
+       as a typo in the one line that carries the mechanic. 46ch holds both
+       sentences and lets `balance` choose the sentence boundary as the break at
+       every width. */
+    max-width: 46ch;
+    text-wrap: balance;
+  }
+
+  .signal {
+    color: var(--color-electric-cyan);
+  }
+</style>

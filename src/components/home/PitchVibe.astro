@@ -1,0 +1,308 @@
+---
+import Section from '../Section.astro';
+import Container from '../Container.astro';
+import SectionHeader from '../SectionHeader.astro';
+
+/*
+  Pitch page section 3 — the vibe (docs/pitch-demo-sitemap.md §4.3, owner-required).
+
+  NO PHOTOGRAPHY OF PEOPLE — `creative-director` review fix 3, and the sitemap's
+  highest-rated integrity risk on the page. The obvious execution of "show the
+  vibe" is a grid of faces or a wall of gathering photography; both read as
+  evidence of a community that does not exist yet, and stock crowds read as it
+  twice over. So this section is built from type, colour, space and language
+  only: no <img>, no background photograph, no mood-board tiles of other
+  people's work. It is not a placeholder for imagery — it is the section.
+
+  The tonal position is stated once in the heading, and then the sharper half of
+  the job is the negation list: naming what New Earth Network is not does more
+  in three lines than three more adjectives. Those three lines come from the
+  sitemap itself, not from this file.
+
+  COPY STATUS (2026-09-10): the heading and lead paragraph are owner-supplied
+  copy — "Livelier. Funner. Realer." and the "what Gaia does well, and how we
+  differ" paragraph. The three cards below are the owner's own dictated
+  wording, verbatim, one Gaia-vs-New-Earth-Network comparison per product
+  line (Film, Music, Events). They replaced an earlier negation list ("Not a
+  wellness catalog," etc.) that sat awkwardly under a paragraph promising
+  "examples" of products — the owner chose not to bring that beat back
+  elsewhere on the page.
+
+  INTEGRITY: the Music card's claim that Gaia is "less likely to promote 432 Hz
+  Electronica or Rap affirmation music" speculates about a competitor's limits
+  — `copywriter` flagged this as reading insecure in a pitch (sitemap §4.3/§4.4).
+  The owner reviewed and kept it as a deliberate call, not an oversight. Every
+  New Earth Network clause across all three cards stays future tense: these are plans, not a
+  catalog that exists. The Events card links "Garden Party" to the event's
+  public Instagram profile; it does not claim an individual or partner.
+
+  ART DIRECTION (2026-09-10) — three cards, per the site owner. Copy above is
+  byte-for-byte what ships; only its presentation is designed below.
+
+  The card surface is the site's existing card language, not a new one:
+  --color-bg-elevated, --radius-md, --shadow-float — the same three values
+  EventCard, CityCard and CommunityProof already use. Cards float on shadow,
+  no outline (tokens.css, "Elevation"). The dashed --border-placeholder is
+  deliberately NOT used: that treatment means "scaffolding awaiting real
+  content," and this card carries final owner-approved copy.
+
+  THE CATEGORY IS A HEADING, NOT A CAPTION. Each card is one paragraph of the
+  owner's own prose, so the only structural decision left is what anchors it.
+  A 13px tracked-out cyan label — this page's treatment for repeated-item
+  metadata (PitchPlan's step numerals, PitchWho's roles) — would leave three
+  cards that are each a lone grey paragraph, in the one section on the page
+  whose entire argument is that New Earth Network is livelier than the
+  incumbent. Set as an <h3> instead, the three categories carry a horizontal
+  rhythm across the row, and the section stops contradicting its own headline.
+  It is also the correct document outline: these are three subheads under the
+  section's h2, not three labels.
+
+  What carries that rhythm changed when the owner renamed the categories from
+  Film / Music / Events to More Creativity / Less Corporate / Higher Vibes
+  (2026-09-10). It used to be size — three big single words. It is now the
+  parallel grammar: comparative + noun, three times, More / Less / Higher. That
+  only reads if the three sit on one line each and their paragraphs start
+  level, which is what the retuned .label sizing below protects and what the
+  old 32px setting broke. Size stopped being the mechanism, so size gave way.
+
+  SO THE CARDS SPEND NO CYAN. That is the one deliberate departure from the
+  page's other repeated-item labels, and it is a quantity argument, not a
+  taste one: three headings in the signal colour is a completely different
+  amount of light from three 13px marks, and it would leave this section with
+  four lit elements competing (the kicker plus three titles) where the rule is
+  that light is earned and one thing is loudest. The kicker keeps the cyan.
+  The cards are carried by the type scale and the elevated surface, which is
+  what those exist for. Flagged for `creative-director` explicitly — the
+  cumulative cyan budget across the whole pitch page is a page-level call, and
+  this section should not be the only one that quietly answers it.
+
+  CARDS ARE NOT LINK WRAPPERS. Garden Party is an inline source link, but the
+  card itself still has no destination. A hover lift or glow on the whole card
+  would promise an interaction it cannot complete. The inline link uses the
+  page's established underlined cyan treatment and the global focus-visible
+  state. Nothing in this section animates, so there is no reduced-motion branch.
+
+  Three-up at 960px, one column below. Not the 720px this page uses elsewhere
+  (PitchWho's roster): those cards carry one short line each, these carry a
+  full paragraph, and at 720px a third of the rail is ~170px of text. 960px is
+  where each card still holds a real measure (~368px of text at 1440px, about
+  50 characters a line — measured, not estimated). Below it, full-width
+  stacked cards; no 2-up step, which would orphan the third card.
+*/
+
+interface TextLink {
+  label: string;
+  href: string;
+}
+
+type TextPart = string | TextLink;
+
+// One shape for all three, matching the copy: a category and the owner's own
+// paragraph about it. Text parts allow a named source to remain a semantic link
+// without injecting HTML. The explicit type keeps incomplete cards from building.
+interface Example {
+  label: string;
+  text: TextPart[];
+}
+
+const examples: Example[] = [
+  {
+    label: 'More Creativity',
+    text: [
+      'Gaia focuses their film content on documentaries. While New Earth Network will also produce documentaries, we will differentiate by also producing movies to create worlds and tell stories that help viewers imagine, innerstand, and perceive the New Earth.',
+    ],
+  },
+  {
+    label: 'Less Corporate',
+    text: [
+      'While Gaia may promote meditation, sound bath, and singing bowl healing, they are less likely to promote 432 Hz Electronica or Rap affirmation music. New Earth Network will not be bound to such limitations.',
+    ],
+  },
+  {
+    label: 'Higher Vibes',
+    text: [
+      'Gaia produces events such as conferences with speaker panels. While New Earth Network will also produce such events, we will also throw 5D parties. A great example is the ',
+      {
+        label: 'Garden Party',
+        href: 'https://www.instagram.com/garden.party.la/',
+      },
+      '.',
+    ],
+  },
+];
+---
+
+<Section tone="deep" id="vibe">
+  <Container>
+    <SectionHeader kicker="The vibe" heading="Livelier. Funner. Realer." />
+
+    <p class="lead">
+      What Gaia does, it does well. And while New Earth Network will operate on a similar
+      model, we will differentiate ourselves significantly in energy, frequency, and vibe.
+      Below are some examples of how we can offer and distribute similar types of products
+      while creating a distinctly different experience.
+    </p>
+
+    <ul class="examples" role="list">
+      {
+        examples.map((example) => (
+          <li class="card">
+            <h3 class="label">{example.label}</h3>
+            <p class="text">
+              {example.text.map((part) =>
+                typeof part === 'string' ? (
+                  part
+                ) : (
+                  <a class="pitch-vibe-link" href={part.href} target="_blank" rel="noopener">
+                    {part.label}
+                  </a>
+                ),
+              )}
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+  </Container>
+</Section>
+
+<style>
+  .lead {
+    color: var(--color-text-body);
+    margin-bottom: var(--space-16);
+    max-width: 60ch;
+  }
+
+  .examples {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-6);
+    background: var(--color-bg-elevated);
+    border-radius: var(--radius-md);
+    /* Opaque fill + shadow, no outline: an object floating on the field should
+       occlude it (tokens.css, --color-bg-veil). --color-bg-elevated is 1.19x the
+       sky's median luminance, so the card reads as lifted rather than as a hole
+       punched in the nebula. */
+    box-shadow: var(--shadow-float);
+  }
+
+  /* The category is the card's anchor, not its metadata, so it is set as a
+     heading and not as a small tracked-out accent label. This is the section
+     arguing for more energy, so it should not be the quietest section on the
+     page.
+
+     RETUNED 2026-09-10 for the owner's new headings. These were single words
+     (Film / Music / Events) and the treatment was built on that: --text-lg,
+     inherited weight 500, three big words carrying a horizontal rhythm across
+     the row. Two-word claims are a different object and broke it two ways,
+     both measured in the browser rather than argued:
+
+     1. FIT. Three-up, the card's text column is 214px at the 960px breakpoint.
+        At --text-lg (30.4px there) "More Creativity" measures 217px and wrapped;
+        "Less Corporate" cleared by 1.8px. So the row's narrowest state was
+        already broken between 960-969px and was inside the noise floor
+        everywhere below ~1100px — one card's paragraph starting a line lower
+        than its neighbours', which is the misalignment tell. It also broke
+        outright for anyone browsing at a larger default font size, since the
+        rem half of the clamp scales while the card's vw-derived width does not.
+        Single words had ~100px of slack and never exposed this.
+     2. VOICE. Six words at 32px across the row out-massed the section's own h2
+        (--text-xl). Something has to be loudest and it is the headline.
+
+     So the heading is sized to the CARD, not to the viewport: --text-lg while
+     the cards are stacked full-width (nothing about the new copy is under
+     pressure there — 205px of ink in a 658px column at 768px), stepping down
+     one rung to --text-md in the three-up rule below, where the column is
+     narrow. Same place the padding already steps; no new breakpoint, no new
+     token.
+
+     Weight goes up to 600 as the size comes down — the site's h1/h2 weight,
+     restoring the 500 that the global h3 rule steps down to. A claim wants to
+     be dense rather than large, and it pays back at 320px, where --text-md's
+     floor (20px) sits close to the 17px body and needs the weight to still
+     read as a title. `balance` rather than the paragraph's `pretty` because
+     these are two-word lines: if one ever does wrap it should split evenly
+     rather than drop "Creativity" alone onto a second line under "More".
+
+     One accepted degradation, measured, not assumed: at a 20px browser default
+     font size the three-up row still wraps between 960px and ~1010px, because
+     the type scales with rem while the column is derived from vw. It clears by
+     1024px. That is reflow behaving correctly — nothing clips or overlaps, the
+     wrap is even, and the only cost is that the paragraphs stop starting level
+     for that band. Closing it entirely would mean either subgrid-linking the
+     heading row across the three cards (which forces the inter-card gap and
+     the label's own bottom margin to become the same value) or pushing the
+     three-up breakpoint to 1024px and giving up a working three-up layout for
+     everyone at 960-1023px. Neither is worth it; the old 32px setting wrapped
+     here at every default font size, so this is the strictly better failure.
+
+     Deliberately still NOT cyan, and the new copy strengthens that rather than
+     reopening it: these read as claims now, and three lit claims plus the
+     kicker is four competing lights where the rule is that one thing is
+     loudest. The kicker keeps the cyan; the cards use the type system.
+     Inherits face, tracking and --color-text-primary from the global h1-h4
+     rule. Contrast: #f7f4ff on #422a58 = 11.35:1, unchanged — nothing here
+     touches colour. */
+  .label {
+    font-size: var(--text-lg);
+    font-weight: var(--font-weight-semibold);
+    text-wrap: balance;
+    /* One rung more than the old --space-4. At --text-lg a 16px gap read as
+       the heading sitting on its paragraph; now that the claim and the body
+       are closer in size, the space is what separates claim from evidence. */
+    margin-bottom: var(--space-6);
+  }
+
+  /* The paragraph keeps the page's default body size rather than stepping down
+     into caption territory: it is the card's whole substance, and it is the
+     same voice as the lead paragraph above the row, so it should read at the
+     same size. Only the colour is set — everything else is inherited.
+     Contrast: #ded9ef on #422a58 = 8.97:1. */
+  .text {
+    color: var(--color-text-body);
+    text-wrap: pretty;
+    /* Same measure as .lead above the row, so the section reads at one line
+       length throughout. It only binds while the cards are stacked and full
+       width — at 768px an uncapped card runs ~70 characters a line, past a
+       comfortable measure. Three-up, the card is already narrower than 60ch,
+       so this does nothing there and costs no breakpoint to say so. */
+    max-width: 60ch;
+  }
+
+  /* This link is rendered from a typed text-part inside an array map. Keep its
+     uniquely named visual rule global so Astro's dev HMR cannot temporarily
+     strand the anchor with a stale scope attribute when replacing this
+     component's CSS; the global anchor reset would otherwise remove the only
+     persistent inline-link treatment after the initial browser paint. */
+  :global(.pitch-vibe-link) {
+    color: var(--color-electric-cyan);
+    text-decoration: underline;
+    text-decoration-color: currentColor;
+  }
+
+  @media (min-width: 960px) {
+    .examples {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* Padding steps up with the card, not independently of it — same 4px grid,
+       one rung. */
+    .card {
+      padding: var(--space-8);
+    }
+
+    /* ...and the heading steps DOWN one rung as the column narrows, for the
+       fit and voice reasons in .label above. At 24px the longest claim is
+       171px in a 214px column — 20% slack at the tightest point of the whole
+       range, against 1.8px before — so all three sit on one line and the three
+       paragraphs start on the same baseline across the row. */
+    .label {
+      font-size: var(--text-md);
+    }
+  }
+</style>

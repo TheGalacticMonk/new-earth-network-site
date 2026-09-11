@@ -3,10 +3,16 @@ import Container from '../Container.astro';
 import OfferingCard from '../OfferingCard.astro';
 
 /*
-  Same left-to-right order as the nav (Navigation.astro's `links`) — Events,
-  Series, Docs & Films, Music, Courses, Shop. Card copy is just each name for
-  now, plus a reserved (currently unfilled) `description` slot per card — see
-  OfferingCard.astro's header comment. The neon palette is still the next pass.
+  Six cards: Events, Series, Docs & Films, Music, Courses, Shop. Card copy is
+  just each name for now, plus a reserved (currently unfilled) `description`
+  slot per card — see OfferingCard.astro's header comment. The neon palette is
+  still the next pass.
+
+  NO LONGER "same order as the nav" (2026-09-11) — Navigation.astro's `links`
+  now anchors this page's own sections (Offerings/Model/Vibe/Plan/Roster)
+  instead of linking these six catalog names as separate routes, so the two
+  lists aren't the same thing any more. This grid itself is unchanged, Shop
+  included — only the nav copy moved.
 */
 const cards = [
   {
@@ -17,23 +23,23 @@ const cards = [
   {
     icon: '/series.svg',
     label: 'SERIES',
-    description: 'An ongoing collection of the most truth-seeking content from your favorite New Earth celebrities',
+    description: 'An ongoing collection of the most truth-seeking shows from your favorite New Earth celebrities',
   },
   {
     icon: '/docsfilms.svg',
     label: 'DOCS &',
     labelBottom: 'FILMS',
-    description: "Cinematic non-fiction and fiction titles that tell stories that Hollywood won't",
+    description: "Cinematic non-fiction and fiction titles that tell stories that help viewers imagine, innerstand, and build the New Earth.",
   },
   {
     icon: '/music.svg',
     label: 'MUSIC',
-    description: 'Albums of all genres and sound healing frequencies that elevate your mind, body, & soul',
+    description: 'Albums of all genres and sound healing frequencies that elevate the mind, body, and soul.',
   },
   {
     icon: '/courses.svg',
     label: 'COURSES',
-    description: 'Online & in-person classes that teach wisdom & gifts that traditional schools hide and censor',
+    description: 'Online & in-person classes that teach wisdom & gifts that traditional schools neglect.',
   },
   {
     icon: '/shop.svg',
@@ -43,8 +49,9 @@ const cards = [
 ];
 ---
 
-<section class="offerings">
+<section class="offerings" id="offerings">
   <Container>
+    <p class="kicker">Offerings</p>
     <div class="grid">
       {cards.map((card) => (
         <OfferingCard
@@ -61,6 +68,21 @@ const cards = [
 <style>
   .offerings {
     padding-block: var(--space-section);
+    /* Same reasoning as Section.astro's own scroll-margin-top: the nav is
+       position: sticky and now links straight to #offerings. */
+    scroll-margin-top: var(--nav-height);
+  }
+
+  /* Same treatment as SectionHeader's kicker (PitchModel's "The model", etc.) —
+     this section has no heading of its own, just the label, so the class is
+     duplicated here rather than pulling in SectionHeader for a kicker alone. */
+  .kicker {
+    font-family: var(--font-accent);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-widest);
+    text-transform: uppercase;
+    color: var(--color-electric-cyan);
+    margin-bottom: var(--space-6);
   }
 
   .grid {

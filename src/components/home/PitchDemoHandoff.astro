@@ -1,0 +1,53 @@
+---
+import Section from '../Section.astro';
+import Container from '../Container.astro';
+import SectionHeader from '../SectionHeader.astro';
+import Button from '../Button.astro';
+
+/*
+  Pitch page section 6 — see it working (docs/pitch-demo-sitemap.md §4.6).
+
+  The hand-off: the one thing this build can do that a deck cannot. One framing
+  sentence, one entry point, no menu of deep links — a choice of four doors turns
+  a ninety-second walkthrough into a decision nobody makes.
+
+  The link is a plain anchor, same tab: a new tab breaks the back path and
+  orphans the ask, which is the section this walk has to return to.
+
+  DESTINATION IS A STAND-IN. The real target is /demo, the product walkthrough
+  subtree, which is a separate build and does not exist yet. Rather than ship a
+  dead link at the one lateral action on the page, it points at /events — the
+  closest thing currently in the repo to "a room you can actually open." Change
+  this href to "/demo" when that subtree lands; nothing else in this file needs
+  to move.
+
+  The id is load-bearing: the demo bar the sitemap specifies returns to
+  /#see-it-working so the scroll resumes here rather than at the top of the page.
+
+  COPY STATUS: the framing sentence is a plain statement of fact about what the
+  demo is — the honesty this section exists to carry, not an invented claim —
+  pending `copywriter`'s pass. The heading is the brief's own section name.
+*/
+---
+
+<Section id="see-it-working">
+  <Container>
+    <SectionHeader kicker="The proof" heading="See it working." />
+
+    <p class="framing">
+      This is a working demonstration, not a screenshot. The gatherings and cities in it are
+      examples, and nothing you tap signs you up for anything.
+    </p>
+
+    <Button href="/events" variant="primary" size="lg">Enter the demo</Button>
+  </Container>
+</Section>
+
+<style>
+  .framing {
+    color: var(--color-text-body);
+    font-size: var(--text-md);
+    max-width: 46ch;
+    margin-bottom: var(--space-12);
+  }
+</style>

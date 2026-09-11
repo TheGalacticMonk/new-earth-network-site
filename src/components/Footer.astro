@@ -5,13 +5,17 @@ import Logo from './Logo.astro';
 // Kept identical to Navigation.astro's own `links` array on purpose — the
 // site owner asked for the footer's Explore column to match the top nav
 // exactly, so this isn't independently maintained IA, it's a mirror of it.
+// Updated alongside Navigation.astro's move to in-page section anchors
+// (2026-09-11): the old catalog routes these used to point at (series.astro,
+// docs-films.astro, music.astro, courses.astro, shop.astro) are deleted, not
+// just unlinked — keeping this list in sync with the nav is what makes that
+// safe.
 const explore = [
-  { label: 'Events', href: '/events' },
-  { label: 'Series', href: '/series' },
-  { label: 'Docs & Films', href: '/docs-films' },
-  { label: 'Music', href: '/music' },
-  { label: 'Courses', href: '/courses' },
-  { label: 'Shop', href: '/shop' },
+  { label: 'Offerings', href: '/#offerings' },
+  { label: 'Model', href: '/#model' },
+  { label: 'Vibe', href: '/#vibe' },
+  { label: 'Plan', href: '/#plan' },
+  { label: 'Roster', href: '/#roster' },
 ];
 
 const more = [

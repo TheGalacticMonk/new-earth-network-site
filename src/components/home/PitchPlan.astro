@@ -1,0 +1,186 @@
+---
+import Section from '../Section.astro';
+import Container from '../Container.astro';
+import SectionHeader from '../SectionHeader.astro';
+
+/*
+  Pitch page section 8 — the five-step plan (docs/pitch-demo-sitemap.md §4.9,
+  owner-required).
+
+  Steps 1–3 retain `ux-designer`'s proposed names; the owner has since confirmed
+  the production descriptions for all five steps and renamed steps 4–5. The
+  remaining specifics (timing and per-step capital) are still open questions.
+
+  DATA GAP (owner): the step-1 slate, the step-2 city, honest current status per
+  step, and per-step capital if this is to be tied to the ask.
+
+  CURRENT STEP: the owner confirmed we are at step 1. Mark it explicitly,
+  without implying completion or assigning dates to later steps.
+
+  Each step carries its production field as a <dl> so the plan stays focused on
+  what each phase creates.
+*/
+
+const steps = [
+  {
+    n: '01',
+    name: 'Assemble the Parts',
+    current: true,
+    produces:
+      'Reach out and gather a roster of at least 15 on-camera influencers who would be interested in working for New Earth Network if it were a paying job. We would hire dedicated production crews for each series. Content would be professionally recorded.',
+  },
+  {
+    n: '02',
+    name: 'Find CEO Prospects',
+    produces:
+      "Use the roster of influencers as a package to help CEO's see the bigger picture. CEO prospects should already have proven experience leading multi-million dollar projects and have a track record demonstrating their capability to secure funding.",
+  },
+  {
+    n: '03',
+    name: 'Vote for the lead CEO',
+    produces:
+      'The roster of influencers vote on who they each feel is most capable of starting-up New Earth Network as the lead CEO.',
+  },
+  {
+    n: '04',
+    name: 'CEO begins pitching',
+    produces:
+      'The funding goal to start-up New Earth Network is determined and the chosen CEO begins pitching.',
+  },
+  {
+    n: '05',
+    name: 'Funding secured',
+    produces:
+      'Only if and when funding is secured does further development and work begin. New Earth Network does not launch unless all 5 steps of this plan are successfully completed.',
+  },
+];
+---
+
+<Section tone="deep" id="plan">
+  <Container>
+    <SectionHeader kicker="The plan" heading="Five steps to launch sequence." />
+
+    <ol class="steps" role="list">
+      {steps.map((step) => (
+        <li class="step" aria-current={step.current ? 'step' : undefined}>
+          <p class="step-n">{step.n}</p>
+          <div class="step-body">
+            <div class="step-heading">
+              <h3 class="step-name">{step.name}</h3>
+              {step.current && <p class="current-label">We're here</p>}
+            </div>
+            <dl class="fields">
+              <dt>Phase {step.n}</dt>
+              <dd>{step.produces}</dd>
+            </dl>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </Container>
+</Section>
+
+<style>
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+  }
+
+  .step {
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--plan-node-size) minmax(0, 1fr);
+    gap: var(--space-4);
+  }
+
+  /* Four connectors stop short of the next node; none extends past step 05. */
+  .step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    inset-inline-start: calc((var(--plan-node-size) - var(--diagram-line-weight)) / 2);
+    top: calc(var(--plan-node-size) + var(--space-2));
+    bottom: calc(-1 * var(--space-12) + var(--space-2));
+    width: var(--diagram-line-weight);
+    background: var(--plan-line-color);
+    pointer-events: none;
+  }
+
+  .step-n {
+    display: grid;
+    place-items: center;
+    width: var(--plan-node-size);
+    height: var(--plan-node-size);
+    border: var(--diagram-line-weight) solid var(--plan-line-color);
+    border-radius: var(--radius-full);
+    font-family: var(--font-accent);
+    font-size: var(--text-sm);
+    letter-spacing: var(--tracking-widest);
+    color: var(--color-electric-cyan);
+  }
+
+  .step-body {
+    min-width: 0;
+    padding-top: var(--space-2);
+  }
+
+  .step[aria-current='step'] .step-n {
+    background: var(--color-electric-cyan);
+    border-color: var(--color-electric-cyan);
+    color: var(--color-bg-deep);
+  }
+
+  .step-heading {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+
+  .current-label {
+    font-family: var(--font-accent);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-electric-cyan);
+    white-space: nowrap;
+  }
+
+  .step-name {
+    font-size: var(--text-lg);
+  }
+
+  .fields {
+    display: grid;
+    gap: var(--space-2);
+    max-width: 60ch;
+  }
+
+  .fields dt {
+    font-family: var(--font-accent);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-widest);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .fields dd {
+    margin-inline-start: 0;
+    color: var(--color-text-body);
+    font-size: var(--text-sm);
+  }
+
+  @media (min-width: 720px) {
+    .steps {
+      --plan-node-size: var(--plan-node-size-wide);
+    }
+
+    .step {
+      gap: var(--space-8);
+    }
+
+    .step-body {
+      padding-top: var(--space-4);
+    }
+  }
+</style>

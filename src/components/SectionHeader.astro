@@ -4,12 +4,19 @@ interface Props {
   heading: string;
   level?: 'h2' | 'h3';
   align?: 'left' | 'center';
+  spacing?: 'default' | 'compact';
 }
 
-const { kicker, heading, level: Tag = 'h2', align = 'left' } = Astro.props;
+const {
+  kicker,
+  heading,
+  level: Tag = 'h2',
+  align = 'left',
+  spacing = 'default',
+} = Astro.props;
 ---
 
-<div class="section-header" data-align={align}>
+<div class="section-header" data-align={align} data-spacing={spacing}>
   {kicker && <p class="kicker">{kicker}</p>}
   <Tag class="heading">{heading}</Tag>
   {Astro.slots.has('default') && (
@@ -32,6 +39,10 @@ const { kicker, heading, level: Tag = 'h2', align = 'left' } = Astro.props;
     margin-inline: auto;
     align-items: center;
     text-align: center;
+  }
+
+  .section-header[data-spacing='compact'] {
+    margin-bottom: var(--space-8);
   }
 
   .kicker {

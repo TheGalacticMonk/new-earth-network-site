@@ -4,16 +4,21 @@ import Logo from './Logo.astro';
 import HeartSignalButton from './HeartSignalButton.astro';
 import MobileNavigation from './MobileNavigation.astro';
 
+// In-page anchors, not routes: the site is a single-page pitch demo now (see
+// CLAUDE.md's "New direction"), so nav links its own sections directly
+// instead of the pre-pivot catalog subpages (Events/Series/Docs & Films/
+// Music/Courses/Shop — see index.astro's own history of what's still built).
+// Order matches index.astro's render order. Each target id lives on that
+// section's own <Section id="…"> (or, for Offerings, its <section> directly)
+// — see Section.astro's scroll-margin-top for why a plain #id anchor is
+// enough despite the sticky nav.
 const links = [
-  { label: 'Events', href: '/events' },
-  { label: 'Series', href: '/series' },
-  { label: 'Docs & Films', href: '/docs-films' },
-  { label: 'Music', href: '/music' },
-  { label: 'Courses', href: '/courses' },
-  { label: 'Shop', href: '/shop' },
+  { label: 'Offerings', href: '/#offerings' },
+  { label: 'Model', href: '/#model' },
+  { label: 'Vibe', href: '/#vibe' },
+  { label: 'Plan', href: '/#plan' },
+  { label: 'Roster', href: '/#roster' },
 ];
-
-const currentPath = Astro.url.pathname;
 ---
 
 <header class="nav">
@@ -32,7 +37,7 @@ const currentPath = Astro.url.pathname;
         <ul role="list">
           {links.map((link) => (
             <li>
-              <a href={link.href} aria-current={currentPath === link.href ? 'page' : undefined}>
+              <a href={link.href}>
                 {link.label}
               </a>
             </li>
@@ -42,7 +47,7 @@ const currentPath = Astro.url.pathname;
 
       <div class="nav-actions">
         <div class="desktop-cta">
-          <HeartSignalButton href="/#subscribe">Subscribe</HeartSignalButton>
+          <HeartSignalButton href="/influencer-application">Influencer Application</HeartSignalButton>
         </div>
         <button
           id="nav-toggle"
@@ -72,7 +77,7 @@ const currentPath = Astro.url.pathname;
   this has moved to .nav::before, but the clipping reason stands on its own, so
   the panel stays out here.
 -->
-<MobileNavigation links={links} primaryLabel="Subscribe" primaryHref="/#subscribe" />
+<MobileNavigation links={links} primaryLabel="Influencer Application" primaryHref="/influencer-application" />
 
 <script>
   const toggle = document.getElementById('nav-toggle');

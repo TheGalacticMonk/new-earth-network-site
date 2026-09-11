@@ -1,0 +1,186 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Container from '../components/Container.astro';
+import Section from '../components/Section.astro';
+
+// Destination for PitchWho.astro's "Influencer Application" CTA (roster
+// section, docs/pitch-demo-sitemap.md §4.7) — that button linked to /#subscribe
+// as a placeholder until this page existed.
+//
+// Submits to Formspree (owner-created endpoint, 2026-09-11). Plain `fetch`,
+// not @formspree/ajax — the site takes no third-party JS dependency anywhere
+// else and stays under a 15KB JS budget (CLAUDE.md), and a two-field POST +
+// JSON response doesn't need a library. The <form>'s own action/method are
+// the real Formspree endpoint too, so submission still works with JS off
+// (Formspree's own hosted redirect) — same "must work with no JS" discipline
+// the rest of the site holds to.
+---
+
+<BaseLayout
+  title="Influencer Application"
+  description="Apply to join the New Earth Network influencer roster."
+>
+  <Section>
+    <Container narrow>
+      <h1>Apply to the roster</h1>
+      <p class="lead">
+        We're building a Yin and Yang balance of influencers with unique personas, voices, and
+        messages. Tell us about what you make.
+      </p>
+
+      <form
+        id="application-form"
+        class="form"
+        action="https://formspree.io/f/meaqdnar"
+        method="POST"
+      >
+        <input type="hidden" name="_subject" value="New influencer application" />
+        <div class="field">
+          <label for="name">Name</label>
+          <input id="name" name="name" type="text" required autocomplete="name" />
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" required autocomplete="email" />
+        </div>
+        <div class="field">
+          <label for="link">Link to your platform</label>
+          <input
+            id="link"
+            name="link"
+            type="url"
+            required
+            placeholder="Your site, YouTube, Instagram, podcast — wherever you make things"
+          />
+        </div>
+        <div class="field">
+          <label for="message">Tell us about what you create</label>
+          <textarea
+            id="message"
+            name="message"
+            rows="5"
+            required
+            placeholder="What you make, your voice, and why the roster is a fit"
+          ></textarea>
+        </div>
+        <button type="submit">Submit application</button>
+      </form>
+      <p id="application-status" class="status" role="status" aria-live="polite"></p>
+
+      <p class="note">
+        Applying doesn't guarantee a spot on the Influencer Roster. We review every application
+        as we fulfill the roster and reach out if it's a fit.
+      </p>
+    </Container>
+  </Section>
+</BaseLayout>
+
+<script>
+  const form = document.getElementById('application-form') as HTMLFormElement | null;
+  const status = document.getElementById('application-status');
+  const submitButton = form?.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!status || !submitButton) return;
+
+    submitButton.disabled = true;
+    submitButton.textContent = 'Sending…';
+    status.textContent = '';
+    status.classList.remove('status-success');
+
+    try {
+      const response = await fetch(form.action, {
+        method: form.method,
+        body: new FormData(form),
+        headers: { Accept: 'application/json' },
+      });
+
+      if (response.ok) {
+        status.textContent = "Application received. We'll be in touch if it's a fit.";
+        status.classList.add('status-success');
+        form.reset();
+      } else {
+        status.textContent = "Something went wrong sending that — please try again, or email us directly.";
+      }
+    } catch {
+      status.textContent = "Something went wrong sending that — please try again, or email us directly.";
+    } finally {
+      submitButton.disabled = false;
+      submitButton.textContent = 'Submit application';
+    }
+  });
+</script>
+
+<style>
+  h1 {
+    font-size: var(--text-2xl);
+  }
+
+  .lead {
+    margin-top: var(--space-8);
+    color: var(--color-text-body);
+  }
+
+  .form {
+    margin-top: var(--space-12);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  label {
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  input,
+  textarea {
+    padding: var(--space-4);
+    background: var(--color-bg-elevated);
+    border-radius: var(--radius-sm);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+    resize: vertical;
+  }
+
+  button {
+    align-self: flex-start;
+    padding: var(--space-4) var(--space-8);
+    font-family: var(--font-accent);
+    font-size: var(--text-sm);
+    letter-spacing: var(--tracking-widest);
+    text-transform: uppercase;
+    color: var(--color-bg-deep);
+    background: var(--color-electric-cyan);
+    border-radius: var(--radius-full);
+    transition: box-shadow var(--duration-base) var(--ease-out);
+  }
+
+  button:hover {
+    box-shadow: var(--shadow-glow-md);
+  }
+
+  .status {
+    margin-top: var(--space-4);
+    color: var(--color-electric-cyan);
+  }
+
+  .status-success {
+    color: var(--color-success);
+  }
+
+  .note {
+    margin-top: var(--space-8);
+    max-width: 60ch;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+</style>

@@ -1,0 +1,486 @@
+---
+import { Image } from 'astro:assets';
+import Section from '../Section.astro';
+import Container from '../Container.astro';
+import SectionHeader from '../SectionHeader.astro';
+import HeartSignalButton from '../HeartSignalButton.astro';
+import galacticMonkPhoto from '../../assets/roster-galactic-monk.jpg';
+import sarahStarrPhoto from '../../assets/roster-sarah-starr.jpg';
+
+/*
+  Pitch page section 7 — who (docs/pitch-demo-sitemap.md §4.7 + §4.8, merged).
+
+  FOUNDERS CARD, AND THE "THE ROSTER" REGISTER HEADING/INTRO, REMOVED
+  (2026-09-10, owner request). The section originally merged two labelled
+  registers per `creative-director` REVIEW FIX 5 — founders full width, roster
+  beneath, each under its own <h3> — because two adjacent people-sections with
+  no confirmed names in either read as padding. With founders gone, a lone
+  "The roster" label was redundant next to the section's own "Current roster"
+  kicker, so the owner had that removed too, along with its lorem-ipsum intro
+  paragraph. The individual roster placeholder cards below are unchanged — the
+  owner was explicit those stay. If founders come back, re-read that review fix
+  before re-adding a second labelled register.
+
+  REVIEW FIX 4 — NO "CONVERSATIONS IN PROGRESS" VAPOR. Originally: no invented
+  names, no bios, no portraits, no follower or audience figures (banned even
+  when real), no "in conversation with" implying a commitment that does not
+  exist — each card was a role in the network's own language, a dashed
+  placeholder frame, and Latin where the words would go. Cards 1 and 2 now
+  carry real, consent-confirmed names/roles/links (below), which this fix
+  never banned — it banned invention, not disclosure once consent exists.
+
+  PORTRAIT BAN OVERRIDDEN FOR CARDS 1 AND 2 (2026-09-10, owner request,
+  flagged before applying each time). The "no portraits, banned even when
+  real" line above was read back to the owner explicitly for each photo
+  before it went in; they confirmed both are genuine, rights-cleared photos
+  of the real people, used with consent, and asked for the ban lifted
+  card-by-card. Don't assume this override is a standing policy for future
+  roster additions — get the same confirmation per photo, per person. Card
+  1's photo was swapped once already (galacticmonk.com headshot →
+  "monk-beach.jpg"); card 2's photo was swapped once too, after a portrait-
+  shaped first attempt produced a bad crop (see COPY STATUS) — the
+  ban-override confirmation applies to whichever image is currently wired in,
+  not to a specific file; re-confirm again if either changes again. Re-review
+  with `creative-director`: this section now has one
+  placeholder card and two named-linked-and-photographed cards, which the
+  dashed --border-placeholder frame (still applied to all three, see .card
+  below) no longer honestly describes for cards 1 and 2.
+
+  BIO LINE AND "ROOM THEY LEAD" REMOVED (2026-09-10, owner request). Every
+  card used to carry a lorem-ipsum bio sentence and a labelled "room they
+  lead" line. Removed entirely, not just for the two named cards — the owner
+  didn't want lorem ipsum sitting next to real names, and cutting it only for
+  cards 1–2 would have left the placeholder card in a different shape from the
+  rest.
+
+  PLACEHOLDER CARD SIMPLIFIED TO "SLOT PENDING" (2026-09-10, owner request).
+  The third card no longer uses the "Placeholder" tag + "Name" + role
+  scaffold — it's a named person or it just says "Slot pending," nothing
+  else. `RosterEntry.role` is optional now for this reason; a card branches
+  entirely on whether `name` is set (see the template below), so a named
+  card is: photo (if any), name, role, website icon-link (if any); an
+  unnamed one is an avatar and the one line of text.
+
+  AVATAR ADDED FOR THE PENDING SLOT (2026-09-10, owner request), so the
+  unfilled card keeps the same circle-then-text shape as the two filled ones
+  instead of leaving a gap where a photo would be. Iterated same-day: a "?"
+  glyph → public/anon.svg (a generic person-with-"?" glyph reads more like an
+  avatar placeholder than a bare question mark), and the circle fill went
+  from neutral --color-bg-elevated → --color-electric-pink → OfferingCard's
+  card gradient, copied verbatim to visually match the offering cards. Full
+  reasoning for the current state is on `.pending-avatar` in the styles
+  below, including why that gradient is copied rather than tokenized.
+
+  HEADING (2026-09-11, owner-confirmed): "Influencer talent list to be updated as
+  prospects verify interest." Reads close to the "conversations in
+  progress" pattern this fix bans, so it was flagged and the owner confirmed
+  before it went in: there are real, current prospects being asked to verify
+  interest, not an invented pipeline. If that stops being true, this heading
+  needs to change with it.
+
+  ROSTER GROWN TO FIVE CARDS (2026-09-10, owner request) — two more "Slot
+  pending" cards added alongside the original one, so the row now holds two
+  named people and three pending slots. Doesn't change or resolve the DATA
+  GAP or the "no invented roster" standard below: three unnamed cards are
+  exactly as honest as one was, just a wider row. See the FIVE-CARD ROW
+  comment in the styles below for how the grid was reworked to fit them.
+
+  Two additional five-card rows of pending slots added at the owner's request,
+  then a fourth row (2026-09-11, same request pattern). The roster now
+  contains two named people and eighteen pending slots.
+
+  DATA GAP (owner) — BLOCKING for the pending cards: name, what
+  they make or lead, naming consent, and whether a cleared portrait exists,
+  per person. Cards 1 (Galactic Monk, Wayshower/Alchemist/Producer) and 2
+  (Sarah Starr, Galactic Guide, Space Weather, & Astrology) have confirmed
+  names, roles, naming consent, and a personal-site link and cleared portrait
+  each.
+
+  COPY STATUS: cards 1 and 2's names, roles, links, and photos are real,
+  owner-supplied and consent-confirmed (2026-09-10) — src/assets/roster-
+  galactic-monk.jpg and src/assets/roster-sarah-starr.jpg. The
+  remaining cards' "Slot pending" text is the field left to fill on each,
+  left visible on purpose so a reviewer can see exactly what is missing
+  rather than what is asserted.
+
+  DOMAIN TEXT REPLACED WITH A WEBSITE ICON-LINK (2026-09-10, owner request).
+  Cards 1 and 2 used to spell out the URL as visible link text; that's gone,
+  replaced by public/website.svg as an icon-only link (`.card-link` /
+  `.card-link-icon` below), same CSS-mask technique as the pending avatar and
+  OfferingCard.astro's icons. The link's accessible name comes from
+  `aria-label="{name}'s website"` on the `<a>`, not from visible text — check
+  that stays true if this ever changes to more than two people having a URL,
+  a `<span class="sr-only">` fallback is the usual pattern if `aria-label`
+  ever feels insufficient (e.g. if the icon needs a visible tooltip too).
+
+  "INTERESTED" BADGE ADDED TO CARDS 1 AND 2 (2026-09-10, owner request) —
+  public/check.svg plus the word, in a pill on the avatar's corner (same
+  pattern as CityCard.astro's "Launching" badge). `RosterEntry.interested` is
+  a boolean set per-person rather than inferred from having a photo, so it
+  stays a deliberate owner claim, not a side effect of some other field being
+  filled in. This is a status about the two confirmed people, not a new
+  roster-size claim — doesn't touch the DATA GAP or REVIEW FIX 4 above.
+
+  SARAH STARR'S PHOTO WAS REPLACED (2026-09-10). The first version was a
+  704x920 portrait-shaped photo; fit into a square thumbnail, it left too
+  much shoulder/chest below the chin, and a same-day attempt to fix that by
+  biasing the crop (Astro Image `position` prop, then a manually pre-cropped
+  source file) still read as off-center once masked into a circle, because a
+  non-square source has no horizontal crop slack for Sharp to redistribute —
+  full width always shows, so an asymmetric hairstyle reads as "leaning" no
+  matter what position keyword is used. Replaced with
+  "assets/sarah-starr-profile.jpg" (owner-supplied), which is natively square
+  (1080x1080) — a square source needs no crop position at all, which is why
+  card 1's photo (also natively square) never had this problem. If a future
+  roster photo isn't square, crop it to square before import rather than
+  reaching for Astro's `fit`/`position` props — this section already tried
+  that path and it doesn't reliably work for this circular-avatar case.
+
+  GOAL STATEMENT ADDED (2026-09-10, owner request). Sits between the section
+  heading and the roster grid: "A Yin and Yang balance of at least 20 influencers
+  with unique personas, voices, and messages." This is a target, not a
+  headcount — phrased and placed to read as one (a labelled "Goal", separate
+  from the roster list below it, not a fourth roster entry), consistent with
+  REVIEW FIX 4's "no invented roster" rule: stating an intended future size is
+  not the same as claiming 20 people exist or are in conversation. Reuses
+  `.card`'s dashed placeholder border, which fits here too — a goal not yet
+  met is exactly the "scaffolding, not finished" meaning that border exists
+  to carry.
+
+  APPLY CTA ADDED AFTER THE ROSTER GRID (2026-09-11, owner request). Roster is
+  the last section on the page (index.astro), so this is the page's actual
+  closing beat — see the render-order comment there on why that gap-as-ask
+  framing is deliberate. `.cta-card` deliberately does NOT reuse `.card`'s
+  dashed --border-placeholder: that border means "scaffolding, not finished"
+  (tokens.css), and this card — real text, a real working button — is
+  finished content, not an unfilled slot. Styled instead with the site's
+  ordinary finished-surface pattern (--color-bg-elevated / --radius-md /
+  --shadow-float, "cards float on shadow, not outline") that EventCard,
+  CityCard, CommunityProof, and PitchVibe's own cards already use. Button is
+  the exact same HeartSignalButton and label as the nav's primary CTA
+  (Navigation.astro), one control reused rather than a second thing
+  pretending to be the first — but its own target, not the nav's
+  /#subscribe: it points at /influencer-application (2026-09-11), the real
+  page that placeholder was standing in for until it existed.
+*/
+
+interface RosterEntry {
+  name?: string;
+  role?: string;
+  url?: string;
+  photo?: ImageMetadata;
+  interested?: boolean;
+}
+
+// First two entries are confirmed real people (owner-supplied, 2026-09-10),
+// each confirmed by the owner as having agreed to be named publicly in this
+// funding-pitch context (the DATA GAP consent requirement below) — name,
+// role, and a link to their own site. The rest stay role-only placeholders:
+// the network's own language for what a person does, with no person
+// attached. An invented name here would be the fabrication the whole section
+// exists to avoid.
+const roster: RosterEntry[] = [
+  {
+    name: 'Galactic Monk',
+    role: 'Wayshower, Alchemist, & Producer',
+    url: 'https://galacticmonk.com',
+    photo: galacticMonkPhoto,
+    interested: true,
+  },
+  {
+    name: 'Sarah Starr',
+    role: 'Galactic Guide, Space Weather, & Astrology',
+    url: 'https://sarahstarrofficial.com',
+    photo: sarahStarrPhoto,
+    interested: true,
+  },
+  ...Array.from({ length: 18 }, (): RosterEntry => ({})),
+];
+---
+
+<Section id="roster">
+  <Container>
+    <SectionHeader
+      kicker="Current roster"
+      heading="Influencer talent list to be updated as prospects verify interest."
+      spacing="compact"
+    />
+
+    <div class="card goal">
+      <p class="goal-label">Goal</p>
+      <p class="goal-text">Reach out and gather a roster of at least 20 on-camera influencers with unique personas, voices, and messages.</p>
+    </div>
+
+    <ul class="roster" role="list">
+      {roster.map((person) => (
+        <li class="card">
+          {person.name ? (
+            <>
+              {person.photo && (
+                <Image class="card-photo" src={person.photo} alt={person.name} width={160} height={160} loading="lazy" />
+              )}
+              {person.interested && (
+                <span class="interest-badge">
+                  <span class="interest-icon" aria-hidden="true"></span>
+                  Interested
+                </span>
+              )}
+              <h4 class="card-name">{person.name}</h4>
+              <p class="card-role">{person.role}</p>
+              {person.url && (
+                <a
+                  class="card-link"
+                  href={person.url}
+                  target="_blank"
+                  rel="noopener"
+                  aria-label={`${person.name}'s website`}
+                >
+                  <span class="card-link-icon" aria-hidden="true"></span>
+                </a>
+              )}
+            </>
+          ) : (
+            <>
+              <span class="pending-avatar" aria-hidden="true"></span>
+              <p class="pending-text">Slot pending</p>
+            </>
+          )}
+        </li>
+      ))}
+    </ul>
+
+    <div class="cta-card">
+      <p class="cta-text">Interested in joining the influencer roster?</p>
+      <HeartSignalButton href="/influencer-application">Influencer Application</HeartSignalButton>
+    </div>
+  </Container>
+</Section>
+
+<style>
+  .card {
+    /* The one sanctioned use of an outline on this site: an unfilled surface has
+       to read as scaffolding rather than as a finished card. See
+       --border-placeholder in tokens.css. */
+    border: var(--border-placeholder);
+    border-radius: var(--radius-md);
+    padding: var(--space-8);
+    /* Positioning context for .interest-badge, which sits in the card's own
+       top-right corner rather than on the avatar (see that rule for why). A
+       no-op for every card without a badge, .goal included. */
+    position: relative;
+  }
+
+  .pending-text {
+    color: var(--color-text-muted);
+  }
+
+  .goal {
+    max-width: 60ch;
+    margin-bottom: var(--space-8);
+  }
+
+  .goal-label {
+    font-family: var(--font-accent);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-widest);
+    text-transform: uppercase;
+    color: var(--color-electric-cyan);
+    margin-bottom: var(--space-4);
+  }
+
+  .goal-text {
+    color: var(--color-text-body);
+  }
+
+  /* Finished-content card, not scaffolding — see the header comment's APPLY
+     CTA note on why this deliberately does not reuse `.card`. Same
+     background/radius/shadow recipe as PitchVibe's own cards. */
+  .cta-card {
+    margin-top: var(--space-12);
+    padding: var(--space-8);
+    background: var(--color-bg-elevated);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-float);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-6);
+    text-align: center;
+  }
+
+  .cta-text {
+    max-width: 40ch;
+    font-size: var(--text-md);
+    color: var(--color-text-body);
+  }
+
+  .card-role {
+    font-family: var(--font-accent);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-widest);
+    text-transform: uppercase;
+    color: var(--color-electric-cyan);
+    margin-top: var(--space-2);
+  }
+
+  .roster {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .card-photo {
+    display: block;
+    width: var(--space-24);
+    height: var(--space-24);
+    object-fit: cover;
+    border-radius: var(--radius-full);
+    margin-bottom: var(--space-4);
+  }
+
+  /* Corner badge on the CARD, not the avatar (2026-09-10, owner request,
+     iterated three times same-day). First try overlapped the 96px avatar
+     circle — "Interested" plus an icon is roughly as wide as the avatar
+     itself, so any corner placement on the circle either covered the face
+     or hung off its edge. The card has real room instead: the photo sits at
+     the card's top-left at its own fixed 96px width, leaving the top-right
+     empty — but only barely, at the row's tightest point. At the 1100px
+     five-up breakpoint the card is ~170px wide with --space-6 (24px)
+     padding, so the photo's box (96px, starting at the content edge) ends
+     24px from the card's top — the badge has to fit inside that 24px strip
+     above it or it overlaps again, which is why the sizing below is
+     measured in hard pixels instead of the space-N scale: nothing on that
+     scale is small enough. Verified against the actual tightest card, not
+     estimated. `.card` carries `position: relative` for this to anchor to.
+     font-size 0.625rem matches CityCard.astro's own corner-badge precedent
+     (also below any token) rather than inventing a different tiny size. */
+  .interest-badge {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 2px 6px;
+    background: var(--color-bg-elevated);
+    border-radius: var(--radius-full);
+    font-family: var(--font-accent);
+    font-size: 0.625rem;
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-text-primary);
+    white-space: nowrap;
+  }
+
+  .interest-icon {
+    width: 8px;
+    height: 8px;
+    background: var(--color-electric-cyan);
+    mask: url(/check.svg) center / contain no-repeat;
+    flex-shrink: 0;
+  }
+
+  /* Same circle footprint as .card-photo, so the unfilled slot lines up with
+     the two real avatars beside it in the row instead of leaving a gap where
+     a photo would go. The icon is a mask, not an <img>, so it takes a token
+     fill instead of the baked-in one the source SVG ships with (see
+     public/anon.svg — swapped in from question-mark.svg, 2026-09-10, owner
+     request: a generic "anonymous person" glyph reads more like an avatar
+     placeholder than a bare "?" does).
+
+     Background is OfferingCard.astro's card gradient
+     (`linear-gradient(45deg, #1a1a1a, #262626)`), copied verbatim rather than
+     extracted to a shared token (2026-09-10, owner request, to visually match
+     the offering cards). That gradient is pre-existing standards debt on this
+     site — hard-coded hex, not tokens.css values — inherited as-is in
+     OfferingCard.astro (see index.astro's import comment) rather than fixed;
+     copying it here matches that debt intentionally, it does not introduce a
+     new instance of it. If OfferingCard's gradient is ever tokenized, update
+     this rule to match rather than leaving it pointing at stale hex. */
+  .pending-avatar {
+    display: block;
+    position: relative;
+    width: var(--space-24);
+    height: var(--space-24);
+    border-radius: var(--radius-full);
+    background: linear-gradient(45deg, #1a1a1a, #262626);
+    margin-bottom: var(--space-6);
+  }
+
+  .pending-avatar::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 40%;
+    height: 40%;
+    background: var(--color-text-primary);
+    mask: url(/anon.svg) center / contain no-repeat;
+  }
+
+  .card-name {
+    font-size: var(--text-md);
+  }
+
+  /* Icon-only external link, replacing the plain-text domain (2026-09-10,
+     owner request). `aria-label` on the <a> carries the accessible name
+     since there's no visible text — "{name}'s website" rather than a bare
+     "Website" so a screen-reader user landing here via the roster's link
+     list still knows which card they're in. `display: inline-flex` rather
+     than block, so the link's hit target is exactly the icon's box, not the
+     full card width. */
+  .card-link {
+    display: inline-flex;
+    margin-top: var(--space-2);
+  }
+
+  .card-link-icon {
+    display: block;
+    /* public/website.svg is drawn at 24x24 with fine detail (globe
+       lat/long lines plus a small link-arrow overlay); at --space-4 (16px)
+       that detail compressed into an indistinct blob (owner-reported,
+       2026-09-10). --space-6 renders it at native size instead of shrinking
+       it further. */
+    width: var(--space-6);
+    height: var(--space-6);
+    background: var(--color-electric-cyan);
+    mask: url(/website.svg) center / contain no-repeat;
+  }
+
+  /* FIVE-CARD ROW (2026-09-10, owner request) — up from three, to hold two
+     named people plus three "Slot pending" cards without any of them
+     wrapping to a second row on typical desktop widths. Three steps instead
+     of the old two:
+
+     - Below 640px: single column (unchanged).
+     - 640–1099px: two columns, at the original --space-8 gap/padding — with
+       five cards that's 3-then-2, not the old 3-card 2-then-1 split this
+       file used to explicitly reject; an uneven last row reads as a roster
+       still filling in, not as a mistake, once there are enough cards that a
+       reader isn't consciously counting them.
+     - 1100px+: all five across. This is where the padding and gap step down
+       from --space-8 to --space-6 (see .card and this rule) — fitting five
+       229px-ish columns at container-max (1440px) needs the room back that
+       two wider gaps and eight extra padding-px per card side would cost.
+       `minmax(0, 1fr)` rather than plain `1fr` on purpose: a bare `1fr`
+       track won't shrink narrower than its content's min-content size, and
+       this row's content includes a fixed 96px avatar — without the
+       explicit `minmax(0, …)` floor, five of those could force the grid
+       wider than the container instead of letting the surrounding text wrap
+       first. */
+  @media (min-width: 640px) {
+    .roster {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .roster {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: var(--space-6);
+    }
+
+    .card {
+      padding: var(--space-6);
+    }
+  }
+</style>

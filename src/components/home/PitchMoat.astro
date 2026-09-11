@@ -1,0 +1,65 @@
+---
+import Section from '../Section.astro';
+import Container from '../Container.astro';
+import SectionHeader from '../SectionHeader.astro';
+
+/*
+  Pitch page section 4 — what Gaia can't copy (docs/pitch-demo-sitemap.md §4.4).
+
+  The shortest section on the page, and it stays that way: the rule once, its
+  consequence once, no CTA. Its power is that it asks for nothing.
+
+  The rule itself is not placeholder text — it is the project's binding rule as
+  recorded in AGENTS.md and .claude/agents/README.md, quoted rather than
+  re-invented here. The consequence paragraph is lorem ipsum pending
+  `copywriter`.
+
+  Gaia is described only as what it verifiably is — a subscription library of
+  consciousness media. No claims about its numbers, its plans, or its quality:
+  the sitemap's integrity note for this section is that a pitch attacking the
+  incumbent reads as insecure, while one naming a thing the incumbent's
+  architecture forbids reads as inevitable.
+
+  Note for whoever builds /demo/*: this section is only true because the binding
+  rule is enforced in the schema. `src/content/signals/` is still unregistered in
+  src/content.config.ts and has no room field — registering it with a REQUIRED
+  reference to an event is what makes this claim structural instead of
+  aspirational. Out of scope for this pass; named here so it is not lost.
+*/
+---
+
+<Section>
+  <Container>
+    <SectionHeader kicker="The moat" heading="What Gaia can't copy" />
+
+    <p class="rule">
+      Every piece of content resolves to a room — a dated, located gathering. If a piece of
+      content can't say what room it leads to, it doesn't ship.
+    </p>
+
+    <p class="consequence">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+      incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+      exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    </p>
+  </Container>
+</Section>
+
+<style>
+  .rule {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    line-height: var(--leading-snug);
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-text-primary);
+    /* The rule is the section, so it is set as display type and given the whole
+       measure; the consequence below it is deliberately quieter. */
+    max-width: 26ch;
+  }
+
+  .consequence {
+    margin-top: var(--space-8);
+    color: var(--color-text-muted);
+    max-width: 60ch;
+  }
+</style>

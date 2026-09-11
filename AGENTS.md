@@ -6,6 +6,27 @@ and workflow, and `.claude/STANDARDS.md` for the standard all work is held to.
 You are the producer: hold the brief, sequence the agents, carry artifacts between them.
 The same standard applies to work you do directly.
 
+## New direction (2026-09-09)
+
+This is no longer the live New Earth Network product. The site owner has redirected the
+project: it is now a **password-protected demonstration of the plan**, built to put New
+Earth Network in a position to begin pitching for funding. Two consequences for every
+agent, on top of everything below:
+
+- **Gate it — last.** The whole site will sit behind a password, but the gate is
+  deployed last, after the pages it protects are actually built. Don't block content,
+  design, or dev work on it existing yet. `creative-developer` owns the mechanism,
+  decided with the same "least technology that works" discipline as everything else, and
+  it counts against the same performance budget. Not yet built.
+- **Demonstrate, never fabricate.** This proves the plan is worth funding — it does not
+  manufacture evidence that the plan already succeeded. No fake testimonials, attendance
+  or RSVP counts, revenue figures, press mentions, or partner logos presented as real. See
+  the Integrity section of `.claude/STANDARDS.md`.
+
+The underlying plan being demonstrated — the concept, positioning, and direction recorded
+in `.claude/agents/README.md` — is unchanged. What changed is what the site is *for*:
+proving the plan to a funder, not running it live for the public.
+
 ## The short version
 
 - UX objective before creative concept; art, brand, copy and motion inform code. Nothing ships un-reviewed.
@@ -56,7 +77,11 @@ Consult these guides before working on related tasks:
 
 ## Project state
 
-Phase 1 delivered: architecture, design system, reusable components, and a built-out
-homepage. Other routes (`/about`, `/events`, `/cities`, `/start-a-gathering`, `/principles`,
-`/faq`, `/contact`) exist as structural stubs on the shared layout/nav, ready for content —
-not finished pages. See `docs/architecture.md` for what's next.
+Phase 1 delivered architecture, design system, reusable components, and a built-out
+homepage, under the old "live product" framing — before the pivot above. Other routes
+(`/about`, `/events`, `/cities`, `/start-a-gathering`, `/principles`, `/faq`, `/contact`)
+exist as structural stubs on the shared layout/nav, ready for content — not finished
+pages. Treat existing pages as material to re-evaluate against the pitch-demo direction,
+not as finished work; building under the new direction has not started. See
+`docs/architecture.md` for the file map and `.claude/agents/README.md` for the current
+team brief.

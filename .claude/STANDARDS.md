@@ -49,6 +49,14 @@ Violate one and the work is rejected without discussion. No exceptions, no "just
 - Motion: typically 150–250ms and purposeful, with a decelerating ease (`cubic-bezier(0.2, 0, 0, 1)`). Rare ambient signal treatments may be slower only with a measured cost and a complete reduced-motion alternative. Motion explains state or a spatial relationship or it doesn't exist.
 - Everything defined as design tokens. No hard-coded hex values in components, ever.
 
+**Integrity**
+- This build is a demonstration of a plan, not proof the plan already happened. Nothing
+  shown may present illustrative or placeholder content as real evidence: no fabricated
+  testimonials, attendance/RSVP counts, revenue figures, press mentions, partner logos, or
+  "as seen in" claims. If a number or quote isn't real, it must read as an example, not as
+  a fact. This applies to every discipline — copy, imagery, iconography, data — not just
+  the words.
+
 ## 3. The review ritual
 
 Work goes through three cuts. Nothing skips a cut.

@@ -19,6 +19,39 @@ site is memorable because it has a coherent idea, not because it moves a lot.
 | `creative-developer` | Astro implementation — HTML, CSS, minimal JS, build, deploy. | opus |
 | `quality-engineer` | Performance, accessibility, and QA in one pass. Budget and usability veto. | sonnet |
 
+## What this build actually is now (2026-09-09)
+
+Direction change from the site owner: this is no longer the live New Earth Network
+product. It is a **password-protected demonstration of the plan**, built to put New
+Earth Network in a position to begin pitching for funding. Read everything below —
+including the concept and business direction, which still stand — through that lens:
+
+- **The audience is a funder, not a newcomer off social media.** Every page still has to
+  demonstrate the real end-user experience convincingly — that's the entire point of a
+  pitch demo — but the actual person clicking through right now is deciding whether to
+  back this, not whether to RSVP tonight. `ux-designer` and `copywriter` design and write
+  for the person in that seat, without hollowing out the authenticity of the underlying
+  product experience being demonstrated.
+- **It's a demonstration, not evidence.** Nothing on the site may present mocked or
+  illustrative content as if it were real proof of traction — no fabricated
+  testimonials, attendance/RSVP counts, revenue figures, press mentions, or partner
+  logos. Example content must read as an example. This is a hard line in
+  `.claude/STANDARDS.md`, not a style preference, and every agent enforces it, not just
+  `copywriter`.
+- **The whole site sits behind a password — deployed last.** `creative-developer` owns
+  the gate mechanism — least technology that works, and it counts against the same
+  performance budget as every other page. It goes on *after* the pages it protects are
+  built, not before: don't sequence content, design, or dev work behind a gate that
+  doesn't exist yet, and don't let its absence read as "not private" in the meantime —
+  it's just not deployed. Once it exists, treat the gate screen as a page like any
+  other: `creative-director` and `quality-engineer` review it, because it's the very
+  first thing every visitor sees from that point on.
+- **What didn't change:** the plan itself. "The complete human experience for awakened
+  souls, online and offline," the Gaia positioning, Darkness → Signal → Connection, the
+  gathering outranking the subscription — all of it is still the plan being demonstrated.
+  What changed is what the site is *for*: proving that plan to a funder, not running it
+  live for the public.
+
 ## The concept every agent is building toward
 
 **Darkness → Signal → Connection. The content is the signal. The room is the point.**

@@ -17,6 +17,11 @@ const { as: Tag = 'section', tone = 'primary', id } = Astro.props;
 <style>
   .section {
     padding-block: var(--space-section);
+    /* Nav is position: sticky (Navigation.astro), so an anchor jump straight to
+       the section's own top edge would land it partly hidden underneath. Every
+       section can be a nav-link target now (see Navigation.astro's `links`),
+       so this has to hold for all of them, not just the ones currently linked. */
+    scroll-margin-top: var(--nav-height);
   }
 
   .section[data-tone='deep'] {

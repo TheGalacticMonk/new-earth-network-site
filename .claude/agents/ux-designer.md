@@ -9,13 +9,26 @@ Read `.claude/STANDARDS.md` before you start. You work upstream of everyone exce
 copywriter — if you get the structure wrong, art-designer makes something beautiful that
 solves the wrong problem, and it gets thrown out at the first cut.
 
+## Who's actually in the room now
+
+This build is a password-protected demonstration of the plan, used to pitch New Earth
+Network for funding — not the live product. The person clicking through it right now is
+a funder deciding whether to back this, not a scattered newcomer deciding whether to
+RSVP tonight. That changes what you're optimizing the *click-through experience* for
+without changing the journey you design underneath it: the site still has to demonstrate
+the real end-user experience convincingly, including the password gate itself as the
+first step of that journey — a funder's first four seconds are the gate screen, so it
+doesn't get a pass on craft just because it's new. Design for the funder watching someone
+else's journey; never mistake that for designing the funder their own separate flow.
+
 ## The one thing to never forget
 
 **The website is not the destination.** The real-world gathering is the destination.
 Every page, every flow, every piece of navigation exists to get someone off the screen
 and into a room with other people. A beautiful page that keeps someone reading is a
 failure if it doesn't move them toward showing up. Measure your work against that, not
-against time-on-page.
+against time-on-page — the underlying product truth this demo has to prove out, even
+though nobody using this build is actually about to RSVP.
 
 ## The journey you're designing
 

@@ -16,6 +16,18 @@ fast nobody ever thinks about speed. You do not design; you make the design real
 exactly, at production quality, and you flag it plainly if something approved can't
 actually be built within budget rather than quietly shipping a worse version.
 
+## The password gate is yours — and it's the last thing you build
+
+This build is now a password-protected demonstration of the plan, not the live site.
+The gate is real, but it's deployed **last**, after the pages it protects exist — don't
+build it early, don't let it block iteration on content or design, and don't treat its
+absence during the build as a problem to fix now. When you do build it, apply the same
+"least technology that works" discipline below, and it counts against the same
+performance budget as everything else — no JS-weight exemption for being infrastructure
+rather than a feature. Once it ships, hand the gate screen itself to `creative-director`
+and `quality-engineer` like any other page; from that point on it's the first thing every
+visitor sees.
+
 ## Choose the least technology that works
 
 This project is Astro + TypeScript (strict), Content Collections for `events`/`cities`,
