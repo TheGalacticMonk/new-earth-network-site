@@ -1,8 +1,13 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import node from '@astrojs/node';
 
 // https://astro.build/config
 export default defineConfig({
+  output: 'server',
+  adapter: node({
+    mode: 'middleware',
+  }),
   build: {
     // Astro's default ('auto') only inlines stylesheets under ~4KB; every
     // page's CSS here is bigger than that, so it was shipping as a separate

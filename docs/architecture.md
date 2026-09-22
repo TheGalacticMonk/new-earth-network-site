@@ -4,16 +4,16 @@
 
 **Astro + TypeScript (strict) + Content Collections.** No UI framework, no Tailwind.
 
-Why: the brief calls for near-zero client JS, static output, and events/cities that
+Why: the brief calls for near-zero client JS and events/cities that
 become data-driven "rather than hardcoded." Astro ships zero JS by default (islands —
 you only pay for the interactivity you explicitly add), and Content Collections give
 typed schemas for `events`/`cities` now that can point at a real CMS or API later
 without touching a single template. Plain CSS with custom-property tokens plus Astro's
-native per-component scoped `<style>` keeps the dependency count at just Astro + two
-font packages — every dependency is a liability the team owns forever, so we didn't
-reach for one we didn't need.
+native per-component scoped `<style>` keeps the client lean. The site now renders through
+Astro's Node adapter because real password protection must reject unauthorized requests
+before page HTML or media is served; a static client-side gate cannot provide that.
 
-Verified: `npx astro check` — 0 errors. `npm run build` — 15 static pages, no errors.
+Verified: `npx astro check` — 0 errors. `npm run build` — Node server build, no errors.
 
 ## Fonts
 
@@ -95,6 +95,7 @@ reused elsewhere, so they aren't in the shared primitives folder: `Hero`, `Manif
 
 ```
 /                       homepage (fully built)
+/access                 server-rendered password form (the only public page)
 /about                  stub — structure + one paragraph
 /events                 real: lists all upcoming events from the collection
 /events/[slug]          real: renders one event's data
@@ -120,9 +121,22 @@ during a live-browser mobile check, not by reading the code. Fixed by rendering
 got a proper focus trap, Escape-to-close, and focus restored to the toggle button on
 close — it's a full-screen dialog, so it's held to modal-dialog a11y rules.
 
+## Access control and deployment
+
+`src/middleware.ts` protects every rendered route with an opaque, `HttpOnly`, `Secure`,
+`SameSite=Lax` cookie. `server.mjs` applies the same check before serving physical media
+from `dist/client`; only the two self-hosted fonts needed by `/access` are public. It also
+negotiates Brotli/gzip for compressible responses. The password is checked on the server
+and never ships in browser HTML or JavaScript.
+
+Build with `npm run build` and run the production server with `npm start`. Production must
+use HTTPS and set the same strong `SITE_ACCESS_SECRET` on every instance so cookies remain
+valid across deploys and load-balanced processes. This is a persistent Node SSR deployment,
+not a zero-configuration static Pages deployment.
+
 ## Performance, measured
 
-- Homepage HTML + CSS: **~11.2 KB gzipped** (budget: 100 KB)
+- Authenticated homepage HTML + CSS: **14.5 KB Brotli** (budget: 100 KB)
 - Inline JS (nav toggle + form acknowledgment): **~700 bytes raw**, inlined directly
   in the HTML — no separate JS request (budget: 15 KB)
 - Logo hero image: optimized to WebP at build time, **1.3 MB → 13 KB**
@@ -144,5 +158,5 @@ first step of the next phase.
    to plug it in.
 4. **Lighthouse audit against a deployed URL** to confirm real-device LCP/INP/CLS,
    plus a full keyboard/screen-reader pass on the pages built this phase.
-5. Decide on hosting/deploy target (Netlify, Vercel, Cloudflare Pages all work with
-   zero config changes to this Astro static setup) and wire CI.
+5. Choose a Node-capable hosting target, configure HTTPS and a stable
+   `SITE_ACCESS_SECRET`, then wire CI and edge rate limiting for the access form.
