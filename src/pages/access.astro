@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { env } from 'cloudflare:workers';
 import {
   ACCESS_COOKIE_NAME,
   accessCookieValue,
@@ -9,14 +10,15 @@ import {
 
 let requestedNext = safeNextPath(Astro.url.searchParams.get('next'));
 let hasError = false;
+const secret = env?.SITE_ACCESS_SECRET;
 
 if (Astro.request.method === 'POST') {
   const formData = await Astro.request.formData();
   const password = formData.get('password');
   requestedNext = safeNextPath(formData.get('next'));
 
-  if (typeof password === 'string' && passwordMatches(password)) {
-    Astro.cookies.set(ACCESS_COOKIE_NAME, accessCookieValue(), {
+  if (typeof password === 'string' && (await passwordMatches(password))) {
+    Astro.cookies.set(ACCESS_COOKIE_NAME, await accessCookieValue(secret), {
       httpOnly: true,
       secure: true,
       sameSite: 'lax',

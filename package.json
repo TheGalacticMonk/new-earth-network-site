@@ -8,12 +8,13 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "start": "node ./server.mjs",
+    "deploy": "npm run build && wrangler deploy --config dist/server/wrangler.json",
+    "cf:dev": "npm run build && wrangler dev --config dist/server/wrangler.json",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/node": "^11.1.6",
+    "@astrojs/cloudflare": "^14.3.2",
     "@fontsource-variable/manrope": "^5.3.0",
     "@fontsource-variable/space-grotesk": "^5.3.0",
     "astro": "^7.3.1"

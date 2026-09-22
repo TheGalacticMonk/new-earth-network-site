@@ -1,34 +1,42 @@
-import { createHash, createHmac, timingSafeEqual } from 'node:crypto';
-
 export const ACCESS_COOKIE_NAME = 'nen_access';
-const ACCESS_COOKIE_VERSION = 'v1';
+const ACCESS_COOKIE_VERSION = 'v2';
 const ACCESS_PAGE = '/access';
 const PASSWORD = 'frequency';
-const LOCAL_SECRET = createHash('sha256')
-  .update('new-earth-network:local-cookie-secret:v1:', 'utf8')
-  .update(PASSWORD, 'utf8')
-  .digest();
-const ACCESS_SECRET = process.env.SITE_ACCESS_SECRET?.trim() || LOCAL_SECRET;
-const ACCESS_TOKEN = createHmac('sha256', ACCESS_SECRET)
-  .update(`new-earth-network:${ACCESS_COOKIE_VERSION}`)
-  .digest('base64url');
+const LOCAL_SECRET = 'new-earth-network:local-cookie-secret:v1:frequency';
 
-function constantTimeEqual(left, right) {
-  const leftDigest = createHash('sha256').update(left, 'utf8').digest();
-  const rightDigest = createHash('sha256').update(right, 'utf8').digest();
-  return timingSafeEqual(leftDigest, rightDigest);
+function secretValue(secret) {
+  return typeof secret === 'string' && secret.trim() ? secret.trim() : LOCAL_SECRET;
 }
 
-export function passwordMatches(candidate) {
-  return constantTimeEqual(candidate, PASSWORD);
+function toBase64Url(bytes) {
+  let binary = '';
+  for (const byte of bytes) binary += String.fromCharCode(byte);
+  return btoa(binary).replaceAll('+', '-').replaceAll('/', '_').replace(/=+$/u, '');
 }
 
-export function accessCookieValue() {
-  return ACCESS_TOKEN;
+async function tokenFor(secret) {
+  const input = new TextEncoder().encode(`${secretValue(secret)}:new-earth-network:${ACCESS_COOKIE_VERSION}`);
+  const digest = await crypto.subtle.digest('SHA-256', input);
+  return toBase64Url(new Uint8Array(digest));
 }
 
-export function isAuthorized(cookieValue) {
-  return typeof cookieValue === 'string' && constantTimeEqual(cookieValue, ACCESS_TOKEN);
+export async function passwordMatches(candidate) {
+  return candidate === PASSWORD;
+}
+
+export function accessCookieValue(secret) {
+  return tokenFor(secret);
+}
+
+export async function isAuthorized(cookieValue, secret) {
+  if (typeof cookieValue !== 'string') return false;
+  const expected = await tokenFor(secret);
+  if (cookieValue.length !== expected.length) return false;
+  let difference = 0;
+  for (let index = 0; index < expected.length; index += 1) {
+    difference |= cookieValue.charCodeAt(index) ^ expected.charCodeAt(index);
+  }
+  return difference === 0;
 }
 
 export function isAccessFontPath(pathname) {

@@ -10,8 +10,8 @@ you only pay for the interactivity you explicitly add), and Content Collections 
 typed schemas for `events`/`cities` now that can point at a real CMS or API later
 without touching a single template. Plain CSS with custom-property tokens plus Astro's
 native per-component scoped `<style>` keeps the client lean. The site now renders through
-Astro's Node adapter because real password protection must reject unauthorized requests
-before page HTML or media is served; a static client-side gate cannot provide that.
+Astro's Cloudflare adapter because real password protection must reject unauthorized
+requests before page HTML is served; a static client-side gate cannot provide that.
 
 Verified: `npx astro check` — 0 errors. `npm run build` — Node server build, no errors.
 
@@ -124,15 +124,14 @@ close — it's a full-screen dialog, so it's held to modal-dialog a11y rules.
 ## Access control and deployment
 
 `src/middleware.ts` protects every rendered route with an opaque, `HttpOnly`, `Secure`,
-`SameSite=Lax` cookie. `server.mjs` applies the same check before serving physical media
-from `dist/client`; only the two self-hosted fonts needed by `/access` are public. It also
-negotiates Brotli/gzip for compressible responses. The password is checked on the server
-and never ships in browser HTML or JavaScript.
+`SameSite=Lax` cookie. The password is checked in the Cloudflare runtime and never ships
+in browser HTML or JavaScript. Configure Cloudflare’s edge/static-asset access policy to
+protect private media assets as well as rendered routes; only the two self-hosted fonts
+needed by `/access` need to remain public before login.
 
-Build with `npm run build` and run the production server with `npm start`. Production must
-use HTTPS and set the same strong `SITE_ACCESS_SECRET` on every instance so cookies remain
-valid across deploys and load-balanced processes. This is a persistent Node SSR deployment,
-not a zero-configuration static Pages deployment.
+Build with `npm run build` and deploy the generated Cloudflare worker/functions output from
+the Cloudflare Pages/Workers integration. Production must use HTTPS and set the same strong
+`SITE_ACCESS_SECRET` secret in Cloudflare so cookies remain valid across deployments.
 
 ## Performance, measured
 
